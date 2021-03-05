@@ -1,5 +1,6 @@
 <template>
   <div>
+    Number
     <input type="text" ref="name" :value="value.name" @input="updateValue"/>
     <input type="number" ref="minLength" :value="value.minLength" @input="updateValue"/>
     <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
