@@ -1,15 +1,25 @@
 <template>
-  <div>
+  <div class="container">
     <b-row>
       <b-col cols="8">
         Form
-        <div v-for="(component, index) in schema" v-bind:key="index">
-          <create-string v-if="component.type === 'string'"></create-string>
+        <b-form-group label="Form Name" label-cols="4">
+          <b-form-input v-model="formName"></b-form-input>
+        </b-form-group>
+        <div v-for="(component, index) in properties" v-bind:key="index">
+          <create-string v-model="component.object" v-if="component.type === 'string'"/>
+          <create-number v-model="component.object" v-if="component.type === 'number'"/>
         </div>
       </b-col>
       <b-col cols="4">
         Components
-        <b-button v-on:click="add('string')" block>String</b-button>
+        <b-button v-on:click="add('string', {name: null, minLength: null, maxLength: null})" block>String</b-button>
+        <b-button v-on:click="add('number', {name: null, minLength: null, maxLength: null, minValue: null, maxValue: null})" block>Number</b-button>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-button v-on:click="createJson()">Create Form</b-button>
       </b-col>
     </b-row>
   </div>
@@ -17,20 +27,31 @@
 
 <script>
 import CreateString from '@/components/creator/CreateString'
+import CreateNumber from "@/components/creator/CreateNumber";
 
 export default {
   name: 'DynamicFormCreator',
   components: {
-    CreateString
+    CreateString,
+    CreateNumber
   },
   data() {
     return {
-      schema: []
+      formName: '',
+      properties: [],
     }
   },
   methods: {
-    add(type) {
-      this.schema.push({type: type})
+    add(type, object) {
+      this.properties.push({type: type, object: object});
+    },
+    createJson() {
+      let schemaFormat = {name: this.formName, object: {}};
+      this.properties.forEach((x) => {
+        const {name, ...others} = x.object;
+        schemaFormat.object[name] = {type: x.type, ...others};
+      })
+      console.log('schemaFormat', schemaFormat);
     }
   }
 }

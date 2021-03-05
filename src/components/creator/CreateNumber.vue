@@ -3,12 +3,14 @@
     <input type="text" ref="name" :value="value.name" @input="updateValue"/>
     <input type="number" ref="minLength" :value="value.minLength" @input="updateValue"/>
     <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
+    <input type="number" ref="minValue" :value="value.minValue" @input="updateValue"/>
+    <input type="number" ref="maxValue" :value="value.maxValue" @input="updateValue"/>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'CreateString',
+  name: "CreateNumber",
   props: ['value'],
   methods: {
     updateValue() {
@@ -16,6 +18,8 @@ export default {
         name: this.$refs.name.value,
         minLength: this.$refs.minLength.value,
         maxLength: this.$refs.maxLength.value,
+        minValue: this.$refs.minValue.value,
+        maxValue: this.$refs.maxValue.value,
       })
     }
   }
