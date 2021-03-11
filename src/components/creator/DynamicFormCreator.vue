@@ -26,6 +26,9 @@
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
         </b-card>
+        <b-card class="mt-2">
+          <pre>{{ getJson | jsonFormat }}</pre>
+        </b-card>
       </b-col>
       <b-col cols="4">
         <b-card header="Components">
@@ -40,14 +43,14 @@
         </b-card>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col>
-        <b-button v-on:click="createJson()">Create Json</b-button>
-        <b-card>
-          <pre>{{ getJson | jsonFormat }}</pre>
-        </b-card>
-      </b-col>
-    </b-row>
+<!--    <b-row class="mt-2">-->
+<!--      <b-col>-->
+<!--        <b-button v-on:click="createJson()">Create Json</b-button>-->
+<!--        <b-card>-->
+<!--          <pre>{{ getJson | jsonFormat }}</pre>-->
+<!--        </b-card>-->
+<!--      </b-col>-->
+<!--    </b-row>-->
   </div>
 </template>
 
