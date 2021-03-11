@@ -96,6 +96,7 @@ export default {
         objectArray.forEach(([key, value]) => {
           if (value) object[key] = value
         });
+        schemaFormat.required = [...new Set(schemaFormat.required)];
         schemaFormat.properties[name] = {type: x.type, ...object};
       })
       return schemaFormat;
