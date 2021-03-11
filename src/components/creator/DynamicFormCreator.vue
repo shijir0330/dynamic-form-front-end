@@ -110,7 +110,7 @@ export default {
         objectArray.forEach(([key, value]) => {
           if (value) object[key] = value
         });
-        schemaFormat.properties[name] = {type: x.type, ...others};
+        schemaFormat.properties[name] = {type: x.type, ...object};
       })
       this.schema = schemaFormat;
     }
