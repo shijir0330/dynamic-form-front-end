@@ -29,6 +29,7 @@
       <b-col cols="4">
         <b-card header="Components">
           <div v-for="item in components"
+               class="component-div"
                :draggable="true"
                @dragstart="startDrag($event, item)"
                @dragend="endDrag($event, item)"
@@ -62,7 +63,7 @@ export default {
   data() {
     return {
       components: [
-        {type: 'string', properties: {name: null, minLength: null, maxLength: null, required: false}}
+        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
       ],
       drag: false,
       formName: '',
@@ -109,7 +110,7 @@ export default {
         objectArray.forEach(([key, value]) => {
           if (value) object[key] = value
         });
-        schemaFormat.properties[name] = {type: x.type, ...object};
+        schemaFormat.properties[name] = {type: x.type, ...others};
       })
       this.schema = schemaFormat;
     }
@@ -124,5 +125,12 @@ export default {
   border-width: 2px;
   border-style: dashed;
   border-color: blue;
+}
+.component-div {
+  background: gray;
+  color: white;
+  text-align: center;
+  margin-bottom: 10px;
+  padding: 10px;
 }
 </style>
