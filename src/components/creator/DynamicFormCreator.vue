@@ -16,12 +16,13 @@
             </b-form>
           </template>
           <div v-for="(component, index) in properties" v-bind:key="index">
-            <button class="float-right" @click="remove(index)">X</button>
             <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
-            <!--            <div @dragstart="startDrag($event, component)">-->
-            <create-string v-model="component.object" :required="required" v-if="component.type === 'string'"/>
-            <!--            <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
-            <!--            </div>-->
+<!--            <div @dragstart="startDrag($event, component)">-->
+            <div>
+              <button class="float-right" @click="remove(index)">X</button>
+              <create-string v-model="component.object" :required="required" v-if="component.type === 'string'"/>
+<!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
+            </div>
           </div>
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
