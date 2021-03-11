@@ -126,22 +126,22 @@ export default {
     remove(index) {
       this.properties.splice(index, 1);
     },
-    createJson() {
-      this.schema = null;
-      let schemaFormat = {name: this.formName, properties: {}, required: []};
-      this.properties.forEach((x) => {
-        const {name, required, ...others} = x.object;
-        if (required)
-          schemaFormat.required.push(name);
-        const objectArray = Object.entries(others);
-        const object = {};
-        objectArray.forEach(([key, value]) => {
-          if (value) object[key] = value
-        });
-        schemaFormat.properties[name] = {type: x.type, ...object};
-      })
-      this.schema = schemaFormat;
-    }
+    // createJson() {
+    //   this.schema = null;
+    //   let schemaFormat = {name: this.formName, properties: {}, required: []};
+    //   this.properties.forEach((x) => {
+    //     const {name, required, ...others} = x.object;
+    //     if (required)
+    //       schemaFormat.required.push(name);
+    //     const objectArray = Object.entries(others);
+    //     const object = {};
+    //     objectArray.forEach(([key, value]) => {
+    //       if (value) object[key] = value
+    //     });
+    //     schemaFormat.properties[name] = {type: x.type, ...object};
+    //   })
+    //   this.schema = schemaFormat;
+    // }
   }
 }
 </script>
