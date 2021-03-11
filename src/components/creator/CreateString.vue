@@ -1,7 +1,7 @@
 <template>
   <b-card class="mb-2">
     String
-    <input type="checkbox" v-model="value.required">
+    <input type="checkbox" v-model="value.required" :disabled="!value.name">
     <input type="text" ref="name" :value="value.name" @input="updateValue"/>
     <input type="number" ref="minLength" :value="value.minLength" @input="updateValue"/>
     <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
