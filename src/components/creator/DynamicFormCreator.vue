@@ -16,14 +16,13 @@
             </b-form>
           </template>
           <div v-for="(component, index) in properties" v-bind:key="index">
-            <div @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent="changeStyle" :style="style"/>
+            <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
 <!--            <div @dragstart="startDrag($event, component)">-->
               <create-string v-model="component.object" v-if="component.type === 'string'"/>
               <!--            <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
 <!--            </div>-->
           </div>
-          <div @drop="onDrop($event, properties.length)" @dragenter.prevent @dragover.prevent
-               style="height: 10px; background-color: red; border-width: 2px; border-style: solid; border-color: black"/>
+          <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent @dragover.prevent/>
         </b-card>
       </b-col>
       <b-col cols="4">
@@ -31,6 +30,7 @@
           <div v-for="item in components"
                :draggable="true"
                @dragstart="startDrag($event, item)"
+               @dragend="endDrag($event, item)"
                v-on:click="add(item.type, item.properties)">
             String
           </div>
@@ -63,7 +63,7 @@ export default {
       components: [
         {type: 'string', properties: {name: null, minLength: null, maxLength: null, required: false}}
       ],
-      style: 'height: 10px; background-color: blue',
+      drag: false,
       formName: '',
       formColumn: 1,
       properties: [],
@@ -75,14 +75,19 @@ export default {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('itemType', item.type);
+      this.drag = true;
+    },
+    endDrag() {
+      // event.dataTransfer.dropEffect = 'move'
+      // event.dataTransfer.effectAllowed = 'move'
+      // event.dataTransfer.setData('itemType', item.type);
+      this.drag = false;
     },
     onDrop(event, index) {
       const type = event.dataTransfer.getData('itemType')
       const item = this.components.find((item) => item.type === type);
       this.properties.splice(index, 0, {type: item.type, object: item.properties});
-    },
-    changeStyle() {
-      this.style = 'border-width: 2px; border-style: solid; border-color: black'
+      this.drag = false;
     },
     add(type, object) {
       this.properties.push({type: type, object: object});
@@ -100,5 +105,11 @@ export default {
 </script>
 
 <style scoped>
-
+.drop-div {
+  height: 20px;
+  margin-bottom: 10px;
+  border-width: 2px;
+  border-style: dashed;
+  border-color: blue;
+}
 </style>
