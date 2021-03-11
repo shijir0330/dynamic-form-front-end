@@ -18,7 +18,7 @@
           <div v-for="(component, index) in properties" v-bind:key="index">
             <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
             <!--            <div @dragstart="startDrag($event, component)">-->
-            <create-string v-model="component.object" v-if="component.type === 'string'"/>
+            <create-string v-model="component.object" :required="required" v-if="component.type === 'string'"/>
             <!--            <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
             <!--            </div>-->
           </div>
@@ -62,14 +62,16 @@ export default {
   },
   data() {
     return {
+      schema: null,
       components: [
         {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
       ],
       drag: false,
+
+      // formColumn: 1,
       formName: '',
-      formColumn: 1,
       properties: [],
-      schema: null
+      required: []
     }
   },
   filters: {
@@ -102,9 +104,11 @@ export default {
     },
     createJson() {
       this.schema = null;
-      let schemaFormat = {name: this.formName, properties: {}};
+      let schemaFormat = {name: this.formName, properties: {}, required: []};
       this.properties.forEach((x) => {
-        const {name, ...others} = x.object;
+        const {name, required, ...others} = x.object;
+        if (required)
+          schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
         const object = {};
         objectArray.forEach(([key, value]) => {
