@@ -17,12 +17,13 @@
           </template>
           <div v-for="(component, index) in properties" v-bind:key="index">
             <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
-<!--            <div @dragstart="startDrag($event, component)">-->
-              <create-string v-model="component.object" v-if="component.type === 'string'"/>
-              <!--            <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
-<!--            </div>-->
+            <!--            <div @dragstart="startDrag($event, component)">-->
+            <create-string v-model="component.object" v-if="component.type === 'string'"/>
+            <!--            <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
+            <!--            </div>-->
           </div>
-          <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent @dragover.prevent/>
+          <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
+               @dragover.prevent/>
         </b-card>
       </b-col>
       <b-col cols="4">
@@ -41,7 +42,7 @@
       <b-col>
         <b-button v-on:click="createJson()">Create Json</b-button>
         <b-card>
-          {{ schema }}
+          <pre>{{ schema | jsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -70,6 +71,12 @@ export default {
       schema: null
     }
   },
+  filters: {
+    jsonFormat: function(value) {
+      if (!value) return '';
+      return JSON.stringify(value, null, '\t');
+    }
+  },
   methods: {
     startDrag(event, item) {
       event.dataTransfer.dropEffect = 'move'
@@ -93,10 +100,16 @@ export default {
       this.properties.push({type: type, object: object});
     },
     createJson() {
+      this.schema = null;
       let schemaFormat = {name: this.formName, properties: {}};
       this.properties.forEach((x) => {
         const {name, ...others} = x.object;
-        schemaFormat.properties[name] = {type: x.type, ...others};
+        const objectArray = Object.entries(others);
+        const object = {};
+        objectArray.forEach(([key, value]) => {
+          if (value) object[key] = value
+        });
+        schemaFormat.properties[name] = {type: x.type, ...object};
       })
       this.schema = schemaFormat;
     }
