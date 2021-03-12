@@ -30,10 +30,10 @@
             </b-form>
           </template>
           <div v-for="(item, index) in properties" v-bind:key="index">
-            <div v-if="drag" class="drop-div"
-                 @drop="onDrop($event, index)"
-                 @dragenter.prevent
-                 @dragover.prevent/>
+<!--            <div v-if="drag" class="drop-div"-->
+<!--                 @drop="onDrop($event, index)"-->
+<!--                 @dragenter.prevent-->
+<!--                 @dragover.prevent/>-->
             <div draggable="true" class="property-div"
                  @dragstart="startDragPosition($event, index)"
                  @drop="onDropPosition($event, index)"
@@ -44,7 +44,9 @@
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
             </div>
           </div>
-          <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
+          <div v-if="drag" class="drop-div" @drop="onDropPosition($event, properties.length)"
+               @dragenter.prevent="dragEnter($event)"
+               @dragleave.prevent="dragLeave($event)"
                @dragover.prevent/>
         </b-card>
         {{ properties }}
@@ -80,6 +82,8 @@ export default {
     return {
       schema: null,
       components: [
+        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
+        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
         {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
       ],
       drag: false,
@@ -123,15 +127,15 @@ export default {
     endDrag() {
       this.drag = false;
     },
-    onDrop(event, index) {
-      const _type = event.dataTransfer.getData('itemType')
-      const {type, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
-      this.properties.splice(index, 0, {
-        type: type,
-        properties: {name: name ? name : type + this.properties.length, ...others}
-      });
-      this.drag = false;
-    },
+    // onDrop(event, index) {
+    //   const _type = event.dataTransfer.getData('itemType')
+    //   const {type, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
+    //   this.properties.splice(index, 0, {
+    //     type: type,
+    //     properties: {name: name ? name : type + this.properties.length, ...others}
+    //   });
+    //   this.drag = false;
+    // },
     add(item) {
       const {type, properties: {name, ...others}} = item;
       this.properties.push({type: type, properties: {name: name ? name : type + this.properties.length, ...others}});
@@ -143,19 +147,26 @@ export default {
       event.dataTransfer.setData('itemIndex', index);
     },
     onDropPosition(event, index) {
-      if (this.drag) return;
       event.target.style.background = "";
-      const _index = event.dataTransfer.getData('itemIndex')
-      const {type, properties} = this.properties[_index];
-      this.properties.splice(_index, 1);
-      this.properties.splice(index, 0, {type: type, properties: properties});
+      if (this.drag) {
+        const _type = event.dataTransfer.getData('itemType')
+        const {type, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
+        this.properties.splice(index, 0, {
+          type: type,
+          properties: {name: name ? name : type + this.properties.length, ...others}
+        });
+        this.drag = false;
+      } else {
+        const _index = event.dataTransfer.getData('itemIndex')
+        const {type, properties} = this.properties[_index];
+        this.properties.splice(_index, 1);
+        this.properties.splice(index, 0, {type: type, properties: properties});
+      }
     },
     dragEnter(event) {
-      if (this.drag) return;
       event.target.style.background = "lightgray";
     },
     dragLeave(event) {
-      if (this.drag) return;
       event.target.style.background = "";
     },
 
@@ -184,11 +195,11 @@ export default {
 
 <style scoped>
 .drop-div {
-  height: 20px;
+  height: 40px;
   /*margin-bottom: 10px;*/
   border-width: 2px;
   border-style: dashed;
-  border-color: blue;
+  border-color: black;
 }
 
 .component-div {
@@ -199,6 +210,7 @@ export default {
   padding: 10px;
   width: 150px;
   float: left;
+  margin-right: 10px;
 }
 
 .button-x {
