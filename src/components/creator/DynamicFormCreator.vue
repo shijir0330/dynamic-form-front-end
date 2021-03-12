@@ -34,7 +34,7 @@
                  @drop="onDrop($event, index)"
                  @dragenter.prevent
                  @dragover.prevent/>
-            <div draggable="true"
+            <div draggable="true" class="property-div"
                  @dragstart="startDragPosition($event, index)"
                  @drop="onDropPosition($event, index)"
                  @dragenter.prevent="dragEnter($event)"
@@ -202,5 +202,11 @@ export default {
 
 .button-div {
   float: right;
+}
+
+.property-div {
+  border-style: solid;
+  border-width: 1px;
+  border-color: black;
 }
 </style>

@@ -1,16 +1,16 @@
 <template>
-  <b-card v-if="edit">
+  <div v-if="edit" class="padding">
     String
     <input type="checkbox" v-model="value.required" :disabled="!value.name">
     <input type="text" ref="name" :value="value.name" @input="updateValue"/>
     <input type="number" ref="minLength" :value="value.minLength" @input="updateValue"/>
     <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
     <button @click="edit = !edit">edit</button>
-  </b-card>
-  <b-card v-else>
+  </div>
+  <div v-else class="padding">
     String: {{ value.name }}
     <button @click="edit = !edit">edit</button>
-  </b-card>
+  </div>
 </template>
 
 <script>
@@ -36,4 +36,7 @@ export default {
 </script>
 
 <style scoped>
+.padding {
+  padding: 10px;
+}
 </style>
