@@ -34,15 +34,13 @@
                  @drop="onDrop($event, index)"
                  @dragenter.prevent
                  @dragover.prevent/>
-            <div v-if="dragPosition" class="drop-div"
-                 @drop="onDropPosition($event, index)"
-                 @dragenter.prevent
-                 @dragover.prevent/>
-            <!--            <div @dragstart="startDrag($event, component)">-->
             <div draggable="true"
-                 @dragstart="startDragPosition($event, index)">
-<!--                 @dragend="endDragPosition($event, item)">-->
-              <button class="property-div" @click="remove(index)">X</button>
+                 @dragstart="startDragPosition($event, index)"
+                 @drop="onDropPosition($event, index)"
+                 @dragenter.prevent="dragEnter($event)"
+                 @dragleave.prevent="dragLeave($event)"
+                 @dragover.prevent>
+              <button class="button-div" @click="remove(index)">X</button>
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
             </div>
             <div v-if="!drag" class="mb-2"/>
@@ -86,7 +84,6 @@ export default {
         {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
       ],
       drag: false,
-      dragPosition: false,
 
       // formColumn: 1,
       formName: '',
@@ -125,9 +122,6 @@ export default {
       this.drag = true;
     },
     endDrag() {
-      // event.dataTransfer.dropEffect = 'move'
-      // event.dataTransfer.effectAllowed = 'move'
-      // event.dataTransfer.setData('itemType', item.type);
       this.drag = false;
     },
     onDrop(event, index) {
@@ -148,17 +142,21 @@ export default {
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.effectAllowed = 'move'
       event.dataTransfer.setData('itemIndex', index);
-      this.dragPosition = true;
-    },
-    endDragPosition() {
-      this.dragPosition = false;
     },
     onDropPosition(event, index) {
+      event.target.style.background = "";
       const _index = event.dataTransfer.getData('itemIndex')
       const {type, properties} = this.properties[_index];
       this.properties.splice(_index, 1);
       this.properties.splice(index, 0, {type: type, properties: properties});
-      this.dragPosition = false;
+    },
+    dragEnter(event) {
+      if (this.drag) return;
+      event.target.style.background = "lightblue";
+    },
+    dragLeave(event) {
+      if (this.drag) return;
+      event.target.style.background = "";
     },
 
     remove(index) {
@@ -202,7 +200,7 @@ export default {
   float: left;
 }
 
-.property-div {
+.button-div {
   float: right;
 }
 </style>
