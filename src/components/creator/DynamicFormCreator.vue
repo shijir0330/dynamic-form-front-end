@@ -1,6 +1,20 @@
 <template>
   <div>
     <b-row>
+      <b-col>
+        <b-card header="Components">
+          <div v-for="item in components"
+               class="component-div"
+               :draggable="true"
+               @dragstart="startDrag($event, item)"
+               @dragend="endDrag($event, item)"
+               v-on:click="add(item)">
+            String
+          </div>
+        </b-card>
+      </b-col>
+    </b-row>
+    <b-row class="mt-2">
       <b-col cols="8">
         <b-card header-class="">
           <template #header>
@@ -17,41 +31,31 @@
           </template>
           <div v-for="(component, index) in properties" v-bind:key="index">
             <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
-<!--            <div @dragstart="startDrag($event, component)">-->
+            <!--            <div @dragstart="startDrag($event, component)">-->
             <div>
               <button class="float-right" @click="remove(index)">X</button>
               <create-string v-model="component.properties" :required="required" v-if="component.type === 'string'"/>
-<!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
+              <!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
             </div>
           </div>
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
         </b-card>
-        <b-card class="mt-2">
+      </b-col>
+      <b-col cols="4">
+        <b-card header="JSON">
           <pre>{{ getJson | jsonFormat }}</pre>
         </b-card>
       </b-col>
-      <b-col cols="4">
-        <b-card header="Components">
-          <div v-for="item in components"
-               class="component-div"
-               :draggable="true"
-               @dragstart="startDrag($event, item)"
-               @dragend="endDrag($event, item)"
-               v-on:click="add(item.type, item.properties)">
-            String
-          </div>
-        </b-card>
-      </b-col>
     </b-row>
-<!--    <b-row class="mt-2">-->
-<!--      <b-col>-->
-<!--        <b-button v-on:click="createJson()">Create Json</b-button>-->
-<!--        <b-card>-->
-<!--          <pre>{{ getJson | jsonFormat }}</pre>-->
-<!--        </b-card>-->
-<!--      </b-col>-->
-<!--    </b-row>-->
+    <!--    <b-row class="mt-2">-->
+    <!--      <b-col>-->
+    <!--        <b-button v-on:click="createJson()">Create Json</b-button>-->
+    <!--        <b-card>-->
+    <!--          <pre>{{ getJson | jsonFormat }}</pre>-->
+    <!--        </b-card>-->
+    <!--      </b-col>-->
+    <!--    </b-row>-->
   </div>
 </template>
 
@@ -80,7 +84,7 @@ export default {
     }
   },
   filters: {
-    jsonFormat: function(value) {
+    jsonFormat: function (value) {
       if (!value) return '';
       return JSON.stringify(value, null, '\t');
     }
@@ -117,13 +121,17 @@ export default {
       this.drag = false;
     },
     onDrop(event, index) {
-      const type = event.dataTransfer.getData('itemType')
-      const item = this.components.find((item) => item.type === type);
-      this.properties.splice(index, 0, {type: item.type, properties: item.properties});
+      const _type = event.dataTransfer.getData('itemType')
+      const {type, name, others} = this.components.find((item) => item.type === _type);
+      this.properties.splice(index, 0, {
+        type: type,
+        properties: {name: name ? name : type + this.properties.length, ...others}
+      });
       this.drag = false;
     },
-    add(type, object) {
-      this.properties.push({type: type, properties: object});
+    add(item) {
+      const {type, name, others} = item;
+      this.properties.push({type: type, properties: {name: name ? name : type + this.properties.length, ...others}});
     },
     remove(index) {
       this.properties.splice(index, 1);
@@ -156,11 +164,14 @@ export default {
   border-style: dashed;
   border-color: blue;
 }
+
 .component-div {
   background: gray;
   color: white;
   text-align: center;
   margin-bottom: 10px;
   padding: 10px;
+  width: 150px;
+  float: left;
 }
 </style>
