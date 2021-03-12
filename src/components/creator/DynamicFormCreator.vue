@@ -40,7 +40,7 @@
                  @dragenter.prevent="dragEnter($event)"
                  @dragleave.prevent="dragLeave($event)"
                  @dragover.prevent>
-              <button class="button-div" @click="remove(index)">X</button>
+              <button class="button-x" @click="remove(index)">x</button>
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
             </div>
           </div>
@@ -152,7 +152,7 @@ export default {
     },
     dragEnter(event) {
       if (this.drag) return;
-      event.target.style.background = "lightblue";
+      event.target.style.background = "lightgray";
     },
     dragLeave(event) {
       if (this.drag) return;
@@ -192,6 +192,7 @@ export default {
 }
 
 .component-div {
+  cursor: pointer;
   background: gray;
   color: white;
   text-align: center;
@@ -200,7 +201,7 @@ export default {
   float: left;
 }
 
-.button-div {
+.button-x {
   margin: 10px;
   float: right;
 }
