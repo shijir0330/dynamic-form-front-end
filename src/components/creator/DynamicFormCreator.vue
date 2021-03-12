@@ -20,7 +20,7 @@
 <!--            <div @dragstart="startDrag($event, component)">-->
             <div>
               <button class="float-right" @click="remove(index)">X</button>
-              <create-string v-model="component.object" :required="required" v-if="component.type === 'string'"/>
+              <create-string v-model="component.properties" :required="required" v-if="component.type === 'string'"/>
 <!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
             </div>
           </div>
@@ -89,7 +89,7 @@ export default {
     getJson() {
       let schemaFormat = {name: this.formName, properties: {}, required: []};
       this.properties.forEach((x) => {
-        const {name, required, ...others} = x.object;
+        const {name, required, ...others} = x.properties;
         if (required)
           schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
@@ -119,11 +119,11 @@ export default {
     onDrop(event, index) {
       const type = event.dataTransfer.getData('itemType')
       const item = this.components.find((item) => item.type === type);
-      this.properties.splice(index, 0, {type: item.type, object: item.properties});
+      this.properties.splice(index, 0, {type: item.type, properties: item.properties});
       this.drag = false;
     },
     add(type, object) {
-      this.properties.push({type: type, object: object});
+      this.properties.push({type: type, properties: object});
     },
     remove(index) {
       this.properties.splice(index, 1);
@@ -132,7 +132,7 @@ export default {
     //   this.schema = null;
     //   let schemaFormat = {name: this.formName, properties: {}, required: []};
     //   this.properties.forEach((x) => {
-    //     const {name, required, ...others} = x.object;
+    //     const {name, required, ...others} = x.properties;
     //     if (required)
     //       schemaFormat.required.push(name);
     //     const objectArray = Object.entries(others);
