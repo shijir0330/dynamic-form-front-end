@@ -30,11 +30,18 @@
             </b-form>
           </template>
           <div v-for="(item, index) in properties" v-bind:key="index">
-            <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
-            <div v-if="dragPosition" class="drop-div" @drop="onDropPosition($event, index)" @dragenter.prevent
+            <div v-if="drag" class="drop-div"
+                 @drop="onDrop($event, index)"
+                 @dragenter.prevent
+                 @dragover.prevent/>
+            <div v-if="dragPosition" class="drop-div"
+                 @drop="onDropPosition($event, index)"
+                 @dragenter.prevent
                  @dragover.prevent/>
             <!--            <div @dragstart="startDrag($event, component)">-->
-            <div draggable="true">
+            <div draggable="true"
+                 @dragstart="startDragPosition($event, index)">
+<!--                 @dragend="endDragPosition($event, item)">-->
               <button class="property-div" @click="remove(index)">X</button>
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
             </div>
@@ -135,6 +142,23 @@ export default {
     add(item) {
       const {type, properties: {name, ...others}} = item;
       this.properties.push({type: type, properties: {name: name ? name : type + this.properties.length, ...others}});
+    },
+
+    startDragPosition(event, index) {
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.effectAllowed = 'move'
+      event.dataTransfer.setData('itemIndex', index);
+      this.dragPosition = true;
+    },
+    endDragPosition() {
+      this.dragPosition = false;
+    },
+    onDropPosition(event, index) {
+      const _index = event.dataTransfer.getData('itemIndex')
+      const {type, properties} = this.properties[_index];
+      this.properties.splice(_index, 1);
+      this.properties.splice(index, 0, {type: type, properties: properties});
+      this.dragPosition = false;
     },
 
     remove(index) {
