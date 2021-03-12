@@ -43,7 +43,6 @@
               <button class="button-div" @click="remove(index)">X</button>
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
             </div>
-            <div v-if="!drag" class="mb-2"/>
           </div>
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
@@ -144,6 +143,7 @@ export default {
       event.dataTransfer.setData('itemIndex', index);
     },
     onDropPosition(event, index) {
+      if (this.drag) return;
       event.target.style.background = "";
       const _index = event.dataTransfer.getData('itemIndex')
       const {type, properties} = this.properties[_index];
@@ -201,6 +201,7 @@ export default {
 }
 
 .button-div {
+  margin: 10px;
   float: right;
 }
 
@@ -208,5 +209,6 @@ export default {
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  margin: 10px 0;
 }
 </style>
