@@ -5,7 +5,7 @@
         <b-card header="Components">
           <div v-for="item in components"
                class="component-div"
-               :draggable="true"
+               draggable="true"
                @dragstart="startDrag($event, item)"
                @dragend="endDrag($event, item)"
                v-on:click="add(item)">
@@ -34,19 +34,16 @@
             <div v-if="dragPosition" class="drop-div" @drop="onDropPosition($event, index)" @dragenter.prevent
                  @dragover.prevent/>
             <!--            <div @dragstart="startDrag($event, component)">-->
-            <div :draggable="true" class="property-div"
-                 @dragstart="startDragPosition($event, item, index)"
-                 @dragend="endDragPosition($event, item)">
-              <button class="button-div" @click="remove(index)">X{{index}}</button>
+            <div draggable="true">
+              <button class="property-div" @click="remove(index)">X</button>
               <create-string v-model="item.properties" v-if="item.type === 'string'"/>
-              <!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
             </div>
             <div v-if="!drag" class="mb-2"/>
           </div>
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
         </b-card>
-        {{properties}}
+        {{ properties }}
       </b-col>
       <b-col cols="4">
         <b-card header="JSON">
@@ -79,10 +76,7 @@ export default {
     return {
       schema: null,
       components: [
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
+        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
       ],
       drag: false,
       dragPosition: false,
@@ -104,8 +98,7 @@ export default {
       let schemaFormat = {name: this.formName, properties: {}, required: []};
       this.properties.forEach((x) => {
         const {name, required, ...others} = x.properties;
-        if (required)
-          schemaFormat.required.push(name);
+        if (required) schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
         const object = {};
         objectArray.forEach(([key, value]) => {
@@ -132,42 +125,18 @@ export default {
     },
     onDrop(event, index) {
       const _type = event.dataTransfer.getData('itemType')
-      const {type, name, ...others} = this.components.find((item) => item.type === _type);
+      const {type, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
       this.properties.splice(index, 0, {
         type: type,
         properties: {name: name ? name : type + this.properties.length, ...others}
       });
       this.drag = false;
     },
-
-    startDragPosition(event, item, index) {
-      event.dataTransfer.dropEffect = 'move'
-      event.dataTransfer.effectAllowed = 'move'
-      event.dataTransfer.setData('itemIndex', index);
-      this.dragPosition = true;
-    },
-    endDragPosition() {
-      // event.dataTransfer.dropEffect = 'move'
-      // event.dataTransfer.effectAllowed = 'move'
-      // event.dataTransfer.setData('itemType', item.type);
-      this.dragPosition = false;
-    },
-    onDropPosition(event, index) {
-      const _index = event.dataTransfer.getData('itemIndex')
-      // const temp = this.properties[index]
-      const {type, properties} = this.properties[_index];
-      this.properties.splice(_index, 1);
-      this.properties.splice(index, 0, {
-        type: type,
-        properties: properties
-      });
-      this.dragPosition = false;
-    },
-
     add(item) {
-      const {type, name, ...others} = item;
+      const {type, properties: {name, ...others}} = item;
       this.properties.push({type: type, properties: {name: name ? name : type + this.properties.length, ...others}});
     },
+
     remove(index) {
       this.properties.splice(index, 1);
     },
@@ -204,17 +173,12 @@ export default {
   background: gray;
   color: white;
   text-align: center;
-  margin-right: 10px;
   padding: 10px;
   width: 150px;
   float: left;
 }
 
 .property-div {
-
-}
-
-.button-div {
   float: right;
 }
 </style>
