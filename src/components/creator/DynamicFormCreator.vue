@@ -33,10 +33,11 @@
             <div v-if="drag" class="drop-div" @drop="onDrop($event, index)" @dragenter.prevent @dragover.prevent/>
             <!--            <div @dragstart="startDrag($event, component)">-->
             <div>
-              <button class="float-right" @click="remove(index)">X</button>
-              <create-string v-model="component.properties" :required="required" v-if="component.type === 'string'"/>
+              <button class="property-div" @click="remove(index)">X</button>
+              <create-string class="" v-model="component.properties" :required="required" v-if="component.type === 'string'"/>
               <!--              <create-number v-model="component.object" v-if="component.type === 'number'"/>-->
             </div>
+            <div v-if="!drag" class="mb-2"/>
           </div>
           <div v-if="drag" class="drop-div" @drop="onDrop($event, properties.length)" @dragenter.prevent
                @dragover.prevent/>
@@ -159,7 +160,7 @@ export default {
 <style scoped>
 .drop-div {
   height: 20px;
-  margin-bottom: 10px;
+  /*margin-bottom: 10px;*/
   border-width: 2px;
   border-style: dashed;
   border-color: blue;
@@ -169,9 +170,12 @@ export default {
   background: gray;
   color: white;
   text-align: center;
-  margin-bottom: 10px;
   padding: 10px;
   width: 150px;
   float: left;
+}
+
+.property-div {
+  float: right;
 }
 </style>

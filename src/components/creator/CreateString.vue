@@ -1,5 +1,5 @@
 <template>
-  <b-card class="mb-2" v-if="edit">
+  <b-card v-if="edit">
     String
     <input type="checkbox" v-model="value.required" :disabled="!value.name">
     <input type="text" ref="name" :value="value.name" @input="updateValue"/>
@@ -7,7 +7,7 @@
     <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
     <button @click="edit = !edit">edit</button>
   </b-card>
-  <b-card class="mb-2" v-else>
+  <b-card v-else>
     String: {{ value.name }}
     <button @click="edit = !edit">edit</button>
   </b-card>
