@@ -43,13 +43,14 @@
                    @dragenter.prevent="dragEnter($event)"
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
-                <create-string v-if="item.type === 'string'"
-                               v-model="item.properties" :is-edit="item.edit && editing">
-                  <select v-if="!editing" v-model="item.properties.columns">
+                <create-string v-if="item.type === 'string'" v-model="item.properties" :is-edit="editing"
+                               :is-validation="item.edit && editing">
+<!--                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>-->
+                  <select class="ml-2" v-if="!editing" v-model="item.properties.columns">
                     <option v-for="i in 12" :value="i">{{ i }}</option>
                   </select>
-                  <button v-if="editing" @click="item.edit = !item.edit">edit</button>
-                  <button v-if="editing" class="button-x" @click="remove(index)">x</button>
+                  <button v-if="editing" @click="item.edit = !item.edit">validation</button>
+                  <button v-if="!editing" class="button-x" @click="remove(index)">x</button>
                 </create-string>
               </div>
             </b-col>
@@ -92,7 +93,11 @@ export default {
     return {
       schema: null,
       components: [
-        {type: 'string', edit: false, properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
+        {
+          type: 'string',
+          edit: false,
+          properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}
+        },
       ],
       drag: false,
       editing: false,
@@ -147,7 +152,11 @@ export default {
     // },
     add(item) {
       const {type, edit, properties: {name, ...others}} = item;
-      this.properties.push({type: type, edit: edit, properties: {name: name ? name : type + this.properties.length, ...others}});
+      this.properties.push({
+        type: type,
+        edit: edit,
+        properties: {name: name ? name : type + this.properties.length, ...others}
+      });
     },
 
     startDragPosition(event, index) {
@@ -224,7 +233,9 @@ export default {
 }
 
 .button-x {
-  margin: 10px;
+  margin-left: 10px;
+  font-size: 10px;
+  height: 20px;
 }
 
 .property-div {
