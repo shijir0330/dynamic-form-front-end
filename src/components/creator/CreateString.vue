@@ -1,15 +1,18 @@
 <template>
-  <div v-if="edit" class="padding">
-    String
-    <input type="checkbox" v-model="value.required" :disabled="!value.name">
-    <input type="text" ref="name" :value="value.name" @input="updateValue"/>
-    <input type="number" ref="minLength" :value="value.minLength" @input="updateValue"/>
-    <input type="number" ref="maxLength" :value="value.maxLength" @input="updateValue"/>
+  <div class="padding">
+    <template>String: {{ value.name }}</template>
+    <select ref="columns" :value="value.columns" @change="updateValue">
+      <option v-for="i in 12" :value="i">{{ i }}</option>
+    </select>
+    <input type="checkbox" :hidden="edit" v-model="value.required" :disabled="!value.name">
+    <input type="text" :hidden="edit" ref="name" :value="value.name" @input="updateValue"/>
+    <input type="number" :hidden="edit" ref="minLength" :value="value.minLength" @input="updateValue"/>
+    <input ref="maxLength" :hidden="edit" :value="value.maxLength" type="number" @input="updateValue"/>
     <button @click="edit = !edit">edit</button>
-  </div>
-  <div v-else class="padding">
-    String: {{ value.name }}
-    <button @click="edit = !edit">edit</button>
+<!--  </div>-->
+<!--  <div v-else class="padding">-->
+<!--    String: {{ value.name }}-->
+<!--    <button @click="edit = !edit">edit</button>-->
   </div>
 </template>
 
@@ -27,6 +30,7 @@ export default {
       this.$emit('input', {
         name: this.$refs.name.value,
         required: this.value.required,
+        columns: this.$refs.columns.value,
         minLength: this.$refs.minLength.value,
         maxLength: this.$refs.maxLength.value,
       })

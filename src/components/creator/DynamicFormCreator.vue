@@ -29,21 +29,24 @@
               <!--              </b-form-group>-->
             </b-form>
           </template>
-          <div v-for="(item, index) in properties" v-bind:key="index">
-<!--            <div v-if="drag" class="drop-div"-->
-<!--                 @drop="onDrop($event, index)"-->
-<!--                 @dragenter.prevent-->
-<!--                 @dragover.prevent/>-->
-            <div draggable="true" class="property-div"
-                 @dragstart="startDragPosition($event, index)"
-                 @drop="onDropPosition($event, index)"
-                 @dragenter.prevent="dragEnter($event)"
-                 @dragleave.prevent="dragLeave($event)"
-                 @dragover.prevent>
-              <button class="button-x" @click="remove(index)">x</button>
-              <create-string v-model="item.properties" v-if="item.type === 'string'"/>
-            </div>
-          </div>
+          <b-row>
+            <b-col v-for="(item, index) in properties"
+                   v-bind:key="index" :cols="item.properties.columns">
+              <!--            <div v-if="drag" class="drop-div"-->
+              <!--                 @drop="onDrop($event, index)"-->
+              <!--                 @dragenter.prevent-->
+              <!--                 @dragover.prevent/>-->
+              <div draggable="true" class="property-div"
+                   @dragstart="startDragPosition($event, index)"
+                   @drop="onDropPosition($event, index)"
+                   @dragenter.prevent="dragEnter($event)"
+                   @dragleave.prevent="dragLeave($event)"
+                   @dragover.prevent>
+                <button class="button-x" @click="remove(index)">x</button>
+                <create-string v-model="item.properties" v-if="item.type === 'string'"/>
+              </div>
+            </b-col>
+          </b-row>
           <div v-if="drag" class="drop-div" @drop="onDropPosition($event, properties.length)"
                @dragenter.prevent="dragEnter($event)"
                @dragleave.prevent="dragLeave($event)"
@@ -82,9 +85,7 @@ export default {
     return {
       schema: null,
       components: [
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}},
-        {type: 'string', properties: {name: '', minLength: null, maxLength: null, required: false}}
+        {type: 'string', properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
       ],
       drag: false,
 
