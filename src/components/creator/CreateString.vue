@@ -4,10 +4,14 @@
 <!--    <select ref="columns" :value="value.columns" @change="updateValue">-->
 <!--      <option v-for="i in 12" :value="i">{{ i }}</option>-->
 <!--    </select>-->
-    <input type="text" :hidden="!isEdit" ref="name" :value="value.name" @input="updateValue"/>
-    <input type="checkbox" :hidden="!isValidation" v-model="value.required" :disabled="!value.name">
-    <input type="number" :hidden="!isValidation" ref="minLength" :value="value.minLength" @input="updateValue"/>
-    <input ref="maxLength" :hidden="!isValidation" :value="value.maxLength" type="number" @input="updateValue"/>
+    <input v-model="value.name"/>
+    <input type="checkbox" v-model="value.required"/>
+    <input v-model="value.minLength"/>
+    <input v-model="value.maxLength"/>
+<!--    <input type="text" :hidden="!isEdit" ref="name" :value="value.name" @input="updateValue"/>-->
+<!--    <input type="checkbox" :hidden="!isValidation" v-model="value.required" :disabled="!value.name">-->
+<!--    <input type="number" :hidden="!isValidation" ref="minLength" :value="value.minLength" @input="updateValue"/>-->
+<!--    <input ref="maxLength" :hidden="!isValidation" :value="value.maxLength" type="number" @input="updateValue"/>-->
     <slot></slot>
   </div>
 </template>
@@ -22,16 +26,16 @@ export default {
   //   }
   // },
   methods: {
-    updateValue() {
-      this.$emit('input', {
-        name: this.$refs.name.value,
-        required: this.value.required,
-        columns: this.value.columns,
-        // columns: this.$refs.columns.value,
-        minLength: this.$refs.minLength.value,
-        maxLength: this.$refs.maxLength.value,
-      })
-    }
+    // updateValue() {
+    //   this.$emit('input', {
+    //     name: this.$refs.name.value,
+    //     required: this.value.required,
+    //     columns: this.value.columns,
+    //     // columns: this.$refs.columns.value,
+    //     minLength: this.$refs.minLength.value,
+    //     maxLength: this.$refs.maxLength.value,
+    //   })
+    // }
   }
 }
 </script>
