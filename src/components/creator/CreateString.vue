@@ -25,7 +25,7 @@ export default {
   //     edit: true,
   //   }
   // },
-  methods: {
+  // methods: {
     // updateValue() {
     //   this.$emit('input', {
     //     name: this.$refs.name.value,
@@ -36,7 +36,7 @@ export default {
     //     maxLength: this.$refs.maxLength.value,
     //   })
     // }
-  }
+  // }
 }
 </script>
 
