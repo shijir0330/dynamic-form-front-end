@@ -42,8 +42,11 @@
                    @dragenter.prevent="dragEnter($event)"
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
-                <button class="button-x" @click="remove(index)">x</button>
-                <create-string v-model="item.properties" v-if="item.type === 'string'"/>
+                <create-string v-if="item.type === 'string'"
+                               v-model="item.properties" :is-edit="item.edit">
+                  <button @click="item.edit = !item.edit">edit</button>
+                  <button class="button-x" @click="remove(index)">x</button>
+                </create-string>
               </div>
             </b-col>
           </b-row>
@@ -85,7 +88,7 @@ export default {
     return {
       schema: null,
       components: [
-        {type: 'string', properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
+        {type: 'string', edit: true, properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
       ],
       drag: false,
 
@@ -138,8 +141,8 @@ export default {
     //   this.drag = false;
     // },
     add(item) {
-      const {type, properties: {name, ...others}} = item;
-      this.properties.push({type: type, properties: {name: name ? name : type + this.properties.length, ...others}});
+      const {type, edit, properties: {name, ...others}} = item;
+      this.properties.push({type: type, edit: edit, properties: {name: name ? name : type + this.properties.length, ...others}});
     },
 
     startDragPosition(event, index) {
@@ -159,9 +162,9 @@ export default {
         this.drag = false;
       } else {
         const _index = event.dataTransfer.getData('itemIndex')
-        const {type, properties} = this.properties[_index];
+        const {type, edit, properties} = this.properties[_index];
         this.properties.splice(_index, 1);
-        this.properties.splice(index, 0, {type: type, properties: properties});
+        this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
       }
     },
     dragEnter(event) {
@@ -216,7 +219,6 @@ export default {
 
 .button-x {
   margin: 10px;
-  float: right;
 }
 
 .property-div {

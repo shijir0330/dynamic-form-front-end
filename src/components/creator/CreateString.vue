@@ -1,30 +1,26 @@
 <template>
   <div class="padding">
-    <template>String: {{ value.name }}</template>
+    <template>{{ value.name }}: String</template>
     <select ref="columns" :value="value.columns" @change="updateValue">
       <option v-for="i in 12" :value="i">{{ i }}</option>
     </select>
-    <input type="checkbox" :hidden="edit" v-model="value.required" :disabled="!value.name">
-    <input type="text" :hidden="edit" ref="name" :value="value.name" @input="updateValue"/>
-    <input type="number" :hidden="edit" ref="minLength" :value="value.minLength" @input="updateValue"/>
-    <input ref="maxLength" :hidden="edit" :value="value.maxLength" type="number" @input="updateValue"/>
-    <button @click="edit = !edit">edit</button>
-<!--  </div>-->
-<!--  <div v-else class="padding">-->
-<!--    String: {{ value.name }}-->
-<!--    <button @click="edit = !edit">edit</button>-->
+    <input type="checkbox" :hidden="isEdit" v-model="value.required" :disabled="!value.name">
+    <input type="text" :hidden="isEdit" ref="name" :value="value.name" @input="updateValue"/>
+    <input type="number" :hidden="isEdit" ref="minLength" :value="value.minLength" @input="updateValue"/>
+    <input ref="maxLength" :hidden="isEdit" :value="value.maxLength" type="number" @input="updateValue"/>
+    <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
   name: 'CreateString',
-  props: ['value'],
-  data() {
-    return {
-      edit: false
-    }
-  },
+  props: ['value', 'isEdit'],
+  // data() {
+  //   return {
+  //     edit: true,
+  //   }
+  // },
   methods: {
     updateValue() {
       this.$emit('input', {
