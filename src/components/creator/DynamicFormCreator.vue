@@ -27,16 +27,17 @@
               <!--              <b-form-group label="Column number" class="mr-2">-->
               <!--                <b-form-input v-model="formColumn" type="number"></b-form-input>-->
               <!--              </b-form-group>-->
+              <button @click.prevent="editing = !editing">EDITING</button>
             </b-form>
           </template>
           <b-row>
             <b-col v-for="(item, index) in properties"
-                   v-bind:key="index" :cols="item.properties.columns">
+                   v-bind:key="index" :cols="!editing ? item.properties.columns : 12">
               <!--            <div v-if="drag" class="drop-div"-->
               <!--                 @drop="onDrop($event, index)"-->
               <!--                 @dragenter.prevent-->
               <!--                 @dragover.prevent/>-->
-              <div draggable="true" class="property-div"
+              <div :draggable="!editing" class="property-div"
                    @dragstart="startDragPosition($event, index)"
                    @drop="onDropPosition($event, index)"
                    @dragenter.prevent="dragEnter($event)"
@@ -44,8 +45,11 @@
                    @dragover.prevent>
                 <create-string v-if="item.type === 'string'"
                                v-model="item.properties" :is-edit="item.edit">
-                  <button @click="item.edit = !item.edit">edit</button>
-                  <button class="button-x" @click="remove(index)">x</button>
+                  <select v-if="!editing" v-model="item.properties.columns">
+                    <option v-for="i in 12" :value="i">{{ i }}</option>
+                  </select>
+                  <button v-if="editing" @click="item.edit = !item.edit">edit</button>
+                  <button v-if="editing" class="button-x" @click="remove(index)">x</button>
                 </create-string>
               </div>
             </b-col>
@@ -91,6 +95,7 @@ export default {
         {type: 'string', edit: true, properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
       ],
       drag: false,
+      editing: false,
 
       // formColumn: 1,
       formName: '',
@@ -154,9 +159,10 @@ export default {
       event.target.style.background = "";
       if (this.drag) {
         const _type = event.dataTransfer.getData('itemType')
-        const {type, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
+        const {type, edit, properties: {name, ...others}} = this.components.find((item) => item.type === _type);
         this.properties.splice(index, 0, {
           type: type,
+          edit: edit,
           properties: {name: name ? name : type + this.properties.length, ...others}
         });
         this.drag = false;

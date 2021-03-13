@@ -1,9 +1,9 @@
 <template>
   <div class="padding">
     <template>{{ value.name }}: String</template>
-    <select ref="columns" :value="value.columns" @change="updateValue">
-      <option v-for="i in 12" :value="i">{{ i }}</option>
-    </select>
+<!--    <select ref="columns" :value="value.columns" @change="updateValue">-->
+<!--      <option v-for="i in 12" :value="i">{{ i }}</option>-->
+<!--    </select>-->
     <input type="checkbox" :hidden="isEdit" v-model="value.required" :disabled="!value.name">
     <input type="text" :hidden="isEdit" ref="name" :value="value.name" @input="updateValue"/>
     <input type="number" :hidden="isEdit" ref="minLength" :value="value.minLength" @input="updateValue"/>
@@ -26,7 +26,8 @@ export default {
       this.$emit('input', {
         name: this.$refs.name.value,
         required: this.value.required,
-        columns: this.$refs.columns.value,
+        columns: this.value.columns,
+        // columns: this.$refs.columns.value,
         minLength: this.$refs.minLength.value,
         maxLength: this.$refs.maxLength.value,
       })
