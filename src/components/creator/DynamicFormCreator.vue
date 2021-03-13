@@ -44,7 +44,7 @@
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
                 <create-string v-if="item.type === 'string'"
-                               v-model="item.properties" :is-edit="item.edit">
+                               v-model="item.properties" :is-edit="item.edit && editing">
                   <select v-if="!editing" v-model="item.properties.columns">
                     <option v-for="i in 12" :value="i">{{ i }}</option>
                   </select>
@@ -92,7 +92,7 @@ export default {
     return {
       schema: null,
       components: [
-        {type: 'string', edit: true, properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
+        {type: 'string', edit: false, properties: {name: '', required: false, columns: '12', minLength: null, maxLength: null}},
       ],
       drag: false,
       editing: false,

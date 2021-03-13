@@ -4,10 +4,10 @@
 <!--    <select ref="columns" :value="value.columns" @change="updateValue">-->
 <!--      <option v-for="i in 12" :value="i">{{ i }}</option>-->
 <!--    </select>-->
-    <input type="checkbox" :hidden="isEdit" v-model="value.required" :disabled="!value.name">
-    <input type="text" :hidden="isEdit" ref="name" :value="value.name" @input="updateValue"/>
-    <input type="number" :hidden="isEdit" ref="minLength" :value="value.minLength" @input="updateValue"/>
-    <input ref="maxLength" :hidden="isEdit" :value="value.maxLength" type="number" @input="updateValue"/>
+    <input type="checkbox" :hidden="!isEdit" v-model="value.required" :disabled="!value.name">
+    <input type="text" :hidden="!isEdit" ref="name" :value="value.name" @input="updateValue"/>
+    <input type="number" :hidden="!isEdit" ref="minLength" :value="value.minLength" @input="updateValue"/>
+    <input ref="maxLength" :hidden="!isEdit" :value="value.maxLength" type="number" @input="updateValue"/>
     <slot></slot>
   </div>
 </template>
