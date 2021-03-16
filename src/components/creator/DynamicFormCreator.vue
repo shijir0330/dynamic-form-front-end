@@ -32,7 +32,7 @@
           </template>
           <b-row>
             <b-col v-for="(item, index) in properties"
-                   v-bind:key="index" :cols="!editing ? item.common.columns : 12">
+                   v-bind:key="index" :cols="!editing ? item.properties.columns : 12">
               <!--            <div v-if="drag" class="drop-div"-->
               <!--                 @drop="onDrop($event, index)"-->
               <!--                 @dragenter.prevent-->
@@ -44,15 +44,15 @@
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
                 <create-components :item="item" :editing="editing"/>
-<!--                <create-string v-if="item.type === 'string'" v-model="item.properties" :is-edit="editing"-->
-<!--                               :is-validation="item.edit && editing">-->
-<!--&lt;!&ndash;                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>&ndash;&gt;-->
-<!--                  <select class="ml-2" v-if="!editing" v-model="item.properties.columns">-->
-<!--                    <option v-for="i in 12" :value="i">{{ i }}</option>-->
-<!--                  </select>-->
-<!--                  <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
-<!--                  <button v-if="!editing" class="button-x" @click="remove(index)">x</button>-->
-<!--                </create-string>-->
+                <!--                <create-string v-if="item.type === 'string'" v-model="item.properties" :is-edit="editing"-->
+                <!--                               :is-validation="item.edit && editing">-->
+                <!--&lt;!&ndash;                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>&ndash;&gt;-->
+                <!--                  <select class="ml-2" v-if="!editing" v-model="item.properties.columns">-->
+                <!--                    <option v-for="i in 12" :value="i">{{ i }}</option>-->
+                <!--                  </select>-->
+                <!--                  <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
+                <!--                  <button v-if="!editing" class="button-x" @click="remove(index)">x</button>-->
+                <!--                </create-string>-->
               </div>
             </b-col>
           </b-row>
@@ -83,6 +83,7 @@
 <script>
 
 import CreateComponents from "@/components/creator/CreateComponents";
+
 export default {
   name: 'DynamicFormCreator',
   components: {CreateComponents},
@@ -93,8 +94,7 @@ export default {
         {
           type: 'string',
           edit: false,
-          common: {name: '', label: '', columns: '12'},
-          properties: {}
+          properties: {name: '', label: '', columns: '12'}
         },
       ],
       drag: false,
@@ -115,7 +115,7 @@ export default {
     getJson() {
       let schemaFormat = {name: this.formName, properties: {}, required: []};
       this.properties.forEach((x) => {
-        const {name, required, ...others} = {...x.common, ...x.properties};
+        const {name, required, ...others} = x.properties;
         if (required) schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
         const object = {};
@@ -140,12 +140,17 @@ export default {
       this.drag = false;
     },
     add(item) {
-      const {type, edit, common: {columns}, properties: {...properties}} = item;
+      const {type, edit, properties: {columns, name, label, ...properties}} = item;
       this.properties.push({
         type: type,
         edit: edit,
-        common: {name: type + this.properties.length, label: type + this.properties.length, columns: columns},
-        properties: properties
+        properties: {
+          name: name ? name : type + this.properties.length,
+          label: label ? label : type + this.properties.length,
+          columns: columns,
+          ...properties
+        },
+        // properties: properties
       });
     },
     startDragPosition(event, index) {
@@ -157,19 +162,23 @@ export default {
       event.target.style.background = "";
       if (this.drag) {
         const _type = event.dataTransfer.getData('itemType')
-        const {type, edit, common: {columns}, properties: {...properties}} = this.components.find((item) => item.type === _type);
+        const {type, edit, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
         this.properties.splice(index, 0, {
           type: type,
           edit: edit,
-          common: {name: type + this.properties.length, label: type + this.properties.length, columns: columns},
-          properties: properties
+          properties: {
+            name: name ? name : type + this.properties.length,
+            label: label ? label : type + this.properties.length,
+            columns: columns,
+            ...properties
+          },
         });
         this.drag = false;
       } else {
         const _index = event.dataTransfer.getData('itemIndex')
-        const {type, edit, common, properties} = this.properties[_index];
+        const {type, edit, properties} = this.properties[_index];
         this.properties.splice(_index, 1);
-        this.properties.splice(index, 0, {type: type, edit: edit, common: common, properties: properties});
+        this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
       }
     },
     dragEnter(event) {

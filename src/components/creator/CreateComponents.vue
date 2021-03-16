@@ -1,9 +1,9 @@
 <template>
   <div>
     <div v-if="!editing">
-      <template>{{ item.common.name }}: string</template>
+      <template>{{ item.properties.name }}: string</template>
       <label>Columns:
-        <select v-model="item.common.columns">
+        <select v-model="item.properties.columns">
           <option v-for="i in 12" :value="i">{{ i }}</option>
         </select>
       </label>
@@ -11,10 +11,10 @@
     <div v-else>
       <template>{{ 'Type: ' + item.type }}</template>
       <label>Name:
-        <input v-model="item.common.name"/>
+        <input v-model="item.properties.name"/>
       </label>
       <label>Label:
-        <input v-model="item.common.label"/>
+        <input v-model="item.properties.label"/>
       </label>
     </div>
     <div v-if="editing">Validations:
