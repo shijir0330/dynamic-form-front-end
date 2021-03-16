@@ -1,4 +1,18 @@
 const dragDropMixin = {
+    data() {
+        return {
+            components: [
+                {
+                    type: 'string',
+                    properties: {name: '', label: '', columns: '12'}
+                },
+                {
+                    type: 'container',
+                    properties: {name: '', label: '', columns: '12', properties: {}}
+                },
+            ],
+        }
+    },
     filters: {
         jsonFormat: function (value) {
             if (!value) return '';
@@ -24,10 +38,10 @@ const dragDropMixin = {
             event.target.style.background = "";
             if (this.drag) {
                 const _type = event.dataTransfer.getData('itemType')
-                const {type, edit, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
+                const {type, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
                 this.properties.splice(index, 0, {
                     type: type,
-                    edit: edit,
+                    edit: false,
                     properties: {
                         name: name ? name : type + this.properties.length,
                         label: label ? label : type + this.properties.length,

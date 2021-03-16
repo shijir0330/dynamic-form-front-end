@@ -15,7 +15,7 @@
       </b-col>
     </b-row>
     <b-row class="mt-2">
-      <b-col cols="8">
+      <b-col cols="7">
         <b-card header-class="">
           <template #header>
             <b-form inline>
@@ -33,14 +33,20 @@
           <b-row>
             <b-col v-for="(item, index) in properties"
                    v-bind:key="index" :cols="!editing ? item.properties.columns : 12">
-              <div :draggable="!editing" class="property-div"
-                   @dragstart="startDragPosition($event, index)"
+              <div class="drop-div" v-if="drag"
                    @drop="onDrop($event, index)"
                    @dragenter.prevent="dragEnter($event)"
                    @dragleave.prevent="dragLeave($event)"
-                   @dragover.prevent>
+                   @dragover.prevent/>
+
+              <div :draggable="!editing" class="property-div"
+                   @dragstart="startDragPosition($event, index)">
+<!--                   @drop="onDrop($event, index)"-->
+<!--                   @dragenter.prevent="dragEnter($event)"-->
+<!--                   @dragleave.prevent="dragLeave($event)"-->
+<!--                   @dragover.prevent>-->
                 <button v-if="!editing" class="button-x" @click="remove(index)">x</button>
-                <create-components :item="item" :editing="editing"/>
+                <create-components :item="item" :editing="editing" :drag="drag"/>
               </div>
             </b-col>
           </b-row>
@@ -51,7 +57,7 @@
         </b-card>
         {{ properties }}
       </b-col>
-      <b-col cols="4">
+      <b-col cols="5">
         <b-card header="JSON">
           <pre>{{ getJson | jsonFormat }}</pre>
         </b-card>
@@ -79,18 +85,18 @@ export default {
   data() {
     return {
       schema: null,
-      components: [
-        {
-          type: 'string',
-          edit: false,
-          properties: {name: '', label: '', columns: '12'}
-        },
-        {
-          type: 'container',
-          edit: false,
-          properties: {name: '', label: '', columns: '12', properties: {}}
-        },
-      ],
+      // components: [
+      //   {
+      //     type: 'string',
+      //     edit: false,
+      //     properties: {name: '', label: '', columns: '12'}
+      //   },
+      //   {
+      //     type: 'container',
+      //     edit: false,
+      //     properties: {name: '', label: '', columns: '12', properties: {}}
+      //   },
+      // ],
       drag: false,
       editing: false,
 
@@ -118,10 +124,10 @@ export default {
   },
   methods: {
     add(item) {
-      const {type, edit, properties: {columns, name, label, ...properties}} = item;
+      const {type, properties: {columns, name, label, ...properties}} = item;
       this.properties.push({
         type: type,
-        edit: edit,
+        edit: false,
         properties: {
           name: name ? name : type + this.properties.length,
           label: label ? label : type + this.properties.length,

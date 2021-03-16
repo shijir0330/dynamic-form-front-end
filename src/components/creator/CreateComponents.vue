@@ -17,9 +17,9 @@
         <input v-model="item.properties.label"/>
       </label>
     </div>
-    <div v-if="editing">
-      <create-string v-if="item.type === 'string'" v-model="item.properties"/>
-      <create-container v-if="item.type === 'container'" v-model="item.properties"/>
+    <div>
+      <create-string v-if="editing && item.type === 'string'" v-model="item.properties"/>
+      <create-container v-if="item.type === 'container'" v-model="item.properties" :editing="editing" :drag="drag"/>
     </div>
   </div>
 </template>
@@ -38,7 +38,8 @@ export default {
   },
   props: {
     item: Object,
-    editing: Boolean
+    editing: Boolean,
+    drag: Boolean
   }
 }
 </script>
