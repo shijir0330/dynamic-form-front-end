@@ -9,7 +9,7 @@
                @dragstart="startDrag($event, item)"
                @dragend="endDrag($event, item)"
                v-on:click="add(item)">
-            String
+            {{ item.type }}
           </div>
         </b-card>
       </b-col>
@@ -33,10 +33,6 @@
           <b-row>
             <b-col v-for="(item, index) in properties"
                    v-bind:key="index" :cols="!editing ? item.properties.columns : 12">
-              <!--            <div v-if="drag" class="drop-div"-->
-              <!--                 @drop="onDrop($event, index)"-->
-              <!--                 @dragenter.prevent-->
-              <!--                 @dragover.prevent/>-->
               <div :draggable="!editing" class="property-div"
                    @dragstart="startDragPosition($event, index)"
                    @drop="onDrop($event, index)"
@@ -85,6 +81,11 @@ export default {
       components: [
         {
           type: 'string',
+          edit: false,
+          properties: {name: '', label: '', columns: '12'}
+        },
+        {
+          type: 'container',
           edit: false,
           properties: {name: '', label: '', columns: '12'}
         },

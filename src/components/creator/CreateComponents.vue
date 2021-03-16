@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!editing">
-      <template>{{ item.properties.name }}: string</template>
+      <template>{{ item.properties.name + ':' + item.type }}</template>
       <label>Columns:
         <select v-model="item.properties.columns">
           <option v-for="i in 12" :value="i">{{ i }}</option>
@@ -17,7 +17,7 @@
         <input v-model="item.properties.label"/>
       </label>
     </div>
-    <div v-if="editing">Validations:
+    <div v-if="editing">
       <create-string v-if="item.type === 'string'" v-model="item.properties"/>
         <!--                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>-->
         <!--        <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
