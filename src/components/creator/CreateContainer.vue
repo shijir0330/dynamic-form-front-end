@@ -1,6 +1,6 @@
 <template>
   <div class="padding">
-
+    <input type="checkbox" v-model="value.properties"/>
     <slot></slot>
   </div>
 </template>

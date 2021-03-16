@@ -6,8 +6,8 @@
     <!--    </select>-->
 <!--    <input :hidden="!isEdit" v-model="value.name"/>-->
     <input type="checkbox" v-model="value.required"/>
-    <input v-model="value.minLength"/>
-    <input v-model="value.maxLength"/>
+    <input type="number" v-model="value.minLength"/>
+    <input type="number" v-model="value.maxLength"/>
     <!--    <input type="text" :hidden="!isEdit" ref="name" :value="value.name" @input="updateValue"/>-->
     <!--    <input type="checkbox" :hidden="!isValidation" v-model="value.required" :disabled="!value.name">-->
     <!--    <input type="number" :hidden="!isValidation" ref="minLength" :value="value.minLength" @input="updateValue"/>-->

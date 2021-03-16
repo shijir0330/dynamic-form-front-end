@@ -19,9 +19,7 @@
     </div>
     <div v-if="editing">
       <create-string v-if="item.type === 'string'" v-model="item.properties"/>
-        <!--                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>-->
-        <!--        <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
-        <!--        <button v-if="!editing" class="button-x" @click="remove(index)">x</button>-->
+      <create-container v-if="item.type === 'container'" v-model="item.properties" />
     </div>
   </div>
 </template>
@@ -29,10 +27,12 @@
 <script>
 import CreateString from '@/components/creator/CreateString'
 import CreateNumber from "@/components/creator/CreateNumber";
+import CreateContainer from "@/components/creator/CreateContainer";
 
 export default {
   name: "CreateComponents",
   components: {
+    CreateContainer,
     CreateString,
     CreateNumber
   },
