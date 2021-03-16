@@ -124,7 +124,7 @@ export default {
   },
   methods: {
     add(item) {
-      const {type, properties: {columns, name, label, ...properties}} = item;
+      const {type, properties: {columns, name, label, ...other}} = item;
       this.properties.push({
         type: type,
         edit: false,
@@ -132,7 +132,7 @@ export default {
           name: name ? name : type + this.properties.length,
           label: label ? label : type + this.properties.length,
           columns: columns,
-          ...properties
+          ...other
         },
       });
     },

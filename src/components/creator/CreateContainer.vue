@@ -42,52 +42,52 @@ export default {
   //     }
   //   })
   // },
-  computed: {
-    getPropertiesArray: {
-      get() {
-        return Object.entries(this.value.properties).map(([key, value]) => {
-          return {
-            type: value.type,
-            edit: false,
-            properties: {
-              name: key,
-              label: value.label,
-              columns: value.columns,
-              ...value.properties
-            }
-          }
-        })
-      },
-      set(value) {
-        let schemaFormat = {};
-        value.forEach((x) => {
-          const {name, required, ...others} = x.properties;
-          if (required) schemaFormat.required.push(name);
-          const objectArray = Object.entries(others);
-          const object = {};
-          objectArray.forEach(([key, value]) => {
-            if (value) object[key] = value
-          });
-          schemaFormat[name] = {type: x.type, ...object};
-        })
-        this.value.properties = schemaFormat;
-      }
-    }
-  },
+  // computed: {
+  //   getPropertiesArray: {
+  //     get() {
+  //       return Object.entries(this.value.properties).map(([key, value]) => {
+  //         return {
+  //           type: value.type,
+  //           edit: false,
+  //           properties: {
+  //             name: key,
+  //             label: value.label,
+  //             columns: value.columns,
+  //             ...value.properties
+  //           }
+  //         }
+  //       })
+  //     },
+  //     set(value) {
+  //       let schemaFormat = {};
+  //       value.forEach((x) => {
+  //         const {name, required, ...others} = x.properties;
+  //         if (required) schemaFormat.required.push(name);
+  //         const objectArray = Object.entries(others);
+  //         const object = {};
+  //         objectArray.forEach(([key, value]) => {
+  //           if (value) object[key] = value
+  //         });
+  //         schemaFormat[name] = {type: x.type, ...object};
+  //       })
+  //       this.value.properties = schemaFormat;
+  //     }
+  //   }
+  // },
   methods: {
     onDrop(event, index) {
       event.target.style.background = "";
       if (this.drag) {
         const _type = event.dataTransfer.getData('itemType')
-        const {type, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
+        const {type, properties: {columns, name, label, ...other}} = this.components.find((item) => item.type === _type);
         this.value.properties.splice(index, 0, {
           type: type,
           edit: false,
           properties: {
-            name: name ? name : type + this.getPropertiesArray.length,
-            label: label ? label : type + this.getPropertiesArray.length,
+            name: name ? name : type + this.value.properties.length,
+            label: label ? label : type + this.value.properties.length,
             columns: columns,
-            ...properties
+            ...other
           },
         });
         // this.drag = false;

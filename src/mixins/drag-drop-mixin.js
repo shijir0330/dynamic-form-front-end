@@ -38,7 +38,7 @@ const dragDropMixin = {
             event.target.style.background = "";
             if (this.drag) {
                 const _type = event.dataTransfer.getData('itemType')
-                const {type, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
+                const {type, properties: {columns, name, label, ...other}} = this.components.find((item) => item.type === _type);
                 this.properties.splice(index, 0, {
                     type: type,
                     edit: false,
@@ -46,7 +46,7 @@ const dragDropMixin = {
                         name: name ? name : type + this.properties.length,
                         label: label ? label : type + this.properties.length,
                         columns: columns,
-                        ...properties
+                        ...other
                     },
                 });
                 this.drag = false;
