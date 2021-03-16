@@ -55,11 +55,11 @@
                @dragleave.prevent="dragLeave($event)"
                @dragover.prevent/>
         </b-card>
-        {{ properties }}
+        {{ getJson }}
       </b-col>
       <b-col cols="5">
         <b-card header="JSON">
-          <pre>{{ getJson | jsonFormat }}</pre>
+          <pre>{{ properties | jsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>

@@ -80,6 +80,8 @@ export default {
       if (this.drag) {
         const _type = event.dataTransfer.getData('itemType')
         const {type, properties: {columns, name, label, ...other}} = this.components.find((item) => item.type === _type);
+        if (!this.value.properties) this.value.properties = [];
+        console.log('efefe');
         this.value.properties.splice(index, 0, {
           type: type,
           edit: false,
