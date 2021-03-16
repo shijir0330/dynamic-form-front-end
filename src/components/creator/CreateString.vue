@@ -1,13 +1,13 @@
 <template>
   <div class="padding">
-    <template v-if="!isEdit">{{ value.name }}: string</template>
+<!--    <template v-if="!isEdit">{{ value.name }}: string</template>-->
     <!--    <select ref="columns" :value="value.columns" @change="updateValue">-->
     <!--      <option v-for="i in 12" :value="i">{{ i }}</option>-->
     <!--    </select>-->
-    <input :hidden="!isEdit" v-model="value.name"/>
-    <input :hidden="!isValidation" type="checkbox" v-model="value.required"/>
-    <input :hidden="!isValidation" v-model="value.minLength"/>
-    <input :hidden="!isValidation" v-model="value.maxLength"/>
+<!--    <input :hidden="!isEdit" v-model="value.name"/>-->
+    <input type="checkbox" v-model="value.required"/>
+    <input v-model="value.minLength"/>
+    <input v-model="value.maxLength"/>
     <!--    <input type="text" :hidden="!isEdit" ref="name" :value="value.name" @input="updateValue"/>-->
     <!--    <input type="checkbox" :hidden="!isValidation" v-model="value.required" :disabled="!value.name">-->
     <!--    <input type="number" :hidden="!isValidation" ref="minLength" :value="value.minLength" @input="updateValue"/>-->
@@ -19,7 +19,7 @@
 <script>
 export default {
   name: 'CreateString',
-  props: ['value', 'isEdit', 'isValidation'],
+  props: ['value'],
   // data() {
   //   return {
   //     edit: true,
