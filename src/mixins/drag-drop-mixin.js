@@ -8,7 +8,7 @@ const dragDropMixin = {
                 },
                 {
                     type: 'container',
-                    properties: {name: '', label: '', columns: '12', properties: {}}
+                    properties: {name: '', label: '', columns: '12', properties: [], required: []}
                 },
             ],
         }

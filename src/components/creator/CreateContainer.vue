@@ -1,7 +1,7 @@
 <template>
   <div class="padding">
     <b-row>
-      <b-col v-for="(item, index) in getPropertiesArray"
+      <b-col v-for="(item, index) in value.properties"
              v-bind:key="index" :cols="!editing ? item.properties.columns : 12">
         <div :draggable="!editing" class="property-div"
              @dragstart="startDragPosition($event, index)"
@@ -23,14 +23,24 @@
 
 <script>
 import {dragDropMixin} from "@/mixins/drag-drop-mixin";
-// import CreateComponents from "@/components/creator/CreateComponents";
 
 export default {
   name: "CreateContainer",
   mixins: [dragDropMixin],
   props: ['value', 'editing', 'drag'],
-  // components: {
-  //   CreateComponents
+  // mounted() {
+  //   this.properties = Object.entries(this.value.properties).map(([key, value]) => {
+  //     return {
+  //       type: value.type,
+  //       edit: false,
+  //       properties: {
+  //         name: key,
+  //         label: value.label,
+  //         columns: value.columns,
+  //         ...value.properties
+  //       }
+  //     }
+  //   })
   // },
   computed: {
     getPropertiesArray: {
@@ -70,8 +80,7 @@ export default {
       if (this.drag) {
         const _type = event.dataTransfer.getData('itemType')
         const {type, properties: {columns, name, label, ...properties}} = this.components.find((item) => item.type === _type);
-        let temp = this.getPropertiesArray;
-        temp.splice(index, 0, {
+        this.value.properties.splice(index, 0, {
           type: type,
           edit: false,
           properties: {
@@ -81,17 +90,16 @@ export default {
             ...properties
           },
         });
-        this.getPropertiesArray = temp;
         // this.drag = false;
       } else {
         const _index = event.dataTransfer.getData('itemIndex')
         const {type, edit, properties} = this.properties[_index];
-        let temp = this.getPropertiesArray;
-        temp.splice(_index, 1);
-        temp.splice(index, 0, {type: type, edit: edit, properties: properties});
-        // this.properties.splice(_index, 1);
-        // this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
-        this.getPropertiesArray = temp;
+        // let temp = this.getPropertiesArray;
+        // temp.splice(_index, 1);
+        // temp.splice(index, 0, {type: type, edit: edit, properties: properties});
+        this.properties.splice(_index, 1);
+        this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
+        // this.getPropertiesArray = temp;
       }
     },
   }
