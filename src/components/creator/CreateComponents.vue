@@ -19,7 +19,7 @@
     </div>
     <div v-if="editing">
       <create-string v-if="item.type === 'string'" v-model="item.properties"/>
-      <create-container v-if="item.type === 'container'" v-model="item.properties" />
+      <create-container v-if="item.type === 'container'" v-model="item.properties"/>
     </div>
   </div>
 </template>
