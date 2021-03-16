@@ -18,12 +18,10 @@
       </label>
     </div>
     <div v-if="editing">Validations:
-      <create-string v-if="item.type === 'string'" v-model="item.properties"
-                     :is-validation="item.edit && editing">
+      <create-string v-if="item.type === 'string'" v-model="item.properties"/>
         <!--                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>-->
         <!--        <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
         <!--        <button v-if="!editing" class="button-x" @click="remove(index)">x</button>-->
-      </create-string>
     </div>
   </div>
 </template>

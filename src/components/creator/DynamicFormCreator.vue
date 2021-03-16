@@ -43,16 +43,8 @@
                    @dragenter.prevent="dragEnter($event)"
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
+                <button v-if="!editing" class="button-x" @click="remove(index)">x</button>
                 <create-components :item="item" :editing="editing"/>
-                <!--                <create-string v-if="item.type === 'string'" v-model="item.properties" :is-edit="editing"-->
-                <!--                               :is-validation="item.edit && editing">-->
-                <!--&lt;!&ndash;                  <label v-if="!editing" class="mr-2 ml-2">columns: </label>&ndash;&gt;-->
-                <!--                  <select class="ml-2" v-if="!editing" v-model="item.properties.columns">-->
-                <!--                    <option v-for="i in 12" :value="i">{{ i }}</option>-->
-                <!--                  </select>-->
-                <!--                  <button v-if="editing" @click="item.edit = !item.edit">validation</button>-->
-                <!--                  <button v-if="!editing" class="button-x" @click="remove(index)">x</button>-->
-                <!--                </create-string>-->
               </div>
             </b-col>
           </b-row>
@@ -232,9 +224,7 @@ export default {
 }
 
 .button-x {
-  margin-left: 10px;
-  font-size: 10px;
-  height: 20px;
+  float: right;
 }
 
 .property-div {
