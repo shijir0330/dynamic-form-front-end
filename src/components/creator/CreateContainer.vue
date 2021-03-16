@@ -49,7 +49,6 @@ export default {
         })
       },
       set(value) {
-        console.log('value',value)
         let schemaFormat = {};
         value.forEach((x) => {
           const {name, required, ...others} = x.properties;
@@ -87,8 +86,12 @@ export default {
       } else {
         const _index = event.dataTransfer.getData('itemIndex')
         const {type, edit, properties} = this.properties[_index];
-        this.properties.splice(_index, 1);
-        this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
+        let temp = this.getPropertiesArray;
+        temp.splice(_index, 1);
+        temp.splice(index, 0, {type: type, edit: edit, properties: properties});
+        // this.properties.splice(_index, 1);
+        // this.properties.splice(index, 0, {type: type, edit: edit, properties: properties});
+        this.getPropertiesArray = temp;
       }
     },
   }
