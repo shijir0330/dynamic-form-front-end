@@ -21,7 +21,7 @@
             <b-form inline>
               <label class="mr-2">Form Name</label>
               <!--              <b-form-group label="Form Name" class="mr-2">-->
-              <b-form-input v-model="formName" class="mr-2"/>
+              <b-form-input v-model="schema.formName" class="mr-2"/>
               <!--              </b-form-group>-->
               <!--              <label class="mr-2">Column number</label>-->
               <!--              <b-form-group label="Column number" class="mr-2">-->
@@ -55,7 +55,6 @@
                @dragleave.prevent="dragLeave($event)"
                @dragover.prevent/>
         </b-card>
-        {{ getJson }}
       </b-col>
       <b-col cols="5">
         <b-card header="JSON">
@@ -84,25 +83,13 @@ export default {
   components: {CreateComponents},
   data() {
     return {
-      schema: null,
-      // components: [
-      //   {
-      //     type: 'string',
-      //     edit: false,
-      //     properties: {name: '', label: '', columns: '12'}
-      //   },
-      //   {
-      //     type: 'container',
-      //     edit: false,
-      //     properties: {name: '', label: '', columns: '12', properties: {}}
-      //   },
-      // ],
+      schema: {
+        formName: '',
+        properties: [],
+        required: []
+      },
       drag: false,
       editing: false,
-
-      formName: '',
-      properties: [],
-      required: []
     }
   },
   computed: {
