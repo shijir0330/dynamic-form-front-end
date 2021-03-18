@@ -30,6 +30,6 @@ export default {
 
 <style scoped>
 label {
-  margin-right: 20px;
+  margin: 0 20px 0 0;
 }
 </style>

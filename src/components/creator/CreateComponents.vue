@@ -16,7 +16,7 @@
         <input type="checkbox" v-model="item.required"/>
       </label>
     </div>
-    <div>
+    <div class="marTop">
       <create-string v-if="item.type === 'string'" v-model="item"/>
     </div>
   </div>
@@ -38,6 +38,9 @@ export default {
 
 <style scoped>
 label {
-  margin-right: 20px;
+  margin: 0 20px 0 0;
+}
+.marTop {
+  margin-top: 10px;
 }
 </style>
