@@ -83,7 +83,7 @@
 
     <div id="Position" class="tabcontent">
       <h3>Position</h3>
-      <p>Paris is the capital of France.</p>
+      <properties-position v-model="schema"/>
     </div>
 
     <div id="Preview" class="tabcontent">
@@ -98,11 +98,12 @@ import {dragDropMixin} from "@/mixins/drag-drop-mixin";
 import CreateComponents from "@/components/creator/CreateComponents";
 
 import PropertiesEditor from "@/components/creator/PropertiesEditor";
+import PropertiesPosition from "@/components/creator/PropertiesPosition";
 
 export default {
   name: 'DynamicFormCreator',
   mixins: [dragDropMixin],
-  components: {CreateComponents, PropertiesEditor},
+  components: {PropertiesPosition, CreateComponents, PropertiesEditor},
   data() {
     return {
       schema: {

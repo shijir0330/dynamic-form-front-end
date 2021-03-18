@@ -67,7 +67,7 @@ export default {
         type: "string",
         name: `Property-${this.value.properties.length + 1}`,
         label: `Property-${this.value.properties.length + 1}`,
-        columns: 12
+        column: 12
       });
     },
     remove(index) {
