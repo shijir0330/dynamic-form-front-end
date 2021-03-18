@@ -17,7 +17,10 @@
                    @dragenter.prevent="dragEnter($event)"
                    @dragleave.prevent="dragLeave($event)"
                    @dragover.prevent>
-                {{ `${item.name} : ${item.type}` }}
+                {{ item.name }}
+                <select v-model="item.column">
+                  <option v-for="i in 12" :value="i">{{ i }}</option>
+                </select>
               </div>
             </b-col>
           </b-row>
@@ -25,7 +28,7 @@
       </b-col>
       <b-col cols="5">
         <b-card header="JSON">
-          <pre>{{ getJson | jsonFormat }}</pre>
+          <pre>{{ getProperties | jsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -43,7 +46,7 @@ export default {
     }
   },
   computed: {
-    getJson() {
+    getProperties() {
       return this.value.properties.map(x => {
         return {
           name: x.name,
@@ -76,33 +79,11 @@ export default {
 </script>
 
 <style scoped>
-.drop-div {
-  height: 40px;
-  /*margin-bottom: 10px;*/
-  border-width: 2px;
-  border-style: dashed;
-  border-color: black;
-}
-
-.component-div {
-  cursor: pointer;
-  background: gray;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  width: 150px;
-  float: left;
-  margin-right: 10px;
-}
-
-.button-x {
-  float: right;
-}
-
 .property-div {
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  padding: 10px;
   margin: 10px 0;
 }
 </style>

@@ -1,12 +1,19 @@
 <template>
   <div>
     <div>
-      <template>{{ 'Type: ' + item.type }}</template>
       <label>Name:
         <input v-model="item.name"/>
       </label>
       <label>Label:
         <input v-model="item.label"/>
+      </label>
+      <label>Type:
+        <select v-model="item.type">
+          <option value="string">string</option>
+        </select>
+      </label>
+      <label>
+        <input type="checkbox" v-model="item.required"/>
       </label>
     </div>
     <div>
@@ -31,6 +38,6 @@ export default {
 
 <style scoped>
 label {
-  margin-left: 20px;
+  margin-right: 20px;
 }
 </style>

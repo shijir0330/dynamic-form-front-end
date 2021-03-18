@@ -13,7 +13,7 @@
           <b-row>
             <b-col v-for="(item, index) in value.properties" v-bind:key="index" cols="12">
               <div class="property-div">
-                <button class="button-x" @click="remove(index)">x</button>
+                <button class="button-x" @click="removeProperty(index)">x</button>
                 <create-components :item="item"/>
               </div>
             </b-col>
@@ -22,7 +22,7 @@
       </b-col>
       <b-col cols="5">
         <b-card header="JSON">
-          <pre>{{ value.properties | jsonFormat }}</pre>
+          <pre>{{ getPropertiesArray | jsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -30,12 +30,10 @@
 </template>
 
 <script>
-// import {dragDropMixin} from "@/mixins/drag-drop-mixin";
 import CreateComponents from "@/components/creator/CreateComponents";
 
 export default {
   name: "PropertiesEditor",
-  // mixins: [dragDropMixin],
   components: {CreateComponents},
   props: ['value'],
   filters: {
@@ -45,10 +43,25 @@ export default {
     }
   },
   computed: {
-    getJson() {
-      let schemaFormat = {name: this.formName, properties: {}, required: []};
-      this.schema.properties.forEach((x) => {
-        const {name, required, ...others} = x.properties;
+    getPropertiesArray() {
+      let schemaFormat = {name: this.value.formName, properties: [], required: []};
+      this.value.properties.forEach((x) => {
+        const {required, ...others} = x;
+        if (required) schemaFormat.required.push(x.name);
+        const objectArray = Object.entries(others);
+        const object = {};
+        objectArray.forEach(([key, value]) => {
+          if (value) object[key] = value
+        });
+        schemaFormat.required = [...new Set(schemaFormat.required)];
+        schemaFormat.properties.push(object);
+      })
+      return schemaFormat;
+    },
+    getPropertiesObject() {
+      let schemaFormat = {name: this.value.formName, properties: {}, required: []};
+      this.value.properties.forEach((x) => {
+        const {name, required, ...others} = x;
         if (required) schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
         const object = {};
@@ -70,7 +83,7 @@ export default {
         column: 12
       });
     },
-    remove(index) {
+    removeProperty(index) {
       this.value.properties.splice(index, 1);
     },
   }
@@ -78,25 +91,6 @@ export default {
 </script>
 
 <style scoped>
-.drop-div {
-  height: 40px;
-  /*margin-bottom: 10px;*/
-  border-width: 2px;
-  border-style: dashed;
-  border-color: black;
-}
-
-.component-div {
-  cursor: pointer;
-  background: gray;
-  color: white;
-  text-align: center;
-  padding: 10px;
-  width: 150px;
-  float: left;
-  margin-right: 10px;
-}
-
 .button-x {
   float: right;
 }
@@ -105,6 +99,7 @@ export default {
   border-style: solid;
   border-width: 1px;
   border-color: black;
+  padding: 10px;
   margin: 10px 0;
 }
 </style>

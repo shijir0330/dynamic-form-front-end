@@ -1,6 +1,5 @@
 <template>
   <div class="padding">
-    <input type="checkbox" v-model="value.required"/>
     <input type="number" v-model="value.minLength"/>
     <input type="number" v-model="value.maxLength"/>
   </div>
