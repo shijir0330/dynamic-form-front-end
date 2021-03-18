@@ -1,7 +1,11 @@
 <template>
-  <div class="padding">
-    <input type="number" v-model="value.minLength"/>
-    <input type="number" v-model="value.maxLength"/>
+  <div>
+    <label>minLength:
+      <input type="number" v-model="value.minLength"/>
+    </label>
+    <label>maxLength:
+      <input type="number" v-model="value.maxLength"/>
+    </label>
   </div>
 </template>
 
@@ -25,7 +29,7 @@ export default {
 </script>
 
 <style scoped>
-.padding {
-  padding: 10px;
+label {
+  margin-right: 20px;
 }
 </style>
