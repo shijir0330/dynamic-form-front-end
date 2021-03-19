@@ -8,9 +8,9 @@
         <input v-model="value.label"/>
       </label>
       <label>Type:
-        <select v-model="value.type" @change="updateValue($event)">
+        <select v-model="value.type" @change="updateValue">
           <option value="string">string</option>
-          <option value="email">email</option>
+          <option value="number">number</option>
         </select>
       </label>
       <label>
@@ -18,7 +18,7 @@
       </label>
     </div>
     <div class="marTop">
-      <create-string v-if="value.type === 'string'" v-model="value"/>
+      <create-string v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
     </div>
   </div>
 </template>
@@ -40,9 +40,12 @@ export default {
         type: this.value.type,
         name: this.value.name,
         label: this.value.label,
-        columns: this.value.columns,
+        column: this.value.column,
         required: this.value.required,
       })
+    },
+    updateValue2(values) {
+      this.$emit('input', values)
     }
   }
 }
