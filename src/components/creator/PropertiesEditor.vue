@@ -6,8 +6,9 @@
           <template #header>
             <b-form inline>
               <label class="mr-2">Form Name</label>
-              <b-form-input v-model="value.formName" class="mr-2"/>
+              <b-form-input v-model="value.name" class="mr-2"/>
               <b-button @click="addProperty">PLUS</b-button>
+<!--              <b-button @click="updateValue">GET JSON</b-button>-->
             </b-form>
           </template>
           <b-row>
@@ -44,7 +45,7 @@ export default {
   },
   computed: {
     getPropertiesArray() {
-      let schemaFormat = {name: this.value.formName, properties: [], required: []};
+      let schemaFormat = {name: this.value.name, properties: [], required: []};
       this.value.properties.forEach((x) => {
         const {required, ...others} = x;
         if (required) schemaFormat.required.push(x.name);
@@ -75,6 +76,9 @@ export default {
     }
   },
   methods: {
+    // updateValue() {
+    //   this.$emit('input', this.getPropertiesArray)
+    // },
     addProperty() {
       this.value.properties.push({
         type: "string",
@@ -86,7 +90,13 @@ export default {
     removeProperty(index) {
       this.value.properties.splice(index, 1);
     },
-  }
+  },
+  // watch: {
+  //   getValue: {
+  //     handler: 'updateValue',
+  //     deep: true
+  //   }
+  // }
 }
 </script>
 

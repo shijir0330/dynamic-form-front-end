@@ -6,7 +6,7 @@
           <template #header>
             <b-form inline>
               <label class="mr-2">Form Name:</label>
-              {{ value.formName }}
+              {{ value.name }}
             </b-form>
           </template>
           <b-row>

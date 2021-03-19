@@ -20,6 +20,8 @@
       <h3>Preview</h3>
       <p>Preview of form.</p>
     </div>
+
+    {{schema}}
   </div>
 </template>
 
@@ -34,7 +36,7 @@ export default {
   data() {
     return {
       schema: {
-        formName: '',
+        name: '',
         properties: [],
         required: []
       }
