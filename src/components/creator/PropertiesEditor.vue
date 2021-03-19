@@ -14,7 +14,7 @@
             <b-col v-for="(item, index) in value.properties" v-bind:key="index" cols="12">
               <div class="property-div">
                 <button class="button-x" @click="removeProperty(index)">x</button>
-                <create-components :item="item"/>
+                <create-components v-model="value.properties[index]"/>
               </div>
             </b-col>
           </b-row>

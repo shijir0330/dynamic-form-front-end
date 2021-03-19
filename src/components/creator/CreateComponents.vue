@@ -2,22 +2,23 @@
   <div>
     <div>
       <label>Name:
-        <input v-model="item.name"/>
+        <input v-model="value.name"/>
       </label>
       <label>Label:
-        <input v-model="item.label"/>
+        <input v-model="value.label"/>
       </label>
       <label>Type:
-        <select v-model="item.type">
+        <select v-model="value.type" @change="updateValue($event)">
           <option value="string">string</option>
+          <option value="email">email</option>
         </select>
       </label>
       <label>
-        <input type="checkbox" v-model="item.required"/>
+        <input type="checkbox" v-model="value.required"/>
       </label>
     </div>
     <div class="marTop">
-      <create-string v-if="item.type === 'string'" v-model="item"/>
+      <create-string v-if="value.type === 'string'" v-model="value"/>
     </div>
   </div>
 </template>
@@ -32,7 +33,18 @@ export default {
     CreateString,
     CreateNumber
   },
-  props: ['item']
+  props: ['value'],
+  methods: {
+    updateValue() {
+      this.$emit('input', {
+        type: this.value.type,
+        name: this.value.name,
+        label: this.value.label,
+        columns: this.value.columns,
+        required: this.value.required,
+      })
+    }
+  }
 }
 </script>
 
