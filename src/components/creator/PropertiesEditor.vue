@@ -8,7 +8,6 @@
               <label class="mr-2">Form Name</label>
               <b-form-input v-model="value.name" class="mr-2"/>
               <b-button @click="addProperty">PLUS</b-button>
-<!--              <b-button @click="updateValue">GET JSON</b-button>-->
             </b-form>
           </template>
           <b-row>
@@ -76,9 +75,6 @@ export default {
     }
   },
   methods: {
-    // updateValue() {
-    //   this.$emit('input', this.getPropertiesArray)
-    // },
     addProperty() {
       this.value.properties.push({
         type: "string",
@@ -90,13 +86,7 @@ export default {
     removeProperty(index) {
       this.value.properties.splice(index, 1);
     },
-  },
-  // watch: {
-  //   getValue: {
-  //     handler: 'updateValue',
-  //     deep: true
-  //   }
-  // }
+  }
 }
 </script>
 
