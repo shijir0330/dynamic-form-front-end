@@ -1,11 +1,33 @@
 <template>
   <div>
+    <b-row>
+      <b-col>
+        <b-form inline>
+          <b-form-group label="Properties:">
+            <b-form-select v-model="properties">
+              <b-form-select-option value="array">array</b-form-select-option>
+              <b-form-select-option value="object">object</b-form-select-option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group label="Required:">
+            <b-form-select v-model="required">
+              <b-form-select-option value="array">array</b-form-select-option>
+              <b-form-select-option value="object">object</b-form-select-option>
+            </b-form-select>
+          </b-form-group>
+        </b-form>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <properties-editor v-model="schema" :properties="properties" :required="required"/>
+      </b-col>
+    </b-row>
 <!--    <div class="tab">-->
 <!--      <button class="tablinks" @click="changeTap($event, 'Editor')">Editor</button>-->
 <!--&lt;!&ndash;      <button class="tablinks" @click="changeTap($event, 'Position')">Position</button>&ndash;&gt;-->
 <!--      <button class="tablinks" @click="changeTap($event, 'Preview')">Preview</button>-->
 <!--    </div>-->
-    <properties-editor v-model="schema" properties="object"/>
 <!--    <div id="Editor" class="tabcontent">-->
 <!--      <h3>Editor</h3>-->
 <!--      <properties-editor v-model="schema"/>-->
@@ -32,6 +54,8 @@ export default {
   components: {PropertiesPosition, PropertiesEditor},
   data() {
     return {
+      properties: 'array',
+      required: 'array',
       schema: {
         name: '',
         properties: [{
