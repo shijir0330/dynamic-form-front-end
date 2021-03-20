@@ -13,7 +13,7 @@
 
     <div id="Position" class="tabcontent">
       <h3>Position</h3>
-      <properties-position v-model="schema"/>
+<!--      <properties-position v-model="schema"/>-->
     </div>
 
     <div id="Preview" class="tabcontent">

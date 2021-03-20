@@ -38,18 +38,14 @@ export default {
     value: Object,
     properties: {
       type: String,
-      default: function () {
-        return 'array'
-      },
+      default: 'array',
       validator: function(value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
     },
     required: {
       type: String,
-      default: function () {
-        return 'array'
-      },
+      default: 'array',
       validator: function(value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
@@ -65,8 +61,7 @@ export default {
     return {
       componentValue: {
         name: '',
-        properties: [],
-        required: []
+        properties: []
       }
     }
   },
@@ -75,33 +70,58 @@ export default {
   },
   computed: {
     getPropertiesArray() {
-      let schemaFormat = {name: this.componentValue.name, properties: [], required: []};
-      this.componentValue.properties.forEach((x) => {
-        const {required, ...others} = x;
-        if (required) schemaFormat.required.push(x.name);
-        const objectArray = Object.entries(others);
-        const object = {};
-        objectArray.forEach(([key, value]) => {
-          if (value) object[key] = value
-        });
-        schemaFormat.required = [...new Set(schemaFormat.required)];
-        schemaFormat.properties.push(object);
-      })
+      let schemaFormat = {name: this.componentValue.name, properties: []};
+      if (this.required === 'array') {
+        schemaFormat.required = [];
+        this.componentValue.properties.forEach((x) => {
+          const {required, ...others} = x;
+          if (required) schemaFormat.required.push(x.name);
+          const objectArray = Object.entries(others);
+          const object = {};
+          objectArray.forEach(([key, value]) => {
+            if (value) object[key] = value
+          });
+          schemaFormat.required = [...new Set(schemaFormat.required)];
+          schemaFormat.properties.push(object);
+        })
+      } else if (this.required === 'object') {
+        this.componentValue.properties.forEach((x) => {
+          const objectArray = Object.entries(x);
+          const object = {};
+          objectArray.forEach(([key, value]) => {
+            if (value) object[key] = value
+          });
+          schemaFormat.properties.push(object);
+        })
+      }
       return schemaFormat;
     },
     getPropertiesObject() {
-      let schemaFormat = {name: this.componentValue.name, properties: {}, required: []};
-      this.componentValue.properties.forEach((x) => {
-        const {name, required, ...others} = x;
-        if (required) schemaFormat.required.push(name);
-        const objectArray = Object.entries(others);
-        const object = {};
-        objectArray.forEach(([key, value]) => {
-          if (value) object[key] = value
-        });
-        schemaFormat.required = [...new Set(schemaFormat.required)];
-        schemaFormat.properties[name] = {type: x.type, ...object};
-      })
+      let schemaFormat = {name: this.componentValue.name, properties: {}};
+      if (this.required === 'array') {
+        schemaFormat.required = [];
+        this.componentValue.properties.forEach((x) => {
+          const {name, required, ...others} = x;
+          if (required) schemaFormat.required.push(name);
+          const objectArray = Object.entries(others);
+          const object = {};
+          objectArray.forEach(([key, value]) => {
+            if (value) object[key] = value
+          });
+          schemaFormat.required = [...new Set(schemaFormat.required)];
+          schemaFormat.properties[name] = {...object};
+        })
+      } else if (this.required === 'object') {
+        this.componentValue.properties.forEach((x) => {
+          const {name, ...others} = x;
+          const objectArray = Object.entries(others);
+          const object = {};
+          objectArray.forEach(([key, value]) => {
+            if (value) object[key] = value
+          });
+          schemaFormat.properties[name] = {...object};
+        })
+      }
       return schemaFormat;
     }
   },
