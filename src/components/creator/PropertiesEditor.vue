@@ -6,23 +6,22 @@
           <template #header>
             <b-form inline>
               <label class="mr-2">Form Name</label>
-              <b-form-input v-model="value.name" class="mr-2"/>
+              <b-form-input v-model="componentValue.name" class="mr-2"/>
               <b-button @click="addProperty">PLUS</b-button>
             </b-form>
           </template>
           <b-row>
-            <b-col v-for="(item, index) in value.properties" v-bind:key="index" cols="12">
-              <div class="property-div">
-                <button class="button-x" @click="removeProperty(index)">x</button>
-                <create-components v-model="value.properties[index]"/>
-              </div>
+            <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
+<!--              <div class="property-div">-->
+                <create-components v-model="componentValue.properties[index]" v-on:remove-property="removeProperty(index)"/>
+<!--              </div>-->
             </b-col>
           </b-row>
         </b-card>
       </b-col>
       <b-col cols="5">
         <b-card header="JSON">
-          <pre>{{ getPropertiesArray | jsonFormat }}</pre>
+          <pre>{{ value | jsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -35,17 +34,49 @@ import CreateComponents from "@/components/creator/CreateComponents";
 export default {
   name: "PropertiesEditor",
   components: {CreateComponents},
-  props: ['value'],
+  props: {
+    value: Object,
+    properties: {
+      type: String,
+      default: function () {
+        return 'array'
+      },
+      validator: function(value) {
+        return ['array', 'object'].indexOf(value) !== -1
+      }
+    },
+    required: {
+      type: String,
+      default: function () {
+        return 'array'
+      },
+      validator: function(value) {
+        return ['array', 'object'].indexOf(value) !== -1
+      }
+    }
+  },
   filters: {
     jsonFormat: function (value) {
       if (!value) return '';
       return JSON.stringify(value, null, '\t');
     }
   },
+  data() {
+    return {
+      componentValue: {
+        name: '',
+        properties: [],
+        required: []
+      }
+    }
+  },
+  mounted() {
+    // this.componentValue = this.value
+  },
   computed: {
     getPropertiesArray() {
-      let schemaFormat = {name: this.value.name, properties: [], required: []};
-      this.value.properties.forEach((x) => {
+      let schemaFormat = {name: this.componentValue.name, properties: [], required: []};
+      this.componentValue.properties.forEach((x) => {
         const {required, ...others} = x;
         if (required) schemaFormat.required.push(x.name);
         const objectArray = Object.entries(others);
@@ -59,8 +90,8 @@ export default {
       return schemaFormat;
     },
     getPropertiesObject() {
-      let schemaFormat = {name: this.value.formName, properties: {}, required: []};
-      this.value.properties.forEach((x) => {
+      let schemaFormat = {name: this.componentValue.name, properties: {}, required: []};
+      this.componentValue.properties.forEach((x) => {
         const {name, required, ...others} = x;
         if (required) schemaFormat.required.push(name);
         const objectArray = Object.entries(others);
@@ -76,30 +107,34 @@ export default {
   },
   methods: {
     addProperty() {
-      this.value.properties.push({
+      if (!this.componentValue.properties)
+        this.componentValue.properties = []
+      this.componentValue.properties.push({
         type: "string",
-        name: `Property-${this.value.properties.length + 1}`,
-        label: `Property-${this.value.properties.length + 1}`,
+        name: `Property-${this.componentValue.properties.length + 1}`,
+        label: `Property-${this.componentValue.properties.length + 1}`,
         column: 12
       });
     },
     removeProperty(index) {
-      this.value.properties.splice(index, 1);
+      this.componentValue.properties.splice(index, 1);
     },
+    updateValue() {
+      if (this.properties === 'array')
+        this.$emit('input', this.getPropertiesArray)
+      else if (this.properties === 'object')
+        this.$emit('input', this.getPropertiesObject)
+    }
+  },
+  watch: {
+    'componentValue': {
+      deep: true,
+      handler: 'updateValue'
+    }
   }
 }
 </script>
 
 <style scoped>
-.button-x {
-  float: right;
-}
 
-.property-div {
-  border-style: solid;
-  border-width: 1px;
-  border-color: black;
-  padding: 10px;
-  margin: 10px 0;
-}
 </style>

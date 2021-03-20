@@ -20,8 +20,6 @@
       <h3>Preview</h3>
       <p>Preview of form.</p>
     </div>
-
-    {{schema}}
   </div>
 </template>
 
