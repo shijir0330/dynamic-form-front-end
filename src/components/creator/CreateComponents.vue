@@ -1,33 +1,36 @@
 <template>
-  <div class="property-div">
+  <b-card class="property-div">
     <div>
       <label>Name:
-        <input v-model="value.name"/>
+        <b-form-input v-model="value.name"/>
       </label>
       <label>Label:
-        <input v-model="value.label"/>
+        <b-form-input v-model="value.label"/>
       </label>
       <label>Type:
-        <select v-model="value.type" @change="updateValue">
-          <option value="string">string</option>
-          <option value="number">number</option>
-        </select>
+        <b-form-select v-model="value.type" @change="updateValue">
+          <b-form-select-option value="string">string</b-form-select-option>
+          <b-form-select-option value="number">number</b-form-select-option>
+        </b-form-select>
       </label>
     </div>
     <div class="marTop">
       <create-string v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
     </div>
-    <div class="control-panel">
-      <label class="switch">Required
-        <input type="checkbox" v-model="value.required"/>
-        <span class="slider round"></span>
-      </label>
-
-      <b-button pill @click="removeProperty">
-        <b-icon icon="trash"/>
-      </b-button>
-    </div>
-  </div>
+    <template #footer>
+      <div class="float-right">
+        <b-link pill @click="duplicateProperty">
+          <b-icon class="mr-3 text-secondary" icon="files" scale="1.1"/>
+        </b-link>
+        <b-link pill @click="removeProperty">
+          <b-icon class="mr-3 text-secondary" icon="trash" scale="1.1"/>
+        </b-link> |
+        <label class="ml-3">Required
+          <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
+        </label>
+      </div>
+    </template>
+  </b-card>
 </template>
 
 <script>
@@ -41,7 +44,8 @@ export default {
     CreateNumber
   },
   props: {
-    value: Object
+    value: Object,
+    index: Number
   },
   methods: {
     updateValue() {
@@ -58,6 +62,10 @@ export default {
     },
     removeProperty() {
       this.$emit('remove-property');
+    },
+    duplicateProperty() {
+      const {...values} = this.value
+      this.$emit('duplicate-property', values, this.index);
     }
   }
 }
@@ -73,10 +81,10 @@ export default {
 }
 
 .property-div {
-  border-style: solid;
-  border-width: 1px;
-  border-color: black;
-  padding: 10px;
+  /*border-style: solid;*/
+  /*border-width: 1px;*/
+  /*border-color: black;*/
+  /*padding: 10px;*/
   margin: 10px 0;
 }
 

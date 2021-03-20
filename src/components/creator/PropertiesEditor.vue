@@ -4,17 +4,40 @@
       <b-col cols="7">
         <b-card header-class="">
           <template #header>
-            <b-form inline>
+            <b-form inline class="float-left">
               <label class="mr-2">Form Name</label>
               <b-form-input v-model="componentValue.name" class="mr-2"/>
               <b-button @click="addProperty">PLUS</b-button>
             </b-form>
+            <b-button-group class="float-right">
+              <b-button :variant="editing ? 'secondary' : 'light'"
+                        v-on:click="editing = ! editing"
+              >EDIT
+              </b-button>
+              <b-button :variant="!editing ? 'secondary' : 'light'"
+                        v-on:click="editing = ! editing"
+              >POSITIONING
+              </b-button>
+            </b-button-group>
           </template>
-          <b-row>
+          <b-row v-if="editing">
             <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
-<!--              <div class="property-div">-->
-                <create-components v-model="componentValue.properties[index]" v-on:remove-property="removeProperty(index)"/>
-<!--              </div>-->
+              <create-components v-model="componentValue.properties[index]" v-bind:index="index"
+                                 v-on:remove-property="removeProperty(index)"
+                                 v-on:duplicate-property="duplicateProperty"
+              />
+            </b-col>
+          </b-row>
+          <b-row v-else>
+            <b-col>
+              <properties-position v-model="componentValue"/>
+<!--                <template v-slot:default="{item}">-->
+                  <!--            {{ item.name }}-->
+                  <!--            <select v-model="item.column">-->
+                  <!--              <option v-for="i in 12" :value="i">{{ i }}</option>-->
+                  <!--            </select>-->
+<!--                </template>-->
+<!--              </properties-position>-->
             </b-col>
           </b-row>
         </b-card>
@@ -30,23 +53,24 @@
 
 <script>
 import CreateComponents from "@/components/creator/CreateComponents";
+import PropertiesPosition from "@/components/creator/PropertiesPosition";
 
 export default {
   name: "PropertiesEditor",
-  components: {CreateComponents},
+  components: {CreateComponents, PropertiesPosition},
   props: {
     value: Object,
     properties: {
       type: String,
       default: 'array',
-      validator: function(value) {
+      validator: function (value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
     },
     required: {
       type: String,
       default: 'array',
-      validator: function(value) {
+      validator: function (value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
     }
@@ -59,16 +83,17 @@ export default {
   },
   data() {
     return {
-      componentValue: {
-        name: '',
-        properties: []
-      }
+      componentValue: this.value,
+      editing: true
     }
   },
   mounted() {
     // this.componentValue = this.value
   },
   computed: {
+    getValue() {
+      return this.value;
+    },
     getPropertiesArray() {
       let schemaFormat = {name: this.componentValue.name, properties: []};
       if (this.required === 'array') {
@@ -135,6 +160,9 @@ export default {
         label: `Property-${this.componentValue.properties.length + 1}`,
         column: 12
       });
+    },
+    duplicateProperty(item, index) {
+      this.componentValue.properties.splice(index, 0, item);
     },
     removeProperty(index) {
       this.componentValue.properties.splice(index, 1);

@@ -13,7 +13,7 @@
 
     <div id="Position" class="tabcontent">
       <h3>Position</h3>
-<!--      <properties-position v-model="schema"/>-->
+      <properties-position v-model="schema"/>
     </div>
 
     <div id="Preview" class="tabcontent">
@@ -24,7 +24,6 @@
 </template>
 
 <script>
-
 import PropertiesEditor from "@/components/creator/PropertiesEditor";
 import PropertiesPosition from "@/components/creator/PropertiesPosition";
 
@@ -35,8 +34,12 @@ export default {
     return {
       schema: {
         name: '',
-        properties: [],
-        required: []
+        properties: [{
+          type: "string",
+          name: `Property`,
+          label: `Property`,
+          column: 12
+        }],
       }
     }
   },
