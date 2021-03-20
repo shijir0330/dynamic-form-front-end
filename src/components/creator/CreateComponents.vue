@@ -1,5 +1,9 @@
 <template>
-  <b-card class="property-div">
+  <b-card class="property-div"
+          border-variant="primary"
+          footer-border-variant="primary">
+<!--          footer-bg-variant="primary"-->
+<!--          footer-text-variant="white">-->
     <div>
       <label>Name:
         <b-form-input v-model="value.name"/>
@@ -18,12 +22,12 @@
       <create-string v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
     </div>
     <template #footer>
-      <div class="float-right">
+      <div class="float-right text-primary">
         <b-link pill @click="duplicateProperty">
-          <b-icon class="mr-3 text-secondary" icon="files" scale="1.1"/>
+          <b-icon class="mr-3" icon="files" scale="1.1"/>
         </b-link>
         <b-link pill @click="removeProperty">
-          <b-icon class="mr-3 text-secondary" icon="trash" scale="1.1"/>
+          <b-icon class="mr-3" icon="trash" scale="1.1"/>
         </b-link> |
         <label class="ml-3">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>

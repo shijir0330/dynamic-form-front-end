@@ -1,25 +1,25 @@
 <template>
   <div>
-    <div class="tab">
-      <button class="tablinks" @click="changeTap($event, 'Editor')">Editor</button>
-      <button class="tablinks" @click="changeTap($event, 'Position')">Position</button>
-      <button class="tablinks" @click="changeTap($event, 'Preview')">Preview</button>
-    </div>
+<!--    <div class="tab">-->
+<!--      <button class="tablinks" @click="changeTap($event, 'Editor')">Editor</button>-->
+<!--&lt;!&ndash;      <button class="tablinks" @click="changeTap($event, 'Position')">Position</button>&ndash;&gt;-->
+<!--      <button class="tablinks" @click="changeTap($event, 'Preview')">Preview</button>-->
+<!--    </div>-->
+    <properties-editor v-model="schema" properties="object"/>
+<!--    <div id="Editor" class="tabcontent">-->
+<!--      <h3>Editor</h3>-->
+<!--      <properties-editor v-model="schema"/>-->
+<!--    </div>-->
 
-    <div id="Editor" class="tabcontent">
-      <h3>Editor</h3>
-      <properties-editor v-model="schema"/>
-    </div>
+<!--    <div id="Position" class="tabcontent">-->
+<!--      <h3>Position</h3>-->
+<!--      <properties-position v-model="schema"/>-->
+<!--    </div>-->
 
-    <div id="Position" class="tabcontent">
-      <h3>Position</h3>
-      <properties-position v-model="schema"/>
-    </div>
-
-    <div id="Preview" class="tabcontent">
-      <h3>Preview</h3>
-      <p>Preview of form.</p>
-    </div>
+<!--    <div id="Preview" class="tabcontent">-->
+<!--      <h3>Preview</h3>-->
+<!--      <p>Preview of form.</p>-->
+<!--    </div>-->
   </div>
 </template>
 

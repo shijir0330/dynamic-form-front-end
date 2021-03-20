@@ -10,17 +10,21 @@
               <b-button @click="addProperty">PLUS</b-button>
             </b-form>
             <b-button-group class="float-right">
-              <b-button :variant="editing ? 'secondary' : 'light'"
-                        v-on:click="editing = ! editing"
+              <b-button :variant="state === 'editing' ? 'primary' : 'light'"
+                        v-on:click="state = 'editing'"
               >EDIT
               </b-button>
-              <b-button :variant="!editing ? 'secondary' : 'light'"
-                        v-on:click="editing = ! editing"
+              <b-button :variant="state === 'positioning' ? 'primary' : 'light'"
+                        v-on:click="state = 'positioning'"
               >POSITIONING
+              </b-button>
+              <b-button :variant="state === 'preview' ? 'primary' : 'light'"
+                        v-on:click="state = 'preview'"
+              >PREVIEW
               </b-button>
             </b-button-group>
           </template>
-          <b-row v-if="editing">
+          <b-row v-if="state === 'editing'">
             <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
               <create-components v-model="componentValue.properties[index]" v-bind:index="index"
                                  v-on:remove-property="removeProperty(index)"
@@ -28,16 +32,14 @@
               />
             </b-col>
           </b-row>
-          <b-row v-else>
+          <b-row v-if="state === 'positioning'">
             <b-col>
               <properties-position v-model="componentValue"/>
-<!--                <template v-slot:default="{item}">-->
-                  <!--            {{ item.name }}-->
-                  <!--            <select v-model="item.column">-->
-                  <!--              <option v-for="i in 12" :value="i">{{ i }}</option>-->
-                  <!--            </select>-->
-<!--                </template>-->
-<!--              </properties-position>-->
+            </b-col>
+          </b-row>
+          <b-row v-if="state === 'preview'">
+            <b-col>
+              PREVIEW
             </b-col>
           </b-row>
         </b-card>
@@ -84,7 +86,7 @@ export default {
   data() {
     return {
       componentValue: this.value,
-      editing: true
+      state: 'editing'
     }
   },
   mounted() {
