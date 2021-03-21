@@ -32,7 +32,8 @@
         </b-link>
         <b-link pill @click="removeProperty">
           <b-icon class="mr-3" icon="trash" scale="1.1"/>
-        </b-link> |
+        </b-link>
+        |
         <label class="ml-3">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
@@ -78,14 +79,14 @@ export default {
     },
     updateValueValidation() {
       if (!this.value.validation)
-          this.updateValue();
+        this.updateValue();
     },
     removeProperty() {
       this.$emit('remove-property');
     },
     duplicateProperty() {
-      const {...values} = this.value
-      this.$emit('duplicate-property', values, this.index);
+      const {name, ...values} = this.value
+      this.$emit('duplicate-property', {name: name + '-1', ...values}, this.index + 1);
     }
   }
 }
