@@ -7,12 +7,11 @@
               @dragenter.prevent="dragEnter($event)"
               @dragleave.prevent="dragLeave($event)"
               @dragover.prevent>
-        <slot name="update" v-bind:item="item" v-bind:index="index">
-          {{ item.name }}
-          <select v-model="item.column">
-            <option v-for="i in 12" :value="i">{{ i }}</option>
-          </select>
-        </slot>
+        <label>{{ item.name }}
+        <select v-model="item.column">
+          <option v-for="i in 12" :value="i">{{ i }}</option>
+        </select>
+        </label>
       </b-card>
     </b-col>
   </b-row>
