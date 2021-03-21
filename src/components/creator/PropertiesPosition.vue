@@ -1,40 +1,21 @@
 <template>
-<!--  <div>-->
-<!--    <b-row class="mt-2">-->
-<!--      <b-col cols="7">-->
-<!--        <b-card header-class="">-->
-<!--          <template #header>-->
-<!--            <b-form inline>-->
-<!--              <label class="mr-2">Form Name:</label>-->
-<!--              {{ value.name }}-->
-<!--            </b-form>-->
-<!--          </template>-->
-          <b-row>
-            <b-col v-for="(item, index) in value.properties" v-bind:key="index" :cols="item.column">
-              <div draggable="true" class="property-div"
-                   @dragstart="startDrag($event, index)"
-                   @drop="onDrop($event, index)"
-                   @dragenter.prevent="dragEnter($event)"
-                   @dragleave.prevent="dragLeave($event)"
-                   @dragover.prevent>
-                <slot name="update" v-bind:item="item" v-bind:index="index">
-                  {{ item.name }}
-                  <select v-model="item.column">
-                    <option v-for="i in 12" :value="i">{{ i }}</option>
-                  </select>
-                </slot>
-              </div>
-            </b-col>
-          </b-row>
-<!--        </b-card>-->
-<!--      </b-col>-->
-<!--      <b-col cols="5">-->
-<!--        <b-card header="JSON">-->
-<!--          <pre>{{ getProperties | jsonFormat }}</pre>-->
-<!--        </b-card>-->
-<!--      </b-col>-->
-<!--    </b-row>-->
-<!--  </div>-->
+  <b-row>
+    <b-col v-for="(item, index) in value.properties" v-bind:key="index" :cols="item.column">
+      <b-card draggable="true" border-variant="primary" class="mb-2 p-0"
+              @dragstart="startDrag($event, index)"
+              @drop="onDrop($event, index)"
+              @dragenter.prevent="dragEnter($event)"
+              @dragleave.prevent="dragLeave($event)"
+              @dragover.prevent>
+        <slot name="update" v-bind:item="item" v-bind:index="index">
+          {{ item.name }}
+          <select v-model="item.column">
+            <option v-for="i in 12" :value="i">{{ i }}</option>
+          </select>
+        </slot>
+      </b-card>
+    </b-col>
+  </b-row>
 </template>
 
 <script>

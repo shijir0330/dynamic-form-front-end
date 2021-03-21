@@ -7,7 +7,7 @@
             <b-form inline class="float-left">
               <label class="mr-2">Form Name</label>
               <b-form-input v-model="componentValue.name" class="mr-2"/>
-              <b-button @click="addProperty">PLUS</b-button>
+              <b-button @click="addProperty"><b-icon icon="plus"/></b-button>
             </b-form>
             <b-button-group class="float-right">
               <b-button :variant="state === 'editing' ? 'primary' : 'light'"
@@ -26,7 +26,8 @@
           </template>
           <b-row v-if="state === 'editing'">
             <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
-              <create-components v-model="componentValue.properties[index]" v-bind:index="index"
+              <create-components class="mb-2"
+                                 v-model="componentValue.properties[index]" v-bind:index="index"
                                  v-on:remove-property="removeProperty(index)"
                                  v-on:duplicate-property="duplicateProperty"
               />
@@ -102,6 +103,7 @@ export default {
         schemaFormat.required = [];
         this.componentValue.properties.forEach((x) => {
           const {required, ...others} = x;
+          others.validation = undefined;
           if (required) schemaFormat.required.push(x.name);
           const objectArray = Object.entries(others);
           const object = {};
@@ -118,6 +120,7 @@ export default {
           objectArray.forEach(([key, value]) => {
             if (value) object[key] = value
           });
+          object.validation = undefined;
           schemaFormat.properties.push(object);
         })
       }
@@ -129,6 +132,7 @@ export default {
         schemaFormat.required = [];
         this.componentValue.properties.forEach((x) => {
           const {name, required, ...others} = x;
+          others.validation = undefined;
           if (required) schemaFormat.required.push(name);
           const objectArray = Object.entries(others);
           const object = {};
@@ -141,6 +145,7 @@ export default {
       } else if (this.required === 'object') {
         this.componentValue.properties.forEach((x) => {
           const {name, ...others} = x;
+          others.validation = undefined;
           const objectArray = Object.entries(others);
           const object = {};
           objectArray.forEach(([key, value]) => {
@@ -179,6 +184,12 @@ export default {
   watch: {
     'componentValue': {
       deep: true,
+      handler: 'updateValue'
+    },
+    'properties': {
+      handler: 'updateValue'
+    },
+    'required': {
       handler: 'updateValue'
     }
   }

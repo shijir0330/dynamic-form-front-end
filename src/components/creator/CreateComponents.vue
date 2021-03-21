@@ -2,23 +2,27 @@
   <b-card class="property-div"
           border-variant="primary"
           footer-border-variant="primary">
-<!--          footer-bg-variant="primary"-->
-<!--          footer-text-variant="white">-->
-    <div>
-      <label>Name:
-        <b-form-input v-model="value.name"/>
-      </label>
-      <label>Label:
-        <b-form-input v-model="value.label"/>
-      </label>
-      <label>Type:
-        <b-form-select v-model="value.type" @change="updateValue">
-          <b-form-select-option value="string">string</b-form-select-option>
-          <b-form-select-option value="number">number</b-form-select-option>
-        </b-form-select>
-      </label>
-    </div>
-    <div class="marTop">
+    <b-row>
+      <b-col>
+        <b-form-group label="Name">
+          <b-form-input v-model="value.name" autocomplete="off"/>
+        </b-form-group>
+      </b-col>
+      <b-col>
+        <b-form-group label="Label">
+          <b-form-input v-model="value.label" autocomplete="off"/>
+        </b-form-group>
+      </b-col>
+      <b-col>
+        <b-form-group label="Type">
+          <b-form-select v-model="value.type" @change="updateValue">
+            <b-form-select-option value="string">string</b-form-select-option>
+            <b-form-select-option value="number">number</b-form-select-option>
+          </b-form-select>
+        </b-form-group>
+      </b-col>
+    </b-row>
+    <div class="marTop" v-if="value.validation">
       <create-string v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
     </div>
     <template #footer>
@@ -31,6 +35,9 @@
         </b-link> |
         <label class="ml-3">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
+        </label>
+        <label class="ml-3">Validation
+          <b-form-checkbox class="float-right ml-2" switch v-model="value.validation" @change="updateValueValidation"/>
         </label>
       </div>
     </template>
@@ -51,6 +58,11 @@ export default {
     value: Object,
     index: Number
   },
+  data() {
+    return {
+      validation: false
+    }
+  },
   methods: {
     updateValue() {
       this.$emit('input', {
@@ -58,11 +70,15 @@ export default {
         name: this.value.name,
         label: this.value.label,
         column: this.value.column,
-        required: this.value.required,
+        required: this.value.required
       });
     },
     updateValue2(values) {
       this.$emit('input', values);
+    },
+    updateValueValidation() {
+      if (!this.value.validation)
+          this.updateValue();
     },
     removeProperty() {
       this.$emit('remove-property');
@@ -76,27 +92,5 @@ export default {
 </script>
 
 <style scoped>
-.control-panel {
-  border-top: #cccccc;
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  padding-top: 10px;
-  text-align: right;
-}
 
-.property-div {
-  /*border-style: solid;*/
-  /*border-width: 1px;*/
-  /*border-color: black;*/
-  /*padding: 10px;*/
-  margin: 10px 0;
-}
-
-label {
-  margin: 0 20px 0 0;
-}
-
-.marTop {
-  margin-top: 10px;
-}
 </style>

@@ -3,45 +3,24 @@
     <b-row>
       <b-col>
         <b-form inline>
-          <b-form-group label="Properties:">
-            <b-form-select v-model="properties">
-              <b-form-select-option value="array">array</b-form-select-option>
-              <b-form-select-option value="object">object</b-form-select-option>
-            </b-form-select>
-          </b-form-group>
-          <b-form-group label="Required:">
-            <b-form-select v-model="required">
-              <b-form-select-option value="array">array</b-form-select-option>
-              <b-form-select-option value="object">object</b-form-select-option>
-            </b-form-select>
-          </b-form-group>
+          <label class="mr-sm-2">Properties</label>
+          <b-form-select v-model="properties" class="mb-2 mr-sm-2 mb-sm-0">
+            <b-form-select-option value="array">array</b-form-select-option>
+            <b-form-select-option value="object">object</b-form-select-option>
+          </b-form-select>
+          <label class="mr-sm-2">Required</label>
+          <b-form-select v-model="required" class="mb-2 mr-sm-2 mb-sm-0">
+            <b-form-select-option value="array">array</b-form-select-option>
+            <b-form-select-option value="object">object</b-form-select-option>
+          </b-form-select>
         </b-form>
       </b-col>
     </b-row>
-    <b-row>
+    <b-row class="mt-2">
       <b-col>
         <properties-editor v-model="schema" :properties="properties" :required="required"/>
       </b-col>
     </b-row>
-<!--    <div class="tab">-->
-<!--      <button class="tablinks" @click="changeTap($event, 'Editor')">Editor</button>-->
-<!--&lt;!&ndash;      <button class="tablinks" @click="changeTap($event, 'Position')">Position</button>&ndash;&gt;-->
-<!--      <button class="tablinks" @click="changeTap($event, 'Preview')">Preview</button>-->
-<!--    </div>-->
-<!--    <div id="Editor" class="tabcontent">-->
-<!--      <h3>Editor</h3>-->
-<!--      <properties-editor v-model="schema"/>-->
-<!--    </div>-->
-
-<!--    <div id="Position" class="tabcontent">-->
-<!--      <h3>Position</h3>-->
-<!--      <properties-position v-model="schema"/>-->
-<!--    </div>-->
-
-<!--    <div id="Preview" class="tabcontent">-->
-<!--      <h3>Preview</h3>-->
-<!--      <p>Preview of form.</p>-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -58,12 +37,7 @@ export default {
       required: 'array',
       schema: {
         name: '',
-        properties: [{
-          type: "string",
-          name: `Property`,
-          label: `Property`,
-          column: 12
-        }],
+        properties: [],
       }
     }
   },
