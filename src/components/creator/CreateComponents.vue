@@ -22,8 +22,9 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <div class="marTop" v-if="value.validation">
-      <create-string v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
+    <div class="marTop">
+      <create-string v-if="value.type === 'string' && value.validation" v-model="value"
+                     v-on:update-value="updateValue2"/>
     </div>
     <template #footer>
       <div class="float-right text-primary">
@@ -71,7 +72,8 @@ export default {
         name: this.value.name,
         label: this.value.label,
         column: this.value.column,
-        required: this.value.required
+        required: this.value.required,
+        validation: this.value.validation
       });
     },
     updateValue2(values) {

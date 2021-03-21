@@ -27,7 +27,7 @@
         </b-col>
       </template>
       <b-col v-if="value.format === null">
-        <b-form-group label="pattern">
+        <b-form-group label="Pattern">
           <b-form-input type="number" ref="pattern" v-model="value.pattern" autocomplete="off"/>
         </b-form-group>
       </b-col>
