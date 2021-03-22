@@ -26,7 +26,7 @@
           </template>
           <b-row v-if="state === 'editing'">
             <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
-              <create-components class="mb-2"
+              <create-properties class="mb-2"
                                  v-model="componentValue.properties[index]" v-bind:index="index"
                                  v-on:remove-property="removeProperty(index)"
                                  v-on:duplicate-property="duplicateProperty"
@@ -55,12 +55,12 @@
 </template>
 
 <script>
-import CreateComponents from "@/components/creator/CreateComponents";
-import PropertiesPosition from "@/components/creator/PropertiesPosition";
+import CreateProperties from "@/components/properties/CreateProperties";
+import PropertiesPosition from "@/components/PropertiesPosition";
 
 export default {
-  name: "PropertiesEditor",
-  components: {CreateComponents, PropertiesPosition},
+  name: "DynamicFormCreator",
+  components: {CreateProperties, PropertiesPosition},
   props: {
     value: Object,
     properties: {

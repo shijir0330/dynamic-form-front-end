@@ -22,8 +22,8 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <div class="marTop">
-      <create-string v-if="value.type === 'string' && value.validation" v-model="value"
+    <div>
+      <string-property v-if="value.type === 'string' && value.validation" v-model="value"
                      v-on:update-value="updateValue2"/>
     </div>
     <template #footer>
@@ -47,14 +47,12 @@
 </template>
 
 <script>
-import CreateString from '@/components/creator/CreateString'
-import CreateNumber from "@/components/creator/CreateNumber";
+import StringProperty from '@/components/properties/StringProperty'
 
 export default {
   name: "CreateComponents",
   components: {
-    CreateString,
-    CreateNumber
+    StringProperty,
   },
   props: {
     value: Object,

@@ -21,22 +21,6 @@
 export default {
   name: "PropertiesPosition",
   props: ['value'],
-  filters: {
-    jsonFormat: function (value) {
-      if (!value) return '';
-      return JSON.stringify(value, null, '\t');
-    }
-  },
-  computed: {
-    getProperties() {
-      return this.value.properties.map(x => {
-        return {
-          name: x.name,
-          column: x.column
-        }
-      })
-    }
-  },
   methods: {
     startDrag(event, index) {
       event.dataTransfer.dropEffect = 'move'
@@ -61,11 +45,5 @@ export default {
 </script>
 
 <style scoped>
-.property-div {
-  border-style: solid;
-  border-width: 1px;
-  border-color: black;
-  padding: 10px;
-  margin: 10px 0;
-}
+
 </style>

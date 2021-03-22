@@ -1,24 +1,50 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <b-row>
+      <b-col>
+        <b-form inline>
+          <label class="mr-sm-2">Properties</label>
+          <b-form-select v-model="properties" class="mb-2 mr-sm-5 mb-sm-0">
+            <b-form-select-option value="array">array</b-form-select-option>
+            <b-form-select-option value="object">object</b-form-select-option>
+          </b-form-select>
+          <label class="mr-sm-2">Required</label>
+          <b-form-select v-model="required" class="mb-2 mr-sm-2 mb-sm-0">
+            <b-form-select-option value="array">array</b-form-select-option>
+            <b-form-select-option value="object">object</b-form-select-option>
+          </b-form-select>
+        </b-form>
+      </b-col>
+    </b-row>
+    <b-row class="mt-2">
+      <b-col>
+        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"/>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import DynamicFormCreator from "@/components/DynamicFormCreator";
 
 export default {
   name: "Home",
   components: {
-    HelloWorld
+    DynamicFormCreator
+  },
+  data() {
+    return {
+      properties: 'array',
+      required: 'array',
+      schema: {
+        name: '',
+        properties: [],
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
-.home {
-  text-align: center;
-}
+
 </style>
