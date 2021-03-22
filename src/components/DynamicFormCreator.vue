@@ -46,7 +46,7 @@
         </b-card>
       </b-col>
       <b-col cols="5">
-        <b-card header="JSON">
+        <b-card header="JSON SCHEMA">
           <pre>{{ value | jsonFormat }}</pre>
         </b-card>
       </b-col>
