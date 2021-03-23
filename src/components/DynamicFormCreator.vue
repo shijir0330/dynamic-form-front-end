@@ -28,11 +28,11 @@
             </b-button-group>
           </template>
           <b-row v-if="state === 'editing'">
-            <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
+            <b-col v-for="index in componentValue.properties.length" v-bind:key="index" cols="12">
               <create-properties class="mb-2"
-                                 v-model="componentValue.properties[index]"
-                                 v-bind:index="index" v-bind:validated="validated"
-                                 v-on:remove-property="removeProperty(index)"
+                                 v-model="componentValue.properties[index-1]"
+                                 v-bind:index="index-1" v-bind:validated="validated"
+                                 v-on:remove-property="removeProperty(index-1)"
                                  v-on:duplicate-property="duplicateProperty"
               />
             </b-col>
