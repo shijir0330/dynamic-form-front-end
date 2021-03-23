@@ -105,9 +105,6 @@ export default {
       validated: false,
     }
   },
-  // mounted() {
-  // this.componentValue = this.value
-  // },
   computed: {
     getValue() {
       return this.value;
