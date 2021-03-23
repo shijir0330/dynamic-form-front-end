@@ -5,19 +5,17 @@
     <b-row>
       <b-col>
         <b-form-group label="Name">
-          <b-form-input v-model="value.name" autocomplete="off"
-                        :state="validated ? !!value.name : null"/>
+          <b-form-input v-model="value.name" autocomplete="off" :state="validated ? !!value.name : null"/>
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group label="Label">
-          <b-form-input v-model="value.label" autocomplete="off"
-                        :state="validated ? !!value.label : null"/>
+          <b-form-input v-model="value.label" autocomplete="off" :state="validated ? !!value.label : null"/>
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group label="Type">
-          <b-form-select v-model="value.type" @change="updateValue">
+          <b-form-select v-model="value.type" @change="updateValue" :state="validated ? !!value.type : null">
             <b-form-select-option value="string">string</b-form-select-option>
             <b-form-select-option value="number">number</b-form-select-option>
           </b-form-select>

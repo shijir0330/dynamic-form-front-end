@@ -47,7 +47,7 @@
               PREVIEW
             </b-col>
           </b-row>
-          <b-row v-if="!(this.componentValue.properties.length > 0)">
+          <b-row v-if="!(this.componentValue.properties.length > 0) && validated">
             <b-col class="text-danger">
               NO PROPERTY FOUND
             </b-col>
@@ -203,7 +203,9 @@ export default {
 
       if (this.componentValue.properties.length > 0) {
         for (let i = 0; i < this.componentValue.properties.length; i++)
-          if (!this.componentValue.properties[i].name || !this.componentValue.properties[i].label) {
+          if (!this.componentValue.properties[i].name ||
+              !this.componentValue.properties[i].label ||
+              !this.componentValue.properties[i].type) {
             return
           }
       } else {
