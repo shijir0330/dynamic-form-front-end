@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-row>
+      <b-col cols="7"/>
       <b-col>
         <b-form inline>
           <label class="mr-sm-2">Properties</label>

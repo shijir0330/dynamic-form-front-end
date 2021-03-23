@@ -5,12 +5,14 @@
     <b-row>
       <b-col>
         <b-form-group label="Name">
-          <b-form-input v-model="value.name" autocomplete="off"/>
+          <b-form-input v-model="value.name" autocomplete="off"
+                        :state="validated ? !!value.name : null"/>
         </b-form-group>
       </b-col>
       <b-col>
         <b-form-group label="Label">
-          <b-form-input v-model="value.label" autocomplete="off"/>
+          <b-form-input v-model="value.label" autocomplete="off"
+                        :state="validated ? !!value.label : null"/>
         </b-form-group>
       </b-col>
       <b-col>
@@ -56,12 +58,8 @@ export default {
   },
   props: {
     value: Object,
-    index: Number
-  },
-  data() {
-    return {
-      validation: false
-    }
+    index: Number,
+    validated: Boolean
   },
   methods: {
     updateValue() {

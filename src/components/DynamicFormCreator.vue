@@ -6,8 +6,11 @@
           <template #header>
             <b-form inline class="float-left">
               <label class="mr-2">Form Name</label>
-              <b-form-input v-model="componentValue.name" class="mr-2"/>
-              <b-button @click="addProperty"><b-icon icon="plus"/></b-button>
+              <b-form-input v-model="componentValue.name" class="mr-2"
+                            :state="validated ? !!componentValue.name : null"/>
+              <b-button @click="addProperty">
+                <b-icon icon="plus"/>
+              </b-button>
             </b-form>
             <b-button-group class="float-right">
               <b-button :variant="state === 'editing' ? 'primary' : 'light'"
@@ -27,7 +30,8 @@
           <b-row v-if="state === 'editing'">
             <b-col v-for="(item, index) in componentValue.properties" v-bind:key="index" cols="12">
               <create-properties class="mb-2"
-                                 v-model="componentValue.properties[index]" v-bind:index="index"
+                                 v-model="componentValue.properties[index]"
+                                 v-bind:index="index" v-bind:validated="validated"
                                  v-on:remove-property="removeProperty(index)"
                                  v-on:duplicate-property="duplicateProperty"
               />
@@ -49,6 +53,11 @@
         <b-card header="JSON SCHEMA">
           <pre>{{ value | jsonFormat }}</pre>
         </b-card>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col>
+        <b-button variant="primary" v-on:click="submitFormSchema">SUBMIT</b-button>
       </b-col>
     </b-row>
   </div>
@@ -87,12 +96,13 @@ export default {
   data() {
     return {
       componentValue: this.value,
-      state: 'editing'
+      state: 'editing',
+      validated: false,
     }
   },
-  mounted() {
-    // this.componentValue = this.value
-  },
+  // mounted() {
+  // this.componentValue = this.value
+  // },
   computed: {
     getValue() {
       return this.value;
@@ -118,7 +128,7 @@ export default {
           const objectArray = Object.entries(x);
           const object = {};
           objectArray.forEach(([key, value]) => {
-            if (value) object[key] = value
+            if (value !== null) object[key] = value
           });
           object.validation = undefined;
           schemaFormat.properties.push(object);
@@ -149,7 +159,7 @@ export default {
           const objectArray = Object.entries(others);
           const object = {};
           objectArray.forEach(([key, value]) => {
-            if (value) object[key] = value
+            if (value !== null) object[key] = value
           });
           schemaFormat.properties[name] = {...object};
         })
@@ -165,7 +175,8 @@ export default {
         type: "string",
         name: `Property-${this.componentValue.properties.length + 1}`,
         label: `Property-${this.componentValue.properties.length + 1}`,
-        column: 12
+        column: 12,
+        required: false
       });
     },
     duplicateProperty(item, index) {
@@ -179,6 +190,23 @@ export default {
         this.$emit('input', this.getPropertiesArray)
       else if (this.properties === 'object')
         this.$emit('input', this.getPropertiesObject)
+    },
+    submitFormSchema() {
+      this.validated = true;
+
+      if (!this.componentValue.name) return
+
+      if (this.componentValue.properties.length > 0) {
+        for (let i = 0; i < this.componentValue.properties.length; i++)
+          if (!this.componentValue.properties[i].name || !this.componentValue.properties[i].label) {
+            return
+          }
+      } else {
+        return
+      }
+
+      alert('submitted')
+      this.$emit('submit')
     }
   },
   watch: {
