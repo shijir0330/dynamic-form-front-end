@@ -47,6 +47,11 @@
               PREVIEW
             </b-col>
           </b-row>
+          <b-row v-if="!(this.componentValue.properties.length > 0)">
+            <b-col class="text-danger">
+              NO PROPERTY FOUND
+            </b-col>
+          </b-row>
         </b-card>
       </b-col>
       <b-col cols="5">
@@ -205,7 +210,6 @@ export default {
         return
       }
 
-      alert('submitted')
       this.$emit('submit')
     }
   },
