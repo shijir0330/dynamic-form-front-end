@@ -19,8 +19,7 @@
     </b-row>
     <b-row class="mt-2">
       <b-col>
-        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
-                              v-on:submit="submitSchema"/>
+        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required" v-on:submit="submitSchema"/>
       </b-col>
     </b-row>
   </div>
