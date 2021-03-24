@@ -44,10 +44,10 @@
           </b-row>
           <b-row v-if="state === 'preview'">
             <b-col>
-              PREVIEW
+              <dynamic-form-generator :schema="componentValue" properties="array" required="object"/>
             </b-col>
           </b-row>
-          <b-row v-if="!(this.componentValue.properties.length > 0) && validated">
+          <b-row v-if="!(componentValue.properties.length > 0) && validated">
             <b-col class="text-danger">
               NO PROPERTY FOUND
             </b-col>
@@ -71,10 +71,11 @@
 <script>
 import CreateProperties from "@/components/properties/CreateProperties";
 import PropertiesPosition from "@/components/PropertiesPosition";
+import DynamicFormGenerator from "@/components/DynamicFormGenerator";
 
 export default {
   name: "DynamicFormCreator",
-  components: {CreateProperties, PropertiesPosition},
+  components: {DynamicFormGenerator, CreateProperties, PropertiesPosition},
   props: {
     value: Object,
     properties: {
