@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-row>
-      <b-col v-for="(item, index) in schema.properties" v-bind:key="index" :cols="item.column">
+      <b-col v-for="(item, index) in getSchema.properties" v-bind:key="index" :cols="item.column">
         <b-form-group :label="item.label">
           <template v-if="item.type === 'string'">
             <b-form-input v-if="!item.format" v-model="value[item.name]" autocomplete="off"/>
@@ -14,6 +14,11 @@
             <b-form-input v-model="value[item.name]" autocomplete="off" type="number"/>
           </template>
         </b-form-group>
+      </b-col>
+    </b-row>
+    <b-row>
+      <b-col class="text-center">
+        <b-button @click="submitForm">SUBMIT</b-button>
       </b-col>
     </b-row>
   </div>
@@ -51,6 +56,21 @@ export default {
       }
     }
   },
+  data() {
+    return {
+
+    }
+  },
+  computed: {
+    getSchema() {
+      return this.schema;
+    }
+  },
+  methods: {
+    submitForm() {
+
+    }
+  }
 }
 </script>
 
