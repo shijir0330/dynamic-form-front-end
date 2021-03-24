@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     submitSchema() {
-      alert('Schema submitted');
+      alert('JSON SCHEMA submitted');
     }
   }
 }

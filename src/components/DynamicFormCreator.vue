@@ -102,7 +102,7 @@ export default {
     return {
       componentValue: this.value,
       state: 'editing',
-      validated: false,
+      validated: false
     }
   },
   computed: {
@@ -195,9 +195,7 @@ export default {
     },
     submitFormSchema() {
       this.validated = true;
-
       if (!this.componentValue.name) return
-
       if (this.componentValue.properties.length > 0) {
         for (let i = 0; i < this.componentValue.properties.length; i++)
           if (!this.componentValue.properties[i].name ||
@@ -208,7 +206,6 @@ export default {
       } else {
         return
       }
-
       this.$emit('submit')
     }
   },
