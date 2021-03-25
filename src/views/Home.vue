@@ -1,7 +1,9 @@
 <template>
   <div>
     <b-row>
-      <b-col cols="7"/>
+      <b-col cols="7">
+        <b-button @click="change">change</b-button>
+      </b-col>
       <b-col>
         <b-form inline>
           <label class="mr-sm-2">Properties</label>
@@ -19,7 +21,8 @@
     </b-row>
     <b-row class="mt-2">
       <b-col>
-        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required" v-on:submit="submitSchema"/>
+        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
+                              v-on:submit="submitSchema"/>
       </b-col>
     </b-row>
   </div>
@@ -44,6 +47,31 @@ export default {
     }
   },
   methods: {
+    change() {
+      if (this.properties === 'array')
+        this.schema = {
+          name: 'changed',
+          properties: [
+            {
+              type: "string",
+              name: "changed-1",
+              label: "changed-1",
+              column: 12
+            }
+          ],
+        }
+      else if (this.properties === 'object')
+        this.schema = {
+          name: 'changed',
+          properties: {
+            Changed: {
+              type: "string",
+              label: "Changed",
+              column: 12
+            }
+          },
+        }
+    },
     submitSchema() {
       alert('JSON SCHEMA submitted');
     }

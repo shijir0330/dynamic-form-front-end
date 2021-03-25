@@ -107,16 +107,15 @@ export default {
     }
   },
   computed: {
-    getValue() {
-      return this.value;
-    },
+    // componentValue() {
+    //   return this.value;
+    // },
     getPropertiesArray() {
       let schemaFormat = {name: this.componentValue.name, properties: []};
       if (this.required === 'array') {
         schemaFormat.required = [];
         this.componentValue.properties.forEach((x) => {
           const {required, ...others} = x;
-          others.validation = undefined;
           if (required) schemaFormat.required.push(x.name);
           const objectArray = Object.entries(others);
           const object = {};
@@ -134,7 +133,6 @@ export default {
             if (key === 'required') object[key] = value
             if (value) object[key] = typeof value === "string" ? value.trim() : value;
           });
-          object.validation = undefined;
           schemaFormat.properties.push(object);
         })
       }
@@ -146,7 +144,6 @@ export default {
         schemaFormat.required = [];
         this.componentValue.properties.forEach((x) => {
           const {name, required, ...others} = x;
-          others.validation = undefined;
           if (required) schemaFormat.required.push(name);
           const objectArray = Object.entries(others);
           const object = {};
@@ -159,7 +156,6 @@ export default {
       } else if (this.required === 'object') {
         this.componentValue.properties.forEach((x) => {
           const {name, ...others} = x;
-          others.validation = undefined;
           const objectArray = Object.entries(others);
           const object = {};
           objectArray.forEach(([key, value]) => {
@@ -210,6 +206,53 @@ export default {
         return
       }
       this.$emit('submit')
+    },
+    isEqual(value) {
+      if (value.name !== this.componentValue.name) return false;
+      if (this.properties === 'array') {
+        if (value.properties.length !== this.getPropertiesArray.properties.length) return false;
+        for (let i = 0; i < value.properties.length; i++) {
+          const valueArray = Object.entries(value.properties[i]);
+          const otherArray = Object.entries(this.getPropertiesArray.properties[i]);
+          if (valueArray.length !== otherArray.length) return false;
+          for (let j = 0; j < valueArray.length; j++) {
+            if (valueArray[j][0] !== otherArray[j][0] || valueArray[j][1] !== otherArray[j][1]) return false;
+          }
+        }
+        return true;
+      } else if (this.properties === 'object') {
+        const valueArray = Object.entries(value.properties);
+        const otherArray = Object.entries(this.getPropertiesObject.properties);
+        if (valueArray.length !== otherArray.length) return false;
+        for (let i = 0; i < valueArray.length; i++) {
+          if (valueArray[i][0] !== otherArray[i][0]) return false;
+          const valueArray2 = Object.entries(valueArray[i][1]);
+          const otherArray2 = Object.entries(otherArray[i][1]);
+          if (valueArray2.length !== otherArray2.length) return false;
+          for (let j = 0; j < valueArray2.length; j++) {
+            if (valueArray2[j][0] !== otherArray2[j][0] || valueArray2[j][1] !== otherArray2[j][1]) return false;
+          }
+        }
+        return true;
+      }
+    },
+    propsObjectToArray(newValue) {
+      let schemaFormat = {name: newValue.name, properties: []};
+      if (newValue.required)
+        schemaFormat.required = newValue.required;
+      const objectArray = Object.entries(newValue.properties);
+      objectArray.forEach(([key, value]) => {
+        schemaFormat.properties.push({name: key, ...value})
+      })
+      return schemaFormat;
+    },
+    updateComponentValue(newValue) {
+      if (!this.isEqual(newValue)) {
+        if (this.properties === 'array')
+          this.componentValue = newValue;
+        else if (this.properties === 'object')
+          this.componentValue = this.propsObjectToArray(newValue);
+      }
     }
   },
   watch: {
@@ -222,7 +265,13 @@ export default {
     },
     'required': {
       handler: 'updateValue'
-    }
+    },
+    'value': {
+      deep: true,
+      handler(newValue) {
+        this.updateComponentValue(newValue);
+      }
+    },
   }
 }
 </script>
