@@ -5,7 +5,8 @@
     <b-row>
       <b-col>
         <b-form-group label="Name">
-          <b-form-input v-model="value.name" autocomplete="off" :state="validated ? !!value.name : null"/>
+          <b-form-input v-model="value.name" autocomplete="off" :state="validated ? !!value.name : null"
+                        v-on:input="eraseWhiteSpace"/>
         </b-form-group>
       </b-col>
       <b-col>
@@ -24,7 +25,7 @@
     </b-row>
     <div>
       <string-property v-if="value.type === 'string' && value.validation" v-model="value"
-                     v-on:update-value="updateValue2"/>
+                       v-on:update-value="updateValue2"/>
     </div>
     <template #footer>
       <div class="float-right text-primary">
@@ -76,6 +77,12 @@ export default {
     updateValueValidation() {
       if (!this.value.validation)
         this.updateValue();
+    },
+    eraseWhiteSpace() {
+      this.$emit('input', {
+        ...this.value,
+        name: this.value.name.replaceAll(' ', ''),
+      });
     },
     removeProperty() {
       this.$emit('remove-property');
