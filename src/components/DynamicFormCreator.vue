@@ -107,9 +107,6 @@ export default {
     }
   },
   computed: {
-    // componentValue() {
-    //   return this.value;
-    // },
     getPropertiesArray() {
       let schemaFormat = {name: this.componentValue.name, properties: []};
       if (this.required === 'array') {
