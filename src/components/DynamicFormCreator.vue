@@ -175,8 +175,8 @@ export default {
         this.componentValue.properties = []
       this.componentValue.properties.push({
         type: "string",
-        name: `Property-${this.componentValue.properties.length + 1}`,
-        label: `Property-${this.componentValue.properties.length + 1}`,
+        name: `property${this.componentValue.properties.length + 1}`,
+        label: `property${this.componentValue.properties.length + 1}`,
         column: 12,
         required: false
       });

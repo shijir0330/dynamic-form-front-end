@@ -44,7 +44,7 @@
             <b-form-select-option value="date">date</b-form-select-option>
             <b-form-select-option value="time">time</b-form-select-option>
             <b-form-select-option value="email">email</b-form-select-option>
-            <b-form-select-option value="uri">uri</b-form-select-option>
+            <b-form-select-option value="url">url</b-form-select-option>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -59,11 +59,6 @@
             <b-form-input type="number" ref="maxLength" v-model="value.maxLength" autocomplete="off"/>
           </b-form-group>
         </b-col>
-        <b-col cols="12">
-          <b-form-group label="Custom error text">
-            <b-form-input v-model="value.errorText" autocomplete="off"/>
-          </b-form-group>
-        </b-col>
       </template>
       <template v-if="value.format === null">
         <b-col>
@@ -73,12 +68,12 @@
             <!--          <input class="" type="text" ref="pattern" v-model="value.pattern" autocomplete="off" v-on:input="validatePattern"/>-->
           </b-form-group>
         </b-col>
-        <b-col cols="12">
-          <b-form-group label="Custom error text">
-            <b-form-input v-model="value.errorText" autocomplete="off"/>
-          </b-form-group>
-        </b-col>
       </template>
+      <b-col cols="12">
+        <b-form-group label="Custom error text">
+          <b-form-input v-model="value.errorText" autocomplete="off"/>
+        </b-form-group>
+      </b-col>
     </b-row>
   </div>
 </template>
