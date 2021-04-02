@@ -35,6 +35,11 @@
       </b-col>
     </b-row>
     <b-row>
+      <b-col class="text-center font-weight-bold">
+        Validations
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col cols="12">
         <b-form-group label="Format">
           <b-form-select v-model="value.format" @change="updateValue">
