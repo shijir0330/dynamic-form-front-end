@@ -23,10 +23,9 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <div>
-      <string-property v-if="value.type === 'string' && value.validation" v-model="value"
-                       v-on:update-value="updateValue2"/>
-    </div>
+    <b-modal :id="'property'+index" :title="value.name">
+      <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
+    </b-modal>
     <template #footer>
       <div class="float-right text-primary">
         <b-link pill @click="duplicateProperty">
@@ -39,9 +38,7 @@
         <label class="ml-3">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
-        <label class="ml-3">Validation
-          <b-form-checkbox class="float-right ml-2" switch v-model="value.validation" @change="updateValueValidation"/>
-        </label>
+        <b-link v-b-modal="'property'+index" v-text="'More'"/>
       </div>
     </template>
   </b-card>
@@ -68,7 +65,7 @@ export default {
         label: this.value.label,
         column: this.value.column,
         required: this.value.required,
-        validation: this.value.validation
+        // validation: this.value.validation
       });
     },
     updateValue2(values) {

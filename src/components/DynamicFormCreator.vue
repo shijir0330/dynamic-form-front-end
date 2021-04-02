@@ -62,6 +62,7 @@
       <b-col cols="5">
         <b-card header="JSON SCHEMA">
           <pre>{{ value | jsonFormat }}</pre>
+          <pre>{{ value | unquotedJsonFormat}}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -87,7 +88,7 @@ export default {
     },
     required: {
       type: String,
-      default: 'array',
+      default: 'object',
       validator: function (value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
@@ -97,6 +98,9 @@ export default {
     jsonFormat: function (value) {
       if (!value) return '';
       return JSON.stringify(value, null, '\t');
+    },
+    unquotedJsonFormat: function (value) {
+      return JSON.stringify(value, null, '\t').replace(/"([^"]+)":/g, '$1:');
     }
   },
   data() {
@@ -202,6 +206,7 @@ export default {
       } else {
         return
       }
+      
       this.$emit('submit')
     },
     isEqual(value) {

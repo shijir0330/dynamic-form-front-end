@@ -43,6 +43,17 @@ export default {
       schema: {
         name: '',
         properties: [],
+      },
+      example: {
+        "name": "",
+        "properties": {
+          "prop.name": {
+            "type": "string",
+            "label": "Property-1",
+            "column": 12
+          }
+        },
+        "required": []
       }
     }
   },
@@ -74,6 +85,7 @@ export default {
     },
     submitSchema() {
       alert('JSON SCHEMA submitted');
+      console.log('schema', this.schema);
     }
   }
 }
