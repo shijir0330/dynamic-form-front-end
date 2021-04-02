@@ -40,7 +40,7 @@
           <b-form-select v-model="value.format" @change="updateValue">
             <b-form-select-option :value="undefined">text</b-form-select-option>
             <b-form-select-option :value="null">pattern</b-form-select-option>
-            <b-form-select-option value="date-time">date-time</b-form-select-option>
+<!--            <b-form-select-option value="date-time">date-time</b-form-select-option>-->
             <b-form-select-option value="date">date</b-form-select-option>
             <b-form-select-option value="time">time</b-form-select-option>
             <b-form-select-option value="email">email</b-form-select-option>
@@ -63,9 +63,7 @@
       <template v-if="value.format === null">
         <b-col>
           <b-form-group label="Pattern">
-            <input :class="patternClass" type="text" ref="pattern" autocomplete="off"
-                   v-on:input="validatePattern($event.target.value)"/>
-            <!--          <input class="" type="text" ref="pattern" v-model="value.pattern" autocomplete="off" v-on:input="validatePattern"/>-->
+            <b-form-input v-model="value.pattern" autocomplete="off"/>
           </b-form-group>
         </b-col>
       </template>
@@ -88,18 +86,18 @@ export default {
     }
   },
   methods: {
-    validatePattern(pattern) {
-      this.$emit('update-value', {
-        type: this.value.type,
-        name: this.value.name,
-        label: this.value.label,
-        column: this.value.column,
-        required: this.value.required,
-        format: this.value.format,
-        pattern: pattern
-      })
-      console.log(this.value)
-    },
+    // validatePattern(pattern) {
+    //   this.$emit('update-value', {
+    //     type: this.value.type,
+    //     name: this.value.name,
+    //     label: this.value.label,
+    //     column: this.value.column,
+    //     required: this.value.required,
+    //     format: this.value.format,
+    //     pattern: pattern
+    //   })
+    //   console.log(this.value)
+    // },
     updateValue() {
       this.$emit('update-value', {
         type: this.value.type,

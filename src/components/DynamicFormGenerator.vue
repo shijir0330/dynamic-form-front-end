@@ -14,10 +14,6 @@
               </b-input-group-text>
             </b-input-group-prepend>
             <template v-if="item.type === 'string'">
-              <!--              <b-form-input v-if="item.format === 'email'" :type="item.format" v-model="value[item.name]"-->
-              <!--                            autocomplete="off"/>-->
-              <!--              <b-form-input v-if="item.format === 'url'" :type="item.format" v-model="value[item.name]"-->
-              <!--                            autocomplete="off"/>-->
               <b-form-datepicker v-if="item.format === 'date'" v-model="value[item.name]"/>
               <b-form-timepicker v-else-if="item.format === 'time'" v-model="value[item.name]" locale="en"/>
               <b-form-input v-else :type="item.format" v-model="value[item.name]" autocomplete="off"
@@ -98,80 +94,64 @@ export default {
         })
       }
       this.schema.properties.forEach((item) => {
-        switch (item.type) {
-          case 'string':
-            if (!item.required && !item.minLength && !item.maxLength && !item.pattern) {
+        if (!this.value[item.name]) {
+          validator[item.name] = item.required ? false : null;
+        } else {
+          switch (item.type) {
+            case 'string':
+              switch (item.format) {
+                case 'email':
+                  validator[item.name] = this.validateEmail(this.value[item.name]);
+                  break;
+                case 'url':
+                  validator[item.name] = this.validateUrl(this.value[item.name]);
+                  break;
+                default:
+                  validator[item.name] = this.validateString(item);
+              }
+              break;
+            case 'number':
+              break;
+            default:
               validator[item.name] = null;
-              break;
-            }
-            if (
-                (item.required && !this.value[item.name]) ||
-                (item.minLength && this.value[item.name] && this.value[item.name].length < item.minLength) ||
-                (item.maxLength && this.value[item.name] && this.value[item.name].length > item.maxLength)
-            ) {
-              validator[item.name] = false;
-              break;
-            }
-            // if (item.pattern) {
-            //   const regex = new RegExp(item.pattern);
-            //   if (!regex.test(this.value[item.name])) {
-            //     this.validator[item.name] = false;
-            //     break;
-            //   }
-            // }
-            validator[item.name] = true;
-            break;
-          case 'number':
-
-            break;
-          default:
-            validator[item.name] = null;
+          }
         }
       })
       return validator;
     }
   },
   methods: {
-    validatorF() {
-      let validator = {};
-      this.schema.properties.forEach((item) => {
-        if (item.validation) {
-          switch (item.type) {
-            case 'string':
-              if (item.required && !this.value[item.name]) {
-                validator[item.name] = false;
-                break;
-              }
-              if (item.minLength && this.value[item.name] && this.value[item.name].length < item.minLength) {
-                validator[item.name] = false;
-                console.log('sss')
-                break;
-              }
-              if (item.maxLength && this.value[item.name] && this.value[item.name].length > item.maxLength) {
-                validator[item.name] = false;
-                break;
-              }
-              // if (item.pattern) {
-              //   const regex = new RegExp(item.pattern);
-              //   if (!regex.test(this.value[item.name])) {
-              //     this.validator[item.name] = false;
-              //     break;
-              //   }
-              // }
-              validator[item.name] = true;
-              break;
-            case 'number':
-
-              break;
-            default:
-              validator[item.name] = null;
-          }
-        } else {
-          validator[item.name] = null;
-        }
-      })
-      return validator;
+    validateEmail: function (email) {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
     },
+    validateUrl: function (url) {
+      try {
+        new URL(url);
+      } catch (e) {
+        return false;
+      }
+      return true;
+    },
+    validateString: function (item) {
+      if (item.required && !item.minLength && !item.maxLength && !item.pattern) {
+        return true;
+      } else if (!item.required && !item.minLength && !item.maxLength && !item.pattern) {
+        return null;
+      }
+      return !(
+          (item.minLength && this.value[item.name] && this.value[item.name].length < item.minLength) ||
+          (item.maxLength && this.value[item.name] && this.value[item.name].length > item.maxLength)
+      );
+      // if (item.pattern) {
+      //   const regex = new RegExp(item.pattern);
+      //   if (!regex.test(this.value[item.name])) {
+      //     this.validator[item.name] = false;
+      //     break;
+      //   }
+      // }
+    },
+
     submitForm() {
       console.log('submitted')
       this.validated = true;
