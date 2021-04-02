@@ -20,9 +20,15 @@
       </b-col>
     </b-row>
     <b-row class="mt-2">
-      <b-col>
+      <b-col cols="7">
         <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
                               v-on:submit="submitSchema"/>
+      </b-col>
+      <b-col cols="5">
+        <b-card header="JSON SCHEMA">
+          <pre>{{ schema | jsonFormat }}</pre>
+          <pre>{{ schema | unquotedJsonFormat}}</pre>
+        </b-card>
       </b-col>
     </b-row>
   </div>
@@ -35,6 +41,15 @@ export default {
   name: "Home",
   components: {
     DynamicFormCreator
+  },
+  filters: {
+    jsonFormat: function (value) {
+      if (!value) return '';
+      return JSON.stringify(value, null, '\t');
+    },
+    unquotedJsonFormat: function (value) {
+      return JSON.stringify(value, null, '\t').replace(/"([^"]+)":/g, '$1:');
+    }
   },
   data() {
     return {

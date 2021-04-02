@@ -1,71 +1,61 @@
 <template>
   <div>
-    <b-row>
-      <b-col cols="7">
-        <b-card header-class="">
-          <template #header>
-            <b-form inline class="float-left">
-              <label class="mr-2">Form Name</label>
-              <b-form-input v-model="componentValue.name" class="mr-2"
-                            :state="validated ? !!componentValue.name : null"/>
-              <b-button @click="addProperty">
-                <b-icon icon="plus"/>
-              </b-button>
-            </b-form>
-            <b-button-group class="float-right">
-              <b-button :variant="state === 'editing' ? 'primary' : 'light'"
-                        v-on:click="state = 'editing'"
-              >EDIT
-              </b-button>
-              <b-button :variant="state === 'positioning' ? 'primary' : 'light'"
-                        v-on:click="state = 'positioning'"
-              >POSITIONING
-              </b-button>
-              <b-button :variant="state === 'preview' ? 'primary' : 'light'"
-                        v-on:click="state = 'preview'"
-              >PREVIEW
-              </b-button>
-            </b-button-group>
-          </template>
-          <b-row v-if="state === 'editing'">
-            <b-col v-for="index in componentValue.properties.length" v-bind:key="index" cols="12">
-              <create-properties class="mb-2"
-                                 v-model="componentValue.properties[index-1]"
-                                 v-bind:index="index-1" v-bind:validated="validated"
-                                 v-on:remove-property="removeProperty(index-1)"
-                                 v-on:duplicate-property="duplicateProperty"
-              />
-            </b-col>
-          </b-row>
-          <b-row v-if="state === 'positioning'">
-            <b-col>
-              <properties-position v-model="componentValue"/>
-            </b-col>
-          </b-row>
-          <b-row v-if="state === 'preview'">
-            <b-col>
-              <dynamic-form-generator :schema="componentValue" properties="array" required="object"/>
-            </b-col>
-          </b-row>
-          <b-row v-if="!(componentValue.properties.length > 0) && validated">
-            <b-col class="text-danger">
-              NO PROPERTY FOUND
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-button variant="primary" v-on:click="submitFormSchema">SUBMIT</b-button>
-            </b-col>
-          </b-row>
-        </b-card>
-      </b-col>
-      <b-col cols="5">
-        <b-card header="JSON SCHEMA">
-          <pre>{{ value | jsonFormat }}</pre>
-          <pre>{{ value | unquotedJsonFormat}}</pre>
-        </b-card>
-      </b-col>
-    </b-row>
+    <b-card header-class="">
+      <template #header>
+        <b-form inline class="float-left">
+          <label class="mr-2">Form Name</label>
+          <b-form-input v-model="componentValue.name" class="mr-2"
+                        :state="validated ? !!componentValue.name : null"/>
+          <b-button @click="addProperty">
+            <b-icon icon="plus"/>
+          </b-button>
+        </b-form>
+        <b-button-group class="float-right">
+          <b-button :variant="state === 'editing' ? 'primary' : 'light'"
+                    v-on:click="state = 'editing'"
+          >EDIT
+          </b-button>
+          <b-button :variant="state === 'positioning' ? 'primary' : 'light'"
+                    v-on:click="state = 'positioning'"
+          >POSITIONING
+          </b-button>
+          <b-button :variant="state === 'preview' ? 'primary' : 'light'"
+                    v-on:click="state = 'preview'"
+          >PREVIEW
+          </b-button>
+        </b-button-group>
+      </template>
+      <b-row v-if="state === 'editing'">
+        <b-col v-for="index in componentValue.properties.length" v-bind:key="index" cols="12">
+          <create-properties class="mb-2"
+                             v-model="componentValue.properties[index-1]"
+                             v-bind:index="index-1" v-bind:validated="validated"
+                             v-on:remove-property="removeProperty(index-1)"
+                             v-on:duplicate-property="duplicateProperty"
+          />
+        </b-col>
+      </b-row>
+      <b-row v-if="state === 'positioning'">
+        <b-col>
+          <properties-position v-model="componentValue"/>
+        </b-col>
+      </b-row>
+      <b-row v-if="state === 'preview'">
+        <b-col>
+          <dynamic-form-generator :schema="componentValue" properties="array" required="object"/>
+        </b-col>
+      </b-row>
+      <b-row v-if="!(componentValue.properties.length > 0) && validated">
+        <b-col class="text-danger">
+          NO PROPERTY FOUND
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col>
+          <b-button variant="primary" v-on:click="submitFormSchema">SUBMIT</b-button>
+        </b-col>
+      </b-row>
+    </b-card>
   </div>
 </template>
 
@@ -92,15 +82,6 @@ export default {
       validator: function (value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
-    }
-  },
-  filters: {
-    jsonFormat: function (value) {
-      if (!value) return '';
-      return JSON.stringify(value, null, '\t');
-    },
-    unquotedJsonFormat: function (value) {
-      return JSON.stringify(value, null, '\t').replace(/"([^"]+)":/g, '$1:');
     }
   },
   data() {
@@ -206,7 +187,7 @@ export default {
       } else {
         return
       }
-      
+
       this.$emit('submit')
     },
     isEqual(value) {
