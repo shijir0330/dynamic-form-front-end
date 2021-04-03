@@ -119,6 +119,7 @@ export default {
               validator[item.name] = this.validateNumber(this.value[item.name], item);
               break;
             case 'choice':
+              validator[item.name] = this.validateChoice(this.value[item.name], item);
               break;
             default:
               validator[item.name] = item.required ? true : null;
@@ -134,6 +135,9 @@ export default {
     },
     validateNumber: function (value, item) {
       return item.multipleOf && (item.minimum || item.maximum) ? this.validateMultipleOf(value, Number(item.multipleOf)) && this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.multipleOf ? this.validateMultipleOf(value, Number(item.multipleOf)) : item.minimum || item.maximum ? this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.required ? true : null;
+    },
+    validateChoice: function (value, item) {
+      return item.format === 'checkbox' ? item.minLength || item.maxLength ? this.validateLength(value, item.minLength, item.maxLength) : item.required ? !!value.length : null : item.required ? true : null;
     },
 
     validateMultipleOf: function (value, multiple) {

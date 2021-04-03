@@ -50,25 +50,30 @@
             </label>
           </b-col>
         </b-row>
-        <template v-if="value.format === 'checkbox'">
-          <b-row>
-            <b-col class="text-center font-weight-bold">
-              Validations
-            </b-col>
-          </b-row>
-          <b-row>
+        <b-row>
+          <b-col class="text-center font-weight-bold">
+            Validations
+          </b-col>
+        </b-row>
+        <b-row>
+          <template v-if="value.format === 'checkbox'">
             <b-col>
               <b-form-group label="Minimum">
                 <b-form-input type="number" v-model="value.minLength" autocomplete="off"/>
               </b-form-group>
             </b-col>
-            <b-col >
+            <b-col>
               <b-form-group label="Maximum">
                 <b-form-input type="number" v-model="value.maxLength" autocomplete="off"/>
               </b-form-group>
             </b-col>
-          </b-row>
-        </template>
+          </template>
+          <b-col>
+            <b-form-group label="Custom error text">
+              <b-form-input v-model="value.errorText" autocomplete="off"/>
+            </b-form-group>
+          </b-col>
+        </b-row>
       </b-col>
       <b-col cols="8">
         <b-row>
@@ -119,7 +124,8 @@ export default {
           column: this.value.column,
           required: this.value.required,
           format: this.value.format,
-          options: this.value.options
+          options: this.value.options,
+          errorText: this.value.errorText
         })
       else
         this.$emit('update-value', {
@@ -130,7 +136,8 @@ export default {
           required: this.value.required,
           format: this.value.format,
           options: this.value.options,
-          stacked: this.value.stacked
+          stacked: this.value.stacked,
+          errorText: this.value.errorText
         })
     },
     addOption() {
