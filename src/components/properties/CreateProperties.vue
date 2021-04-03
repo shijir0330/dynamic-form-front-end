@@ -24,7 +24,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="'property'+index" :title="value.name">
+    <b-modal :id="'property'+index" :title="value.name" :size="value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
       <property-choice v-if="value.type === 'choice'" v-model="value" v-on:update-value="updateValue2"/>

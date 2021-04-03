@@ -25,6 +25,17 @@
               <b-form-input v-model="value[item.name]" type="number" autocomplete="off"
                             :state="validated ? validator[item.name] : null"/>
             </template>
+            <template v-if="item.type === 'choice'">
+              <b-form-radio-group v-if="item.format === 'radio'" v-model="value[item.name]"
+                                  :options="item.options" :stacked="item.stacked"
+                                  :state="validated ? validator[item.name] : null"/>
+              <b-form-checkbox-group v-else-if="item.format === 'checkbox'" v-model="value[item.name]"
+                                     :options="item.options" :stacked="item.stacked"
+                                     :state="validated ? validator[item.name] : null"/>
+              <b-form-select v-else v-model="value[item.name]"
+                             :options="item.options"
+                             :state="validated ? validator[item.name] : null"/>
+            </template>
             <b-input-group-append v-if="item.append">
               <b-input-group-text>
                 <b-icon v-if="item.appendIcon" :icon="item.append"/>
@@ -39,6 +50,7 @@
       </b-col>
     </b-row>
     {{ value }}
+    {{ validator }}
     <b-row>
       <b-col class="text-center">
         <b-button @click="submitForm">SUBMIT</b-button>
@@ -106,8 +118,10 @@ export default {
             case 'number':
               validator[item.name] = this.validateNumber(this.value[item.name], item);
               break;
+            case 'choice':
+              break;
             default:
-              validator[item.name] = null;
+              validator[item.name] = item.required ? true : null;
           }
         }
       })
