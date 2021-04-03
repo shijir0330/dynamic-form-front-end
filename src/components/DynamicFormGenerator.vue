@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     validateString: function (value, item) {
-      return item.format === 'email' ? this.validateEmail(value) : item.format === 'url' ? this.validateUrl(value) : item.required && !item.minLength && !item.maxLength && !item.pattern ? true : !item.required && !item.minLength && !item.maxLength && !item.pattern ? null : item.pattern ? this.validateRegex(value, item.pattern) : this.validateLength(value, item.minLength, item.maxLength);
+      return item.format === 'email' ? this.validateEmail(value) : item.format === 'url' ? this.validateUrl(value) : item.pattern ? this.validateRegex(value, item.pattern) : item.minLength || item.maxLength ? this.validateLength(value, item.minLength, item.maxLength) : item.required ? true : null;
     },
     validateNumber: function (value, item) {
       return item.multipleOf && (item.minimum || item.maximum) ? this.validateMultipleOf(value, Number(item.multipleOf)) && this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.multipleOf ? this.validateMultipleOf(value, Number(item.multipleOf)) : item.minimum || item.maximum ? this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.required ? true : null;
@@ -158,6 +158,7 @@ export default {
       }
       return true;
     },
+
     submitForm() {
       this.validated = true;
 
