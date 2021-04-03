@@ -85,24 +85,7 @@
 export default {
   name: 'CreateString',
   props: ['value'],
-  computed: {
-    patternClass() {
-      return 'form-control'
-    }
-  },
   methods: {
-    // validatePattern(pattern) {
-    //   this.$emit('update-value', {
-    //     type: this.value.type,
-    //     name: this.value.name,
-    //     label: this.value.label,
-    //     column: this.value.column,
-    //     required: this.value.required,
-    //     format: this.value.format,
-    //     pattern: pattern
-    //   })
-    //   console.log(this.value)
-    // },
     updateValue() {
       this.$emit('update-value', {
         type: this.value.type,

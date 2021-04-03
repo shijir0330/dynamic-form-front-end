@@ -25,6 +25,7 @@
     </b-row>
     <b-modal :id="'property'+index" :title="value.name">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
+      <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
     </b-modal>
     <template #footer>
       <div class="float-right text-primary">
@@ -46,10 +47,12 @@
 
 <script>
 import StringProperty from '@/components/properties/StringProperty'
+import NumberProperty from "@/components/properties/NumberProperty";
 
 export default {
   name: "CreateComponents",
   components: {
+    NumberProperty,
     StringProperty,
   },
   props: {
