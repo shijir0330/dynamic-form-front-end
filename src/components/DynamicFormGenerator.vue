@@ -133,11 +133,22 @@ export default {
       }
       return true;
     },
+    validateRegex: function (pattern, string) {
+      try {
+        const _pattern = new RegExp(pattern);
+        return _pattern.test(string);
+      } catch (e) {
+        return false;
+      }
+    },
     validateString: function (item) {
       if (item.required && !item.minLength && !item.maxLength && !item.pattern) {
         return true;
       } else if (!item.required && !item.minLength && !item.maxLength && !item.pattern) {
         return null;
+      }
+      if (item.pattern) {
+        return this.validateRegex(item.pattern, this.value[item.name]);
       }
       return !(
           (item.minLength && this.value[item.name] && this.value[item.name].length < item.minLength) ||
