@@ -15,15 +15,15 @@
             </b-input-group-prepend>
             <template v-if="item.type === 'string'">
               <b-form-datepicker v-if="item.format === 'date'" v-model="value[item.name]"
-                                 :state="validated ? validator[item.name] : null"/>
+                                 :state="validated ? validator[item.name] : null" :placeholder="item.placeholder"/>
               <b-form-timepicker v-else-if="item.format === 'time'" v-model="value[item.name]" locale="en"
-                                 :state="validated ? validator[item.name] : null"/>
+                                 :state="validated ? validator[item.name] : null" :placeholder="item.placeholder"/>
               <b-form-input v-else :type="item.format" v-model="value[item.name]" autocomplete="off"
-                            :state="validated ? validator[item.name] : null"/>
+                            :state="validated ? validator[item.name] : null" :placeholder="item.placeholder"/>
             </template>
             <template v-if="item.type === 'number'">
               <b-form-input v-model="value[item.name]" type="number" autocomplete="off"
-                            :state="validated ? validator[item.name] : null"/>
+                            :state="validated ? validator[item.name] : null" :placeholder="item.placeholder"/>
             </template>
             <template v-if="item.type === 'choice'">
               <b-form-radio-group v-if="item.format === 'radio'" v-model="value[item.name]"
@@ -35,6 +35,9 @@
               <b-form-select v-else v-model="value[item.name]"
                              :options="item.options"
                              :state="validated ? validator[item.name] : null"/>
+            </template>
+            <template v-if="item.type === 'file'">
+
             </template>
             <b-input-group-append v-if="item.append">
               <b-input-group-text>
@@ -49,7 +52,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    {{ value }}
+    {{ value }} /
     {{ validator }}
     <b-row>
       <b-col class="text-center">

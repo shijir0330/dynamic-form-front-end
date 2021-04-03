@@ -33,6 +33,11 @@
           </b-input-group>
         </b-form-group>
       </b-col>
+      <b-col cols="12">
+        <b-form-group label="Placeholder">
+          <b-form-input v-model="value.placeholder" autocomplete="off"/>
+        </b-form-group>
+      </b-col>
     </b-row>
     <b-row>
       <b-col class="text-center font-weight-bold">
@@ -97,6 +102,7 @@ export default {
         prependIcon: this.value.prependIcon,
         append: this.value.append,
         appendIcon: this.value.appendIcon,
+        placeholder: this.value.placeholder,
         format: this.value.format,
         errorText: this.value.errorText
       })
