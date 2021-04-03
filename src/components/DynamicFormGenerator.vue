@@ -14,13 +14,16 @@
               </b-input-group-text>
             </b-input-group-prepend>
             <template v-if="item.type === 'string'">
-              <b-form-datepicker v-if="item.format === 'date'" v-model="value[item.name]"/>
-              <b-form-timepicker v-else-if="item.format === 'time'" v-model="value[item.name]" locale="en"/>
+              <b-form-datepicker v-if="item.format === 'date'" v-model="value[item.name]"
+                                 :state="validated ? validator[item.name] : null"/>
+              <b-form-timepicker v-else-if="item.format === 'time'" v-model="value[item.name]" locale="en"
+                                 :state="validated ? validator[item.name] : null"/>
               <b-form-input v-else :type="item.format" v-model="value[item.name]" autocomplete="off"
                             :state="validated ? validator[item.name] : null"/>
             </template>
             <template v-if="item.type === 'number'">
-              <b-form-input v-model="value[item.name]" autocomplete="off" type="number"/>
+              <b-form-input v-model="value[item.name]" type="number" autocomplete="off"
+                            :state="validated ? validator[item.name] : null"/>
             </template>
             <b-input-group-append v-if="item.append">
               <b-input-group-text>
@@ -98,7 +101,9 @@ export default {
           validator[item.name] = item.required ? false : null;
         } else {
           switch (item.type) {
-            case 'string': validator[item.name] = this.validateString(item, this.value[item.name]); break;
+            case 'string':
+              validator[item.name] = this.validateString(item, this.value[item.name]);
+              break;
             case 'number':
               break;
             default:
@@ -135,15 +140,21 @@ export default {
         return false;
       }
     },
-    validateLength: function (string, minLength, maxLength) {
+    validateLength: function (value, minLength, maxLength) {
       return !(
-          (minLength && string && string.length < minLength) ||
-          (maxLength && string && string.length > maxLength)
+          (minLength && value && value.length < minLength) ||
+          (maxLength && value && value.length > maxLength)
       );
     },
     submitForm() {
-      console.log('submitted')
       this.validated = true;
+
+      const validateArray = Object.values(this.validator);
+      for (let i = 0; i < validateArray.length; i++)
+        if (validateArray[i] === false) return;
+
+      this.$emit('submit');
+      console.log('submitted');
     }
   }
 }
