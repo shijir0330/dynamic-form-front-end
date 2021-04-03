@@ -37,7 +37,11 @@
                              :state="validated ? validator[item.name] : null"/>
             </template>
             <template v-if="item.type === 'file'">
-
+              <b-form-file v-model="value[item.name]"
+                           :placeholder="item.placeholder"
+                           :drop-placeholder="item.dropPlaceholder"
+                           :accept="item.accept"
+                           :state="validated ? validator[item.name] : null"/>
             </template>
             <b-input-group-append v-if="item.append">
               <b-input-group-text>
