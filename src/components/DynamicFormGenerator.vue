@@ -102,9 +102,10 @@ export default {
         } else {
           switch (item.type) {
             case 'string':
-              validator[item.name] = this.validateString(item, this.value[item.name]);
+              validator[item.name] = this.validateString(this.value[item.name], item);
               break;
             case 'number':
+              validator[item.name] = this.validateNumber(this.value[item.name], item);
               break;
             default:
               validator[item.name] = null;
@@ -115,11 +116,36 @@ export default {
     }
   },
   methods: {
-    validateString: function (item, value) {
+    validateString: function (value, item) {
       return item.format === 'email' ? this.validateEmail(value) : item.format === 'url' ? this.validateUrl(value) : item.required && !item.minLength && !item.maxLength && !item.pattern ? true : !item.required && !item.minLength && !item.maxLength && !item.pattern ? null : item.pattern ? this.validateRegex(value, item.pattern) : this.validateLength(value, item.minLength, item.maxLength);
     },
+    validateNumber: function (value, item) {
+      return item.multipleOf && (item.minimum || item.maximum) ? this.validateMultipleOf(value, Number(item.multipleOf)) && this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.multipleOf ? this.validateMultipleOf(value, Number(item.multipleOf)) : item.minimum || item.maximum ? this.validateMinMax(value, Number(item.minimum), Number(item.maximum), item.exclusiveMinimum, item.exclusiveMaximum) : item.required ? true : null;
+    },
 
-
+    validateMultipleOf: function (value, multiple) {
+      return value % multiple === 0;
+    },
+    validateMinMax: function (value, minimum, maximum, exclusiveMinimum, exclusiveMaximum) {
+      return !(
+          (minimum && value && !exclusiveMinimum ? value < minimum : value <= minimum) ||
+          (maximum && value && !exclusiveMaximum ? value > maximum : value >= maximum)
+      )
+    },
+    validateLength: function (value, minLength, maxLength) {
+      return !(
+          (minLength && value && value.length < minLength) ||
+          (maxLength && value && value.length > maxLength)
+      );
+    },
+    validateRegex: function (string, pattern) {
+      try {
+        const _pattern = new RegExp(pattern);
+        return _pattern.test(string);
+      } catch (e) {
+        return false;
+      }
+    },
     validateEmail: function (email) {
       const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
@@ -131,20 +157,6 @@ export default {
         return false;
       }
       return true;
-    },
-    validateRegex: function (string, pattern) {
-      try {
-        const _pattern = new RegExp(pattern);
-        return _pattern.test(string);
-      } catch (e) {
-        return false;
-      }
-    },
-    validateLength: function (value, minLength, maxLength) {
-      return !(
-          (minLength && value && value.length < minLength) ||
-          (maxLength && value && value.length > maxLength)
-      );
     },
     submitForm() {
       this.validated = true;
