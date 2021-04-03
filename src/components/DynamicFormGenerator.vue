@@ -81,8 +81,7 @@ export default {
   },
   data() {
     return {
-      validated: false,
-      // validator: {}
+      validated: false
     }
   },
   computed: {

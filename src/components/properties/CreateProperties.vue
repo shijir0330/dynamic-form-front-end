@@ -19,6 +19,7 @@
           <b-form-select v-model="value.type" @change="updateValue" :state="validated ? !!value.type : null">
             <b-form-select-option value="string">string</b-form-select-option>
             <b-form-select-option value="number">number</b-form-select-option>
+            <b-form-select-option value="choice">choice</b-form-select-option>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -26,6 +27,7 @@
     <b-modal :id="'property'+index" :title="value.name">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
+      <property-choice v-if="value.type === 'choice'" v-model="value" v-on:update-value="updateValue2"/>
     </b-modal>
     <template #footer>
       <div class="float-right text-primary">
@@ -46,12 +48,14 @@
 </template>
 
 <script>
-import StringProperty from '@/components/properties/StringProperty'
-import NumberProperty from "@/components/properties/NumberProperty";
+import StringProperty from '@/components/properties/PropertyString'
+import NumberProperty from "@/components/properties/PropertyNumber";
+import PropertyChoice from "@/components/properties/PropertyChoice";
 
 export default {
   name: "CreateComponents",
   components: {
+    PropertyChoice,
     NumberProperty,
     StringProperty,
   },
@@ -62,14 +66,28 @@ export default {
   },
   methods: {
     updateValue() {
-      this.$emit('input', {
-        type: this.value.type,
-        name: this.value.name,
-        label: this.value.label,
-        column: this.value.column,
-        required: this.value.required,
-        // validation: this.value.validation
-      });
+      if (this.value.type === 'choice')
+        this.$emit('input', {
+          type: this.value.type,
+          name: this.value.name,
+          label: this.value.label,
+          column: this.value.column,
+          required: this.value.required,
+          options: [
+            {
+              value: 'Option 1',
+              text: 'Option 1'
+            }
+          ]
+        });
+      else
+        this.$emit('input', {
+          type: this.value.type,
+          name: this.value.name,
+          label: this.value.label,
+          column: this.value.column,
+          required: this.value.required,
+        });
     },
     updateValue2(values) {
       this.$emit('input', values);
