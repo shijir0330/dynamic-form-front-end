@@ -99,6 +99,7 @@ export default {
         } else {
           switch (item.type) {
             case 'string':
+              // validator[item.name] = this.validateString(item);
               switch (item.format) {
                 case 'email':
                   validator[item.name] = this.validateEmail(this.value[item.name]);
@@ -133,13 +134,19 @@ export default {
       }
       return true;
     },
-    validateRegex: function (pattern, string) {
+    validateRegex: function (string, pattern) {
       try {
         const _pattern = new RegExp(pattern);
         return _pattern.test(string);
       } catch (e) {
         return false;
       }
+    },
+    validateLength: function (string, minLength, maxLength) {
+      return !(
+          (minLength && string && string.length < minLength) ||
+          (maxLength && string && string.length > maxLength)
+      );
     },
     validateString: function (item) {
       if (item.required && !item.minLength && !item.maxLength && !item.pattern) {
@@ -148,19 +155,9 @@ export default {
         return null;
       }
       if (item.pattern) {
-        return this.validateRegex(item.pattern, this.value[item.name]);
+        return this.validateRegex(this.value[item.name], item.pattern);
       }
-      return !(
-          (item.minLength && this.value[item.name] && this.value[item.name].length < item.minLength) ||
-          (item.maxLength && this.value[item.name] && this.value[item.name].length > item.maxLength)
-      );
-      // if (item.pattern) {
-      //   const regex = new RegExp(item.pattern);
-      //   if (!regex.test(this.value[item.name])) {
-      //     this.validator[item.name] = false;
-      //     break;
-      //   }
-      // }
+      return this.validateLength(this.value[item.name], item.minLength, item.maxLength);
     },
 
     submitForm() {
