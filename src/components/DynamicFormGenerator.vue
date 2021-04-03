@@ -98,19 +98,7 @@ export default {
           validator[item.name] = item.required ? false : null;
         } else {
           switch (item.type) {
-            case 'string':
-              // validator[item.name] = this.validateString(item);
-              switch (item.format) {
-                case 'email':
-                  validator[item.name] = this.validateEmail(this.value[item.name]);
-                  break;
-                case 'url':
-                  validator[item.name] = this.validateUrl(this.value[item.name]);
-                  break;
-                default:
-                  validator[item.name] = this.validateString(item);
-              }
-              break;
+            case 'string': validator[item.name] = this.validateString(item, this.value[item.name]); break;
             case 'number':
               break;
             default:
@@ -122,8 +110,13 @@ export default {
     }
   },
   methods: {
+    validateString: function (item, value) {
+      return item.format === 'email' ? this.validateEmail(value) : item.format === 'url' ? this.validateUrl(value) : item.required && !item.minLength && !item.maxLength && !item.pattern ? true : !item.required && !item.minLength && !item.maxLength && !item.pattern ? null : item.pattern ? this.validateRegex(value, item.pattern) : this.validateLength(value, item.minLength, item.maxLength);
+    },
+
+
     validateEmail: function (email) {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
     },
     validateUrl: function (url) {
@@ -148,18 +141,6 @@ export default {
           (maxLength && string && string.length > maxLength)
       );
     },
-    validateString: function (item) {
-      if (item.required && !item.minLength && !item.maxLength && !item.pattern) {
-        return true;
-      } else if (!item.required && !item.minLength && !item.maxLength && !item.pattern) {
-        return null;
-      }
-      if (item.pattern) {
-        return this.validateRegex(this.value[item.name], item.pattern);
-      }
-      return this.validateLength(this.value[item.name], item.minLength, item.maxLength);
-    },
-
     submitForm() {
       console.log('submitted')
       this.validated = true;
