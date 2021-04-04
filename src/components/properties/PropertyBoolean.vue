@@ -49,16 +49,23 @@
           </b-input-group>
         </b-form-group>
       </b-col>
-      <b-col v-if="!value.format">
-        <b-form-group label="False text">
-          <b-input-group>
-            <b-input-group-prepend is-text>
-              <b-form-radio class="mr-n2" v-model="example" :value="false"/>
-            </b-input-group-prepend>
-            <b-form-input v-model="value.falseText" autocomplete="off"/>
-          </b-input-group>
-        </b-form-group>
-      </b-col>
+      <template v-if="!value.format">
+        <b-col>
+          <b-form-group label="False text">
+            <b-input-group>
+              <b-input-group-prepend is-text>
+                <b-form-radio class="mr-n2" v-model="example" :value="false"/>
+              </b-input-group-prepend>
+              <b-form-input v-model="value.falseText" autocomplete="off"/>
+            </b-input-group>
+          </b-form-group>
+        </b-col>
+        <b-col cols="12">
+          <label>Stacked
+            <b-form-checkbox class="float-right ml-2" switch v-model="value.stacked"/>
+          </label>
+        </b-col>
+      </template>
     </b-row>
     <b-row>
       <b-col>

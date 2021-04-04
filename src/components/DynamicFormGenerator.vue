@@ -36,6 +36,25 @@
                              :options="item.options"
                              :state="validated ? validator[item.name] : null"/>
             </template>
+            <template v-if="item.type === 'boolean'">
+              <b-form-checkbox v-if="item.format === 'checkbox'" v-model="value[item.name]"
+                               :value="item.trueValue" :unchecked-value="item.falseValue"
+                               :state="validated ? validator[item.name] : null"
+              >{{ item.trueText }}
+              </b-form-checkbox>
+              <b-form-checkbox v-else-if="item.format === 'switch'" switch v-model="value[item.name]"
+                               :value="item.trueValue" :unchecked-value="item.falseValue"
+                               :state="validated ? validator[item.name] : null"
+              >{{ item.trueText }}
+              </b-form-checkbox>
+              <b-form-radio-group v-else v-model="value[item.name]"
+                                  :stacked="item.stacked"
+                                  :state="validated ? validator[item.name] : null"
+              >
+                <b-form-radio :value="item.trueValue">{{ item.trueText }}</b-form-radio>
+                <b-form-radio :value="item.falseValue">{{ item.falseText }}</b-form-radio>
+              </b-form-radio-group>
+            </template>
             <template v-if="item.type === 'file'">
               <b-form-file v-model="value[item.name]"
                            :placeholder="item.placeholder"
@@ -115,7 +134,7 @@ export default {
         })
       }
       this.schema.properties.forEach((item) => {
-        if (!this.value[item.name]) {
+        if (!this.value[item.name] && this.value[item.name] !== false) {
           validator[item.name] = item.required ? false : null;
         } else {
           switch (item.type) {

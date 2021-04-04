@@ -88,6 +88,18 @@ export default {
             }
           ]
         });
+      else if (this.value.type === 'boolean')
+        this.$emit('input', {
+          type: this.value.type,
+          name: this.value.name,
+          label: this.value.label,
+          column: this.value.column,
+          required: this.value.required,
+          trueValue: true,
+          falseValue: false,
+          trueText: 'True text',
+          falseText: 'False text'
+        });
       else
         this.$emit('input', {
           type: this.value.type,
