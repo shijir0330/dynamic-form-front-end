@@ -20,6 +20,7 @@
             <b-form-select-option value="string">string</b-form-select-option>
             <b-form-select-option value="number">number</b-form-select-option>
             <b-form-select-option value="choice">choice</b-form-select-option>
+            <b-form-select-option value="boolean">boolean</b-form-select-option>
             <b-form-select-option value="file">file</b-form-select-option>
           </b-form-select>
         </b-form-group>
@@ -30,6 +31,7 @@
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
       <property-choice v-if="value.type === 'choice'" v-model="value" v-on:update-value="updateValue2"/>
       <property-file v-if="value.type === 'file'" v-model="value"/>
+      <property-boolean v-if="value.type === 'boolean'" v-model="value" v-on:update-value="updateValue2"/>
     </b-modal>
     <template #footer>
       <div class="float-right text-primary">
@@ -54,10 +56,12 @@ import StringProperty from '@/components/properties/PropertyString'
 import NumberProperty from "@/components/properties/PropertyNumber";
 import PropertyChoice from "@/components/properties/PropertyChoice";
 import PropertyFile from "@/components/properties/PropertyFile";
+import PropertyBoolean from "@/components/properties/PropertyBoolean";
 
 export default {
   name: "CreateComponents",
   components: {
+    PropertyBoolean,
     PropertyFile,
     PropertyChoice,
     NumberProperty,

@@ -102,7 +102,7 @@ export default {
           const objectArray = Object.entries(others);
           const object = {};
           objectArray.forEach(([key, value]) => {
-            if (value) object[key] = typeof value === "string" ? value.trim() : value;
+            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
           });
           schemaFormat.required = [...new Set(schemaFormat.required)];
           schemaFormat.properties.push(object);
@@ -113,7 +113,7 @@ export default {
           const object = {};
           objectArray.forEach(([key, value]) => {
             if (key === 'required') object[key] = value
-            if (value) object[key] = typeof value === "string" ? value.trim() : value;
+            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
           });
           schemaFormat.properties.push(object);
         })
@@ -130,7 +130,7 @@ export default {
           const objectArray = Object.entries(others);
           const object = {};
           objectArray.forEach(([key, value]) => {
-            if (value) object[key] = typeof value === "string" ? value.trim() : value;
+            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
           });
           schemaFormat.required = [...new Set(schemaFormat.required)];
           schemaFormat.properties[name] = {...object};
@@ -142,7 +142,7 @@ export default {
           const object = {};
           objectArray.forEach(([key, value]) => {
             if (key === 'required') object[key] = value
-            if (value) object[key] = typeof value === "string" ? value.trim() : value;
+            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
           });
           schemaFormat.properties[name] = {...object};
         })

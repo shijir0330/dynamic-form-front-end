@@ -12,7 +12,7 @@
             <b-form-input v-model="value.prepend" autocomplete="off"/>
             <b-input-group-append is-text>
               <b-form-checkbox switch class="mr-n2" v-model="value.prependIcon"
-                               :value="true" :unchecked-value="undefined"/>
+                               :value="true" :unchecked-value="null"/>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -28,7 +28,7 @@
             <b-form-input v-model="value.append" autocomplete="off"/>
             <b-input-group-append is-text>
               <b-form-checkbox switch class="mr-n2" v-model="value.appendIcon"
-                               :value="true" :unchecked-value="undefined"/>
+                               :value="true" :unchecked-value="null"/>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -55,7 +55,7 @@
             <b-form-input v-model="value.minimum" autocomplete="off"/>
             <b-input-group-append is-text>
               <b-form-checkbox switch class="mr-n2" v-model="value.exclusiveMinimum"
-                               :value="true" :unchecked-value="undefined"/>
+                               :value="true" :unchecked-value="null"/>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
@@ -70,7 +70,7 @@
             <b-form-input v-model="value.maximum" autocomplete="off"/>
             <b-input-group-append is-text>
               <b-form-checkbox switch class="mr-n2" v-model="value.exclusiveMaximum"
-                               :value="true" :unchecked-value="undefined"/>
+                               :value="true" :unchecked-value="null"/>
             </b-input-group-append>
           </b-input-group>
         </b-form-group>
