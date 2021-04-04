@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card header-class="">
+    <b-card >
       <template #header>
         <b-form inline class="float-left">
           <label class="mr-2">Form Name</label>

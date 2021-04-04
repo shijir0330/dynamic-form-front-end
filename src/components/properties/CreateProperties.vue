@@ -1,5 +1,5 @@
 <template>
-  <b-card class="property-div"
+  <b-card body-class="m-0 pb-0 pt-1" footer-class="m-0 pt-1 pb-0"
           border-variant="primary"
           footer-border-variant="primary">
     <b-row>
@@ -27,8 +27,8 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="'property'+index" :title="value.name"
-             :size="value.type === 'object' ? 'xl' : value.type === 'choice' ? 'lg' : null">
+    <b-modal :id="`property-${index}`" :title="value.name"
+             :size="value.type === 'object' || value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
       <property-choice v-if="value.type === 'choice'" v-model="value" v-on:update-value="updateValue2"/>
@@ -49,7 +49,7 @@
         <label v-if="value.type !== 'object'">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
-        <b-link v-b-modal="'property'+index" v-text="'More'"/>
+        <b-link v-b-modal="`property-${index}`" v-text="'More'"/>
       </div>
     </template>
   </b-card>
