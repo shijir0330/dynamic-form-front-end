@@ -29,7 +29,8 @@
         <b-col v-for="index in componentValue.properties.length" v-bind:key="index" cols="12">
           <create-properties class="mb-2"
                              v-model="componentValue.properties[index-1]"
-                             v-bind:index="index-1" v-bind:validated="validated"
+                             v-bind:index="index-1" v-bind:name="componentValue.name"
+                             v-bind:validated="validated"
                              v-on:remove-property="removeProperty(index-1)"
                              v-on:duplicate-property="duplicateProperty"
           />

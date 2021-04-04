@@ -27,7 +27,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="`property-${index}`" :title="value.name"
+    <b-modal :id="`property-${name}-${index}`" :title="value.name"
              :size="value.type === 'object' || value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
@@ -49,7 +49,7 @@
         <label v-if="value.type !== 'object'">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
-        <b-link v-b-modal="`property-${index}`" v-text="'More'"/>
+        <b-link v-b-modal="`property-${name}-${index}`" v-text="'More'"/>
       </div>
     </template>
   </b-card>
@@ -76,6 +76,7 @@ export default {
   props: {
     value: Object,
     index: Number,
+    name: String,
     validated: Boolean
   },
   methods: {
