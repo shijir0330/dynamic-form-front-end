@@ -93,7 +93,7 @@
             <b-form-input size="sm" v-model="value.options[index-1].text" autocomplete="off"/>
           </b-col>
           <b-col cols="auto">
-            <b-link pill @click="deleteOption(index-1)">
+            <b-link pill @click="deleteOption(index-1)" v-if="value.options.length > 1">
               <b-icon class="mr-3" icon="trash" scale="1.1"/>
             </b-link>
           </b-col>

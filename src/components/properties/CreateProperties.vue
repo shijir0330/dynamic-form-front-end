@@ -22,16 +22,20 @@
             <b-form-select-option value="choice">choice</b-form-select-option>
             <b-form-select-option value="boolean">boolean</b-form-select-option>
             <b-form-select-option value="file">file</b-form-select-option>
+            <b-form-select-option value="object">object</b-form-select-option>
           </b-form-select>
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="'property'+index" :title="value.name" :size="value.type === 'choice' ? 'lg' : null">
+    <b-modal :id="'property'+index" :title="value.name"
+             :size="value.type === 'object' ? 'xl' : value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
       <property-choice v-if="value.type === 'choice'" v-model="value" v-on:update-value="updateValue2"/>
       <property-file v-if="value.type === 'file'" v-model="value"/>
       <property-boolean v-if="value.type === 'boolean'" v-model="value" v-on:update-value="updateValue2"/>
+      <property-object v-if="value.type === 'object'" v-model="value" :validated="validated"
+                       v-on:update-value="updateValue2"/>
     </b-modal>
     <template #footer>
       <div class="float-right text-primary">
@@ -41,8 +45,8 @@
         <b-link pill @click="removeProperty">
           <b-icon class="mr-3" icon="trash" scale="1.1"/>
         </b-link>
-        |
-        <label class="ml-3">Required
+        <label class="mr-3">|</label>
+        <label v-if="value.type !== 'object'">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
         <b-link v-b-modal="'property'+index" v-text="'More'"/>
@@ -57,10 +61,12 @@ import NumberProperty from "@/components/properties/PropertyNumber";
 import PropertyChoice from "@/components/properties/PropertyChoice";
 import PropertyFile from "@/components/properties/PropertyFile";
 import PropertyBoolean from "@/components/properties/PropertyBoolean";
+import PropertyObject from "@/components/properties/PropertyObject";
 
 export default {
   name: "CreateComponents",
   components: {
+    PropertyObject,
     PropertyBoolean,
     PropertyFile,
     PropertyChoice,
@@ -74,13 +80,22 @@ export default {
   },
   methods: {
     updateValue() {
-      if (this.value.type === 'choice')
+      if (this.value.type === 'object')
         this.$emit('input', {
           type: this.value.type,
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
-          required: this.value.required,
+          // required: this.value.required,
+          properties: []
+        });
+      else if (this.value.type === 'choice')
+        this.$emit('input', {
+          type: this.value.type,
+          name: this.value.name,
+          label: this.value.label,
+          column: this.value.column,
+          required: !!this.value.required,
           options: [
             {
               value: 'Option 1',
@@ -94,7 +109,7 @@ export default {
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
-          required: this.value.required,
+          required: !!this.value.required,
           trueValue: true,
           falseValue: false,
           trueText: 'True text',
@@ -106,7 +121,7 @@ export default {
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
-          required: this.value.required,
+          required: !!this.value.required,
         });
     },
     updateValue2(values) {

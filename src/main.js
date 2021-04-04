@@ -13,9 +13,8 @@ Vue.use(BootstrapVue)
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin)
 
-import CreateComponents from "@/components/properties/CreateProperties";
-Vue.component('create-components', CreateComponents);
-// Vue.component('my-component', MyComponent);
+import CreateProperties from "@/components/properties/CreateProperties";
+Vue.component('create-properties', CreateProperties);
 
 Vue.config.productionTip = false
 
