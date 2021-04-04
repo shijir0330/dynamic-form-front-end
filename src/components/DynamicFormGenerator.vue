@@ -128,12 +128,12 @@ export default {
     },
     validator() {
       let validator = {};
-      if (this.schema.required) {
-        this.schema.required.forEach((name) => {
+      if (this.getSchema.required) {
+        this.getSchema.required.forEach((name) => {
           if (!this.value[name]) validator[name] = false;
         })
       }
-      this.schema.properties.forEach((item) => {
+      this.getSchema.properties.forEach((item) => {
         if (!this.value[item.name] && this.value[item.name] !== false) {
           validator[item.name] = item.required ? false : null;
         } else {
@@ -153,6 +153,9 @@ export default {
             case 'file':
               validator[item.name] = this.validateRequired(this.value[item.name], item);
               break;
+            case 'object':
+              validator[item.name] = this.validateObject(this.value[item.name], item);
+              break;
             default:
               validator[item.name] = undefined;
           }
@@ -162,6 +165,39 @@ export default {
     }
   },
   methods: {
+    validateObject: function (value, item) {
+      let validator = {};
+      if (item.required) {
+        item.required.forEach((name) => {
+          if (!value[name]) validator[name] = false;
+        })
+      }
+      item.properties.forEach((item) => {
+        switch (item.type) {
+          case 'string':
+            validator[item.name] = this.validateString(this.value[item.name], item);
+            break;
+          case 'number':
+            validator[item.name] = this.validateNumber(this.value[item.name], item);
+            break;
+          case 'choice':
+            validator[item.name] = this.validateChoice(this.value[item.name], item);
+            break;
+          case 'boolean':
+            validator[item.name] = this.validateRequired(this.value[item.name], item);
+            break;
+          case 'file':
+            validator[item.name] = this.validateRequired(this.value[item.name], item);
+            break;
+          case 'object':
+            validator[item.name] = this.validateObject(this.value[item.name], item);
+            break;
+          default:
+            validator[item.name] = undefined;
+        }
+      })
+      return validator;
+    },
     validateString: function (value, item) {
       return item.format === 'email' ? this.validateEmail(value) : item.format === 'url' ? this.validateUrl(value) : item.pattern ? this.validateRegex(value, item.pattern) : item.minLength || item.maxLength ? this.validateLength(value, item.minLength, item.maxLength) : item.required ? true : null;
     },
