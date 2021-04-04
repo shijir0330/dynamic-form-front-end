@@ -147,8 +147,14 @@ export default {
             case 'choice':
               validator[item.name] = this.validateChoice(this.value[item.name], item);
               break;
+            case 'boolean':
+              validator[item.name] = this.validateRequired(this.value[item.name], item);
+              break;
+            case 'file':
+              validator[item.name] = this.validateRequired(this.value[item.name], item);
+              break;
             default:
-              validator[item.name] = item.required ? true : null;
+              validator[item.name] = undefined;
           }
         }
       })
@@ -164,6 +170,9 @@ export default {
     },
     validateChoice: function (value, item) {
       return item.format === 'checkbox' ? item.minLength || item.maxLength ? this.validateLength(value, item.minLength, item.maxLength) : item.required ? !!value.length : null : item.required ? true : null;
+    },
+    validateRequired: function (value, item) {
+      return item.required ? value !== null : null
     },
 
     validateMultipleOf: function (value, multiple) {
@@ -181,10 +190,10 @@ export default {
           (maxLength && value && value.length > maxLength)
       );
     },
-    validateRegex: function (string, pattern) {
+    validateRegex: function (value, pattern) {
       try {
         const _pattern = new RegExp(pattern);
-        return _pattern.test(string);
+        return _pattern.test(value);
       } catch (e) {
         return false;
       }
