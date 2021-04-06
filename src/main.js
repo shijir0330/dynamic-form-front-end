@@ -14,7 +14,9 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 
 import CreateProperties from "@/components/properties/CreateProperties";
+import GenerateProperties from "@/components/properties/GenerateProperties";
 Vue.component('create-properties', CreateProperties);
+Vue.component('generate-properties', GenerateProperties);
 
 Vue.config.productionTip = false
 
