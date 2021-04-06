@@ -22,7 +22,7 @@
       <b-col v-for="index in value.properties.length" v-bind:key="index" cols="12">
         <create-properties class="mb-2"
                            v-model="value.properties[index-1]"
-                           v-bind:index="index-1" v-bind:name="value.name"
+                           v-bind:index="index-1" v-bind:name="`${name}-${value.name}`"
                            v-bind:validated="validated"
                            v-on:remove-property="removeProperty(index-1)"
                            v-on:duplicate-property="duplicateProperty"
@@ -48,7 +48,7 @@ import PropertiesPosition from "@/components/PropertiesPosition";
 export default {
   name: "PropertyObject",
   components: {PropertiesPosition},
-  props: ['value', 'validated'],
+  props: ['value', 'validated', 'name'],
   data() {
     return {
       state: 'editing'

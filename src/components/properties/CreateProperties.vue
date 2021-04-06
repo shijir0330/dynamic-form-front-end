@@ -27,7 +27,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="`property-${name}-${index}`" :title="value.name"
+    <b-modal :id="`${name}-${index}`" :title="`${name}-${value.name}`"
              :size="value.type === 'object' || value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
@@ -35,6 +35,7 @@
       <property-file v-if="value.type === 'file'" v-model="value"/>
       <property-boolean v-if="value.type === 'boolean'" v-model="value" v-on:update-value="updateValue2"/>
       <property-object v-if="value.type === 'object'" v-model="value" :validated="validated"
+                       v-bind:name="`${name}-${value.name}`"
                        v-on:update-value="updateValue2"/>
     </b-modal>
     <template #footer>
@@ -49,7 +50,7 @@
         <label v-if="value.type !== 'object'">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
-        <b-link v-b-modal="`property-${name}-${index}`" v-text="'More'"/>
+        <b-link v-b-modal="`${name}-${index}`" v-text="'More'"/>
       </div>
     </template>
   </b-card>
