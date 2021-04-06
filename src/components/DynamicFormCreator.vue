@@ -43,7 +43,7 @@
       </b-row>
       <b-row v-if="state === 'preview'">
         <b-col>
-          <dynamic-form-generator :schema="componentValue" properties="array" required="object"/>
+          <dynamic-form-generator v-model="example" :schema="componentValue" properties="array" required="object"/>
         </b-col>
       </b-row>
       <b-row v-if="!(componentValue.properties.length > 0) && validated">
@@ -89,7 +89,8 @@ export default {
     return {
       componentValue: this.value,
       state: 'editing',
-      validated: false
+      validated: false,
+      example: {property1: {}}
     }
   },
   computed: {
