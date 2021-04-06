@@ -1,12 +1,12 @@
 <template>
   <div>
-    <b-card >
+    <b-card>
       <template #header>
         <b-form inline class="float-left">
           <label class="mr-2">Form Name</label>
           <b-form-input v-model="componentValue.name" class="mr-2"
                         :state="validated ? !!componentValue.name : null"/>
-          <b-button @click="addProperty">
+          <b-button @click="addProperty" v-if="state !== 'preview'">
             <b-icon icon="plus"/>
           </b-button>
         </b-form>
@@ -43,7 +43,14 @@
       </b-row>
       <b-row v-if="state === 'preview'">
         <b-col>
-          <dynamic-form-generator v-model="example" :schema="componentValue" properties="array" required="object"/>
+          <dynamic-form-generator v-model="example" :schema="componentValue" properties="array" required="object"
+                                  v-on:submit="submitExample">
+            <b-row>
+              <b-col class="text-center">
+                <b-button type="submit">SUBMIT FORM</b-button>
+              </b-col>
+            </b-row>
+          </dynamic-form-generator>
         </b-col>
       </b-row>
       <b-row v-if="!(componentValue.properties.length > 0) && validated">
@@ -90,7 +97,7 @@ export default {
       componentValue: this.value,
       state: 'editing',
       validated: false,
-      example: {property1: {}}
+      example: {}
     }
   },
   computed: {
@@ -153,6 +160,17 @@ export default {
     }
   },
   methods: {
+    getExample(properties) {
+      let exampleObject = {}
+      properties.forEach((x) => {
+        if (x.type === 'object') {
+          exampleObject[x.name] = this.getExample(x.properties);
+        } else {
+          exampleObject[x.name] = null;
+        }
+      })
+      return exampleObject;
+    },
     addProperty() {
       if (!this.componentValue.properties)
         this.componentValue.properties = []
@@ -176,21 +194,28 @@ export default {
       else if (this.properties === 'object')
         this.$emit('input', this.getPropertiesObject)
     },
+
+    validateProperties(properties) {
+      for (let i = 0; i < properties.length; i++) {
+        if (properties[i].type === 'object') {
+          if (!this.validateProperties(properties[i].properties)) return false;
+          if (!properties[i].name || !properties[i].label || !properties[i].type) return false;
+        } else if (!properties[i].name || !properties[i].label || !properties[i].type) {
+          return false;
+        }
+      }
+      return true;
+    },
     submitFormSchema() {
       this.validated = true;
-      if (!this.componentValue.name) return
-      if (this.componentValue.properties.length > 0) {
-        for (let i = 0; i < this.componentValue.properties.length; i++)
-          if (!this.componentValue.properties[i].name ||
-              !this.componentValue.properties[i].label ||
-              !this.componentValue.properties[i].type) {
-            return
-          }
-      } else {
-        return
-      }
+
+      if (!this.componentValue.name) return;
+      if (!this.validateProperties(this.componentValue.properties)) return;
 
       this.$emit('submit')
+    },
+    submitExample() {
+      alert('FORM SUBMITTED');
     },
     isEqual(value) {
       if (value.name !== this.componentValue.name) return false;
@@ -257,6 +282,12 @@ export default {
         this.updateComponentValue(newValue);
       }
     },
+    'state': {
+      handler(newValue) {
+        if (newValue === 'preview')
+          this.example = this.getExample(this.componentValue.properties)
+      }
+    }
   }
 }
 </script>

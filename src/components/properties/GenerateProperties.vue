@@ -1,6 +1,6 @@
 <template>
   <b-form-group>
-    <template v-slot:label>
+    <template v-slot:label v-if="!(item.type === 'object' && !item.showLabel)">
       {{ item.label }} <span v-if="item.required" class="text-danger">*</span>
     </template>
     <b-input-group>

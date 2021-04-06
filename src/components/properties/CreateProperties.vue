@@ -16,7 +16,8 @@
       </b-col>
       <b-col>
         <b-form-group label="Type">
-          <b-form-select v-model="value.type" @change="updateValue" :state="validated ? !!value.type : null">
+          <b-form-select v-model="value.type" @change="updateValue"
+                         :state="validated ? value.type === 'object' ? validateProperties(value.properties) : !!value.type : null">
             <b-form-select-option value="string">string</b-form-select-option>
             <b-form-select-option value="number">number</b-form-select-option>
             <b-form-select-option value="choice">choice</b-form-select-option>
@@ -27,7 +28,7 @@
         </b-form-group>
       </b-col>
     </b-row>
-    <b-modal :id="`${name}-${index}`" :title="`${name}-${value.name}`"
+    <b-modal :id="`${name}-${index}`" :title="`${value.name}`"
              :size="value.type === 'object' || value.type === 'choice' ? 'lg' : null">
       <string-property v-if="value.type === 'string'" v-model="value" v-on:update-value="updateValue2"/>
       <number-property v-if="value.type === 'number'" v-model="value" v-on:update-value="updateValue2"/>
@@ -47,6 +48,9 @@
           <b-icon class="mr-3" icon="trash" scale="1.1"/>
         </b-link>
         <label class="mr-3">|</label>
+        <label v-if="value.type === 'object'">Show Label
+          <b-form-checkbox class="float-right ml-2" switch v-model="value.showLabel"/>
+        </label>
         <label v-if="value.type !== 'object'">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
         </label>
@@ -88,7 +92,7 @@ export default {
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
-          // required: this.value.required,
+          showLabel: false,
           properties: []
         });
       else if (this.value.type === 'choice')
@@ -145,7 +149,18 @@ export default {
     duplicateProperty() {
       const {name, ...values} = this.value
       this.$emit('duplicate-property', {name: name + '-1', ...values}, this.index + 1);
-    }
+    },
+    validateProperties(properties) {
+      for (let i = 0; i < properties.length; i++) {
+        if (properties[i].type === 'object') {
+          if (!this.validateProperties(properties[i].properties)) return false;
+          if (!properties[i].name || !properties[i].label || !properties[i].type) return false;
+        } else if (!properties[i].name || !properties[i].label || !properties[i].type) {
+          return false;
+        }
+      }
+      return true;
+    },
   }
 }
 </script>
