@@ -22,7 +22,9 @@
     <b-row class="mt-2">
       <b-col cols="7">
         <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
-                              v-on:submit="submitSchema"/>
+                              v-on:submit="submitSchema">
+
+        </dynamic-form-creator>
       </b-col>
       <b-col cols="5">
         <b-card header="JSON SCHEMA">
