@@ -30,11 +30,14 @@
           <create-properties class="mb-2"
                              v-model="componentValue.properties[index-1]"
                              v-bind:index="index-1" v-bind:name="componentValue.name"
-                             v-bind:validated="validated"
+                             v-bind:validated="validated" v-bind:custom-properties="customProperties"
                              v-on:remove-property="removeProperty(index-1)"
                              v-on:duplicate-property="duplicateProperty"
+                             v-for="c in customProperties" :key="c.value"
           >
-
+            <template :slot="`modal(${c.value})`" slot-scope="{value, type}">
+              <slot :name="`modal(${c.value})`" v-bind:value="value" v-bind:type="type"></slot>
+            </template>
           </create-properties>
         </b-col>
       </b-row>
@@ -47,6 +50,7 @@
         <b-col>
           <dynamic-form-generator v-model="example" :schema="componentValue" properties="array" required="object"
                                   v-on:submit="submitExample">
+
             <b-row>
               <b-col class="text-center">
                 <b-button type="submit">SUBMIT FORM</b-button>
@@ -92,7 +96,8 @@ export default {
       validator: function (value) {
         return ['array', 'object'].indexOf(value) !== -1
       }
-    }
+    },
+    customProperties: Array
   },
   data() {
     return {
@@ -119,59 +124,62 @@ export default {
       //       schemaFormat.properties.push(object);
       //   })
       // } else if (this.required === 'object') {
-        this.componentValue.properties.forEach((x) => {
-          const objectArray = Object.entries(x);
-          const object = {};
-          objectArray.forEach(([key, value]) => {
-            if (key === 'required') object[key] = value
-            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
-          });
-          schemaFormat.properties.push(object);
-        })
+      this.componentValue.properties.forEach((x) => {
+        const objectArray = Object.entries(x);
+        const object = {};
+        objectArray.forEach(([key, value]) => {
+          if (key === 'required') object[key] = value
+          if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
+        });
+        schemaFormat.properties.push(object);
+      })
       // }
       return schemaFormat;
     },
-    getPropertiesObject() {
-      let schemaFormat = {name: this.componentValue.name, properties: {}};
-      if (this.required === 'array') {
-        schemaFormat.required = [];
-        this.componentValue.properties.forEach((x) => {
-          const {name, required, ...others} = x;
-          if (required) schemaFormat.required.push(name);
-          const objectArray = Object.entries(others);
-          const object = {};
-          objectArray.forEach(([key, value]) => {
-            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
-          });
-          schemaFormat.required = [...new Set(schemaFormat.required)];
-          schemaFormat.properties[name] = {...object};
-        })
-      } else if (this.required === 'object') {
-        this.componentValue.properties.forEach((x) => {
-          const {name, ...others} = x;
-          const objectArray = Object.entries(others);
-          const object = {};
-          objectArray.forEach(([key, value]) => {
-            if (key === 'required') object[key] = value
-            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
-          });
-          schemaFormat.properties[name] = {...object};
-        })
-      }
-      return schemaFormat;
-    }
+    // getPropertiesObject() {
+    //   let schemaFormat = {name: this.componentValue.name, properties: {}};
+    //   if (this.required === 'array') {
+    //     schemaFormat.required = [];
+    //     this.componentValue.properties.forEach((x) => {
+    //       const {name, required, ...others} = x;
+    //       if (required) schemaFormat.required.push(name);
+    //       const objectArray = Object.entries(others);
+    //       const object = {};
+    //       objectArray.forEach(([key, value]) => {
+    //         if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
+    //       });
+    //       schemaFormat.required = [...new Set(schemaFormat.required)];
+    //       schemaFormat.properties[name] = {...object};
+    //     })
+    //   } else if (this.required === 'object') {
+    //     this.componentValue.properties.forEach((x) => {
+    //       const {name, ...others} = x;
+    //       const objectArray = Object.entries(others);
+    //       const object = {};
+    //       objectArray.forEach(([key, value]) => {
+    //         if (key === 'required') object[key] = value
+    //         if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
+    //       });
+    //       schemaFormat.properties[name] = {...object};
+    //     })
+    //   }
+    //   return schemaFormat;
+    // }
   },
   methods: {
-    getObjectPropArray(objectProperties, required) {
-      let propArray = [];
-      if (required) {
-        objectProperties.forEach(x => {
-          x.required = undefined;
-          propArray.push(x);
-        })
-      }
-      return propArray;
+    getSlotName(name) {
+      return `modal(${name})`;
     },
+    // getObjectPropArray(objectProperties, required) {
+    //   let propArray = [];
+    //   if (required) {
+    //     objectProperties.forEach(x => {
+    //       x.required = undefined;
+    //       propArray.push(x);
+    //     })
+    //   }
+    //   return propArray;
+    // },
     getExample(properties) {
       let exampleObject = {}
       properties.forEach((x) => {
@@ -204,7 +212,7 @@ export default {
     },
     updateValue() {
       // if (this.properties === 'array')
-        this.$emit('input', this.getPropertiesArray)
+      this.$emit('input', this.getPropertiesArray)
       // else if (this.properties === 'object')
       //   this.$emit('input', this.getPropertiesObject)
     },
@@ -233,49 +241,49 @@ export default {
     },
     isEqual(value) {
       if (value.name !== this.componentValue.name) return false;
-      if (this.properties === 'array') {
-        if (value.properties.length !== this.getPropertiesArray.properties.length) return false;
-        for (let i = 0; i < value.properties.length; i++) {
-          const valueArray = Object.entries(value.properties[i]);
-          const otherArray = Object.entries(this.getPropertiesArray.properties[i]);
-          if (valueArray.length !== otherArray.length) return false;
-          for (let j = 0; j < valueArray.length; j++) {
-            if (valueArray[j][0] !== otherArray[j][0] || valueArray[j][1] !== otherArray[j][1]) return false;
-          }
-        }
-        return true;
-      } else if (this.properties === 'object') {
-        const valueArray = Object.entries(value.properties);
-        const otherArray = Object.entries(this.getPropertiesObject.properties);
+      // if (this.properties === 'array') {
+      if (value.properties.length !== this.getPropertiesArray.properties.length) return false;
+      for (let i = 0; i < value.properties.length; i++) {
+        const valueArray = Object.entries(value.properties[i]);
+        const otherArray = Object.entries(this.getPropertiesArray.properties[i]);
         if (valueArray.length !== otherArray.length) return false;
-        for (let i = 0; i < valueArray.length; i++) {
-          if (valueArray[i][0] !== otherArray[i][0]) return false;
-          const valueArray2 = Object.entries(valueArray[i][1]);
-          const otherArray2 = Object.entries(otherArray[i][1]);
-          if (valueArray2.length !== otherArray2.length) return false;
-          for (let j = 0; j < valueArray2.length; j++) {
-            if (valueArray2[j][0] !== otherArray2[j][0] || valueArray2[j][1] !== otherArray2[j][1]) return false;
-          }
+        for (let j = 0; j < valueArray.length; j++) {
+          if (valueArray[j][0] !== otherArray[j][0] || valueArray[j][1] !== otherArray[j][1]) return false;
         }
-        return true;
       }
+      return true;
+      // } else if (this.properties === 'object') {
+      //   const valueArray = Object.entries(value.properties);
+      //   const otherArray = Object.entries(this.getPropertiesObject.properties);
+      //   if (valueArray.length !== otherArray.length) return false;
+      //   for (let i = 0; i < valueArray.length; i++) {
+      //     if (valueArray[i][0] !== otherArray[i][0]) return false;
+      //     const valueArray2 = Object.entries(valueArray[i][1]);
+      //     const otherArray2 = Object.entries(otherArray[i][1]);
+      //     if (valueArray2.length !== otherArray2.length) return false;
+      //     for (let j = 0; j < valueArray2.length; j++) {
+      //       if (valueArray2[j][0] !== otherArray2[j][0] || valueArray2[j][1] !== otherArray2[j][1]) return false;
+      //     }
+      //   }
+      //   return true;
+      // }
     },
-    propsObjectToArray(newValue) {
-      let schemaFormat = {name: newValue.name, properties: []};
-      if (newValue.required)
-        schemaFormat.required = newValue.required;
-      const objectArray = Object.entries(newValue.properties);
-      objectArray.forEach(([key, value]) => {
-        schemaFormat.properties.push({name: key, ...value})
-      })
-      return schemaFormat;
-    },
+    // propsObjectToArray(newValue) {
+    //   let schemaFormat = {name: newValue.name, properties: []};
+    //   if (newValue.required)
+    //     schemaFormat.required = newValue.required;
+    //   const objectArray = Object.entries(newValue.properties);
+    //   objectArray.forEach(([key, value]) => {
+    //     schemaFormat.properties.push({name: key, ...value})
+    //   })
+    //   return schemaFormat;
+    // },
     updateComponentValue(newValue) {
       if (!this.isEqual(newValue)) {
-        if (this.properties === 'array')
-          this.componentValue = newValue;
-        else if (this.properties === 'object')
-          this.componentValue = this.propsObjectToArray(newValue);
+        // if (this.properties === 'array')
+        this.componentValue = newValue;
+        // else if (this.properties === 'object')
+        //   this.componentValue = this.propsObjectToArray(newValue);
       }
     }
   },
@@ -284,12 +292,12 @@ export default {
       deep: true,
       handler: 'updateValue'
     },
-    'properties': {
-      handler: 'updateValue'
-    },
-    'required': {
-      handler: 'updateValue'
-    },
+    // 'properties': {
+    //   handler: 'updateValue'
+    // },
+    // 'required': {
+    //   handler: 'updateValue'
+    // },
     'value': {
       deep: true,
       handler(newValue) {

@@ -22,8 +22,14 @@
     <b-row class="mt-2">
       <b-col cols="7">
         <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
+                              v-bind:custom-properties="customProperties"
                               v-on:submit="submitSchema">
+          <template v-slot:modal(address)="prop">
+            ERROR: <b-form-input v-model="prop.value.errorText"/>
+          </template>
+          <template>
 
+          </template>
         </dynamic-form-creator>
       </b-col>
       <b-col cols="5">
@@ -61,6 +67,9 @@ export default {
         name: '',
         properties: [],
       },
+      customProperties: [
+          {value: 'address', text: 'Address prop'}
+      ],
       example: {
         "name": "",
         "properties": {

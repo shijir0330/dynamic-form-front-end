@@ -24,6 +24,10 @@
             <b-form-select-option value="boolean">boolean</b-form-select-option>
             <b-form-select-option value="file">file</b-form-select-option>
             <b-form-select-option value="object">object</b-form-select-option>
+            <b-form-select-option-group label="custom" v-if="customProperties.length > 0" v-for="c in customProperties"
+                                        :key="c.value">
+              <b-form-select-option :value="c.value">{{ c.text }}</b-form-select-option>
+            </b-form-select-option-group>
           </b-form-select>
         </b-form-group>
       </b-col>
@@ -36,8 +40,13 @@
       <property-file v-if="value.type === 'file'" v-model="value"/>
       <property-boolean v-if="value.type === 'boolean'" v-model="value" v-on:update-value="updateValue2"/>
       <property-object v-if="value.type === 'object'" v-model="value" :validated="validated"
-                       v-bind:name="`${name}-${value.name}`"
-                       v-on:update-value="updateValue2"/>
+                       v-bind:name="`${name}-${value.name}`" v-on:update-value="updateValue2"/>
+      <div v-for="c in customProperties" :key="c.value">
+        <slot v-if="value.type === c.value" :name="`modal(${c.value})`"
+              v-bind:value="value" v-bind:type="c">
+          {{ c.text }}
+        </slot>
+      </div>
     </b-modal>
     <template #footer>
       <div class="float-right text-primary">
@@ -82,7 +91,8 @@ export default {
     value: Object,
     index: Number,
     name: String,
-    validated: Boolean
+    validated: Boolean,
+    customProperties: Array
   },
   methods: {
     updateValue() {
