@@ -50,9 +50,14 @@
       </b-col>
     </b-row>
     <b-row>
-      <b-col>
+      <b-col cols="12">
         <b-form-group label="Accept">
           <b-form-input v-model="value.accept" autocomplete="off"/>
+        </b-form-group>
+      </b-col>
+      <b-col cols="12">
+        <b-form-group label="Custom error text">
+          <b-form-input v-model="value.errorText" autocomplete="off"/>
         </b-form-group>
       </b-col>
     </b-row>

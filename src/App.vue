@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Form Creator</router-link> |
-      <router-link to="/form-generator">Form Generator</router-link>
-    </div>
+<!--    <div id="nav">-->
+<!--      <router-link to="/">Form Creator</router-link> |-->
+<!--      <router-link to="/form-generator">Form Generator</router-link>-->
+<!--    </div>-->
     <router-view/>
   </div>
 </template>
