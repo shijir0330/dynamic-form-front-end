@@ -98,6 +98,8 @@ export default {
         label: this.value.label,
         column: this.value.column,
         required: this.value.required,
+        labelColumn: this.value.labelColumn,
+        labelAlign: this.value.labelAlign,
         prepend: this.value.prepend,
         prependIcon: this.value.prependIcon,
         append: this.value.append,

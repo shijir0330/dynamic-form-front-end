@@ -1,5 +1,5 @@
 <template>
-  <b-form-group>
+  <b-form-group :label-cols="item.labelColumn" :label-align="item.labelAlign">
     <template v-slot:label v-if="!(item.type === 'object' && !item.showLabel)">
       {{ item.label }} <span v-if="item.required" class="text-danger">*</span>
     </template>
@@ -51,7 +51,7 @@
             <template v-else>{{ item.prepend }}</template>
           </b-input-group-text>
         </b-input-group-prepend>
-        <b-form-radio-group v-if="item.format === 'radio'" v-model="value[item.name]"
+        <b-form-radio-group class="mt-2" v-if="item.format === 'radio'" v-model="value[item.name]"
                             :options="item.options" :stacked="!!item.stacked"
                             :state="validated ? validator[item.name] : null"/>
         <b-form-checkbox-group v-else-if="item.format === 'checkbox'" v-model="value[item.name]"
@@ -79,7 +79,7 @@
                        :state="validated ? validator[item.name] : null"
       >{{ item.trueText }}
       </b-form-checkbox>
-      <b-form-radio-group v-else v-model="value[item.name]"
+      <b-form-radio-group class="mt-2" v-else v-model="value[item.name]"
                           :stacked="item.stacked"
                           :state="validated ? validator[item.name] : null"
       >

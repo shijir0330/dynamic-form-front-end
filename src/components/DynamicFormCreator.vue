@@ -33,7 +33,9 @@
                              v-bind:validated="validated"
                              v-on:remove-property="removeProperty(index-1)"
                              v-on:duplicate-property="duplicateProperty"
-          />
+          >
+
+          </create-properties>
         </b-col>
       </b-row>
       <b-row v-if="state === 'positioning'">
@@ -103,20 +105,20 @@ export default {
   computed: {
     getPropertiesArray() {
       let schemaFormat = {name: this.componentValue.name, properties: []};
-      if (this.required === 'array') {
-        schemaFormat.required = [];
-        this.componentValue.properties.forEach((x) => {
-          const {required, ...others} = x;
-          if (required) schemaFormat.required.push(x.name);
-          const objectArray = Object.entries(others);
-          const object = {};
-          objectArray.forEach(([key, value]) => {
-            if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
-          });
-          schemaFormat.required = [...new Set(schemaFormat.required)];
-          schemaFormat.properties.push(object);
-        })
-      } else if (this.required === 'object') {
+      // if (this.required === 'array') {
+      //   schemaFormat.required = [];
+      //   this.componentValue.properties.forEach((x) => {
+      //       const {required, ...others} = x;
+      //       if (required) schemaFormat.required.push(x.name);
+      //       const objectArray = Object.entries(others);
+      //       const object = {};
+      //       objectArray.forEach(([key, value]) => {
+      //         if (value !== null) object[key] = typeof value === "string" ? value.trim() : value;
+      //       });
+      //       schemaFormat.required = [...new Set(schemaFormat.required)];
+      //       schemaFormat.properties.push(object);
+      //   })
+      // } else if (this.required === 'object') {
         this.componentValue.properties.forEach((x) => {
           const objectArray = Object.entries(x);
           const object = {};
@@ -126,7 +128,7 @@ export default {
           });
           schemaFormat.properties.push(object);
         })
-      }
+      // }
       return schemaFormat;
     },
     getPropertiesObject() {
@@ -160,11 +162,23 @@ export default {
     }
   },
   methods: {
+    getObjectPropArray(objectProperties, required) {
+      let propArray = [];
+      if (required) {
+        objectProperties.forEach(x => {
+          x.required = undefined;
+          propArray.push(x);
+        })
+      }
+      return propArray;
+    },
     getExample(properties) {
       let exampleObject = {}
       properties.forEach((x) => {
         if (x.type === 'object') {
           exampleObject[x.name] = this.getExample(x.properties);
+        } else if (x.type === 'choice' && x.format === 'checkbox') {
+          exampleObject[x.name] = [];
         } else {
           exampleObject[x.name] = null;
         }
@@ -189,10 +203,10 @@ export default {
       this.componentValue.properties.splice(index, 1);
     },
     updateValue() {
-      if (this.properties === 'array')
+      // if (this.properties === 'array')
         this.$emit('input', this.getPropertiesArray)
-      else if (this.properties === 'object')
-        this.$emit('input', this.getPropertiesObject)
+      // else if (this.properties === 'object')
+      //   this.$emit('input', this.getPropertiesObject)
     },
 
     validateProperties(properties) {

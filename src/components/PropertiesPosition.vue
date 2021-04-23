@@ -7,11 +7,20 @@
               @dragenter.prevent="dragEnter($event)"
               @dragleave.prevent="dragLeave($event)"
               @dragover.prevent>
-        <label>{{ item.name }}
-        <select v-model="item.column">
+        <label class="mr-1">{{ item.name }}</label>
+        <select class="mr-1" v-model="item.column" v-b-tooltip.hover title="column">
           <option v-for="i in 12" :value="i">{{ i }}</option>
         </select>
-        </label>
+        <select class="mr-1" v-model="item.labelColumn" v-b-tooltip.hover title="label column"
+                v-on:change="item.labelAlign = !item.labelColumn ? undefined : item.labelAlign">
+          <option :value="undefined">NA</option>
+          <option v-for="i in 12" :value="i">{{ i }}</option>
+        </select>
+        <select v-model="item.labelAlign" v-b-tooltip.hover title="label align"
+                v-if="!!item.labelColumn">
+          <option :value="undefined">left</option>
+          <option value="right">right</option>
+        </select>
       </b-card>
     </b-col>
   </b-row>

@@ -99,6 +99,8 @@ export default {
         label: this.value.label,
         column: this.value.column,
         required: this.value.required,
+        labelColumn: this.value.labelColumn,
+        labelAlign: this.value.labelAlign,
         format: this.value.format,
         trueValue: this.value.trueValue,
         falseValue: this.value.falseValue,

@@ -123,6 +123,8 @@ export default {
           label: this.value.label,
           column: this.value.column,
           required: this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign,
           format: this.value.format,
           options: this.value.options,
           errorText: this.value.errorText
@@ -134,6 +136,8 @@ export default {
           label: this.value.label,
           column: this.value.column,
           required: this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign,
           format: this.value.format,
           options: this.value.options,
           stacked: this.value.stacked,

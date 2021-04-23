@@ -92,6 +92,8 @@ export default {
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign,
           showLabel: false,
           properties: []
         });
@@ -102,6 +104,8 @@ export default {
           label: this.value.label,
           column: this.value.column,
           required: !!this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign,
           options: [
             {
               value: 'Option 1',
@@ -116,6 +120,8 @@ export default {
           label: this.value.label,
           column: this.value.column,
           required: !!this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign,
           trueValue: true,
           falseValue: false,
           trueText: 'True text',
@@ -128,6 +134,8 @@ export default {
           label: this.value.label,
           column: this.value.column,
           required: !!this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign
         });
     },
     updateValue2(values) {
