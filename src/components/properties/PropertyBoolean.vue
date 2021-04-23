@@ -68,6 +68,11 @@
       </template>
     </b-row>
     <b-row>
+      <b-col class="text-center font-weight-bold">
+        Validations
+      </b-col>
+    </b-row>
+    <b-row>
       <b-col>
         <b-form-group label="Custom error text">
           <b-form-input v-model="value.errorText" autocomplete="off"/>
