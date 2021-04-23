@@ -98,7 +98,8 @@ export default {
         return ['array', 'object'].indexOf(value) !== -1
       }
     },
-    customProperties: Array
+    customProperties: Array,
+    customExample: Object
   },
   data() {
     return {
@@ -188,8 +189,11 @@ export default {
           exampleObject[x.name] = this.getExample(x.properties);
         } else if (x.type === 'choice' && x.format === 'checkbox') {
           exampleObject[x.name] = [];
-        } else {
+        } else if (x.type === 'string' || x.type === 'number' || x.type === 'choice'
+            || x.type === 'boolean' || x.type === 'file') {
           exampleObject[x.name] = null;
+        } else {
+          exampleObject[x.name] = this.customExample[x.type];
         }
       })
       return exampleObject;

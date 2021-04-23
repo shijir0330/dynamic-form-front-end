@@ -22,7 +22,7 @@
     <b-row class="mt-2">
       <b-col cols="7">
         <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
-                              v-bind:custom-properties="customProperties"
+                              v-bind:custom-properties="customProperties" v-bind:custom-example="customExample"
                               v-on:submit="submitSchema">
           <template v-slot:modal(address)="prop">
             ERROR:
@@ -31,15 +31,24 @@
           <template v-slot:property(address)="prop">
             <b-row>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name]"/>
+                <b-form-input v-model="prop.value[prop.name].aimag" placeholder="Аймаг/Нийслэл"/>
               </b-col>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name]" :placeholder="prop.item.label"/>
+                <b-form-input v-model="prop.value[prop.name].soum" placeholder="Сум/Дүүрэг"/>
               </b-col>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name]" :placeholder="prop.item.label"/>
+                <b-form-input v-model="prop.value[prop.name].bagKhoroo" placeholder="Баг хороо/Хороо"/>
+              </b-col>
+              <b-col>
+                <b-form-input v-model="prop.value[prop.name].street" placeholder="Гудамж, хаяг"/>
               </b-col>
             </b-row>
+          </template>
+          <template v-slot:property(fullName)="prop">
+            <b-input-group>
+              <b-form-input v-model="prop.value[prop.name].lastName" placeholder="lastName"/>
+              <b-form-input v-model="prop.value[prop.name].firstName" placeholder="firstName"/>
+            </b-input-group>
           </template>
         </dynamic-form-creator>
       </b-col>
@@ -80,9 +89,16 @@ export default {
       },
       customProperties: [
         {value: 'address', text: 'Address prop'},
-        {value: 'address2', text: 'Address prop 2'},
-        // {value: 'address3', text: 'Address prop 3'}
+        {value: 'fullName', text: 'Full name prop'},
       ],
+      customExample: {
+        address: {
+          aimag: "", soum: "", bagKhoroo: "", street: ""
+        },
+        fullName: {
+          lastName: "", firstName: ""
+        }
+      },
       example: {
         "name": "",
         "properties": {
