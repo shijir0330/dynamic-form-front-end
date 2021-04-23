@@ -24,8 +24,11 @@
           </b-input-group-text>
         </b-input-group-append>
       </b-input-group>
+      <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
+        {{ item.errorText }}
+      </b-form-invalid-feedback>
     </template>
-    <template v-if="item.type === 'number'">
+    <template v-else-if="item.type === 'number'">
       <b-input-group>
         <b-input-group-prepend v-if="item.prepend">
           <b-input-group-text>
@@ -42,8 +45,11 @@
           </b-input-group-text>
         </b-input-group-append>
       </b-input-group>
+      <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
+        {{ item.errorText }}
+      </b-form-invalid-feedback>
     </template>
-    <template v-if="item.type === 'choice'">
+    <template v-else-if="item.type === 'choice'">
       <b-input-group>
         <b-input-group-prepend v-if="item.prepend">
           <b-input-group-text>
@@ -67,8 +73,11 @@
           </b-input-group-text>
         </b-input-group-append>
       </b-input-group>
+      <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
+        {{ item.errorText }}
+      </b-form-invalid-feedback>
     </template>
-    <template v-if="item.type === 'boolean'">
+    <template v-else-if="item.type === 'boolean'">
       <b-form-checkbox v-if="item.format === 'checkbox'" v-model="value[item.name]"
                        :value="item.trueValue" :unchecked-value="item.falseValue"
                        :state="validated ? validator[item.name] : null"
@@ -86,8 +95,11 @@
         <b-form-radio :value="item.trueValue">{{ item.trueText }}</b-form-radio>
         <b-form-radio :value="item.falseValue">{{ item.falseText }}</b-form-radio>
       </b-form-radio-group>
+      <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
+        {{ item.errorText }}
+      </b-form-invalid-feedback>
     </template>
-    <template v-if="item.type === 'file'">
+    <template v-else-if="item.type === 'file'">
       <b-input-group>
         <b-input-group-prepend v-if="item.prepend">
           <b-input-group-text>
@@ -107,25 +119,33 @@
           </b-input-group-text>
         </b-input-group-append>
       </b-input-group>
+      <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
+        {{ item.errorText }}
+      </b-form-invalid-feedback>
     </template>
-    <template v-if="item.type === 'object'">
+    <template v-else-if="item.type === 'object'">
       <b-row>
         <b-col v-for="(_item, index) in item.properties" v-bind:key="index" :cols="_item.column">
           <generate-properties v-model="value[item.name]" :item="_item"
-                               :validated="validated" :validator="validator[item.name]"/>
+                               :validated="validated" :validator="validator[item.name]">
+
+          </generate-properties>
         </b-col>
       </b-row>
     </template>
-    <b-form-invalid-feedback v-if="item.errorText" :state="validated ? validator[item.name] : null">
-      {{ item.errorText }}
-    </b-form-invalid-feedback>
+    <div v-else v-for="c in customProperties" :key="c.value">
+      <slot v-if="item.type === c.value" :name="`property(${c.value})`"
+            v-bind:value="value" v-bind:item="item" v-bind:name="item.name">
+        {{ `property(${c.value})` }}
+      </slot>
+    </div>
   </b-form-group>
 </template>
 
 <script>
 export default {
   name: "GenerateProperties",
-  props: ['value', 'item', 'validated', 'validator']
+  props: ['value', 'item', 'validated', 'validator', 'customProperties']
 }
 </script>
 

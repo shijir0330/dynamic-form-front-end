@@ -2,8 +2,11 @@
   <b-form @submit.prevent="submitForm">
     <b-row>
       <b-col v-for="(item, index) in getSchema.properties" v-bind:key="index" :cols="item.column">
-        <generate-properties v-model="value" :item="item" :validated="validated" :validator="validator">
-
+        <generate-properties v-model="value" :item="item" :validated="validated" :validator="validator"
+                             :custom-properties="customProperties">
+          <template :slot="`property(${c.value})`" slot-scope="{value, item, name}" v-for="c in customProperties">
+            <slot :name="`property(${c.value})`" v-bind:value="value" v-bind:item="item" v-bind:name="name"></slot>
+          </template>
         </generate-properties>
       </b-col>
     </b-row>
@@ -36,6 +39,7 @@ export default {
       //   return !(!value.name || !value.properties);
       // }
     },
+    customProperties: Array,
     properties: {
       type: String,
       default: 'array',

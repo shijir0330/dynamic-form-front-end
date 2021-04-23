@@ -24,9 +24,10 @@
             <b-form-select-option value="boolean">boolean</b-form-select-option>
             <b-form-select-option value="file">file</b-form-select-option>
             <b-form-select-option value="object">object</b-form-select-option>
-            <b-form-select-option-group label="custom" v-if="customProperties.length > 0" v-for="c in customProperties"
-                                        :key="c.value">
-              <b-form-select-option :value="c.value">{{ c.text }}</b-form-select-option>
+            <b-form-select-option-group label="custom" v-if="customProperties.length > 0">
+              <b-form-select-option v-for="c in customProperties" :key="c.value"
+                                    :value="c.value">{{ c.text }}
+              </b-form-select-option>
             </b-form-select-option-group>
           </b-form-select>
         </b-form-group>
@@ -57,11 +58,11 @@
           <b-icon class="mr-3" icon="trash" scale="1.1"/>
         </b-link>
         <label class="mr-3">|</label>
-        <label v-if="value.type === 'object'">Show Label
-          <b-form-checkbox class="float-right ml-2" switch v-model="value.showLabel"/>
-        </label>
-        <label v-if="value.type !== 'object'">Required
+        <label v-if="showRequired">Required
           <b-form-checkbox class="float-right ml-2" switch v-model="value.required"/>
+        </label>
+        <label v-else>Show Label
+          <b-form-checkbox class="float-right ml-2" switch v-model="value.showLabel"/>
         </label>
         <b-link v-b-modal="`${name}-${index}`" v-text="'More'"/>
       </div>
@@ -93,6 +94,11 @@ export default {
     name: String,
     validated: Boolean,
     customProperties: Array
+  },
+  computed: {
+    showRequired() {
+      return this.value.type === 'string' || this.value.type === 'number' || this.value.type === 'choice' || this.value.type === 'boolean' || this.value.type === 'file';
+    }
   },
   methods: {
     updateValue() {
@@ -137,13 +143,22 @@ export default {
           trueText: 'True text',
           falseText: 'False text'
         });
-      else
+      else if (this.value.type === 'string' || this.value.type === 'number' || this.value.type === 'file')
         this.$emit('input', {
           type: this.value.type,
           name: this.value.name,
           label: this.value.label,
           column: this.value.column,
           required: !!this.value.required,
+          labelColumn: this.value.labelColumn,
+          labelAlign: this.value.labelAlign
+        });
+      else
+        this.$emit('input', {
+          type: this.value.type,
+          name: this.value.name,
+          label: this.value.label,
+          column: this.value.column,
           labelColumn: this.value.labelColumn,
           labelAlign: this.value.labelAlign
         });

@@ -25,17 +25,28 @@
                               v-bind:custom-properties="customProperties"
                               v-on:submit="submitSchema">
           <template v-slot:modal(address)="prop">
-            ERROR: <b-form-input v-model="prop.value.errorText"/>
+            ERROR:
+            <b-form-input v-model="prop.value.errorText"/>
           </template>
-          <template>
-
+          <template v-slot:property(address)="prop">
+            <b-row>
+              <b-col>
+                <b-form-input v-model="prop.value[prop.name]"/>
+              </b-col>
+              <b-col>
+                <b-form-input v-model="prop.value[prop.name]" :placeholder="prop.item.label"/>
+              </b-col>
+              <b-col>
+                <b-form-input v-model="prop.value[prop.name]" :placeholder="prop.item.label"/>
+              </b-col>
+            </b-row>
           </template>
         </dynamic-form-creator>
       </b-col>
       <b-col cols="5">
         <b-card header="JSON SCHEMA">
           <pre>{{ schema | jsonFormat }}</pre>
-          <pre>{{ schema | unquotedJsonFormat}}</pre>
+          <pre>{{ schema | unquotedJsonFormat }}</pre>
         </b-card>
       </b-col>
     </b-row>
@@ -68,7 +79,9 @@ export default {
         properties: [],
       },
       customProperties: [
-          {value: 'address', text: 'Address prop'}
+        {value: 'address', text: 'Address prop'},
+        {value: 'address2', text: 'Address prop 2'},
+        // {value: 'address3', text: 'Address prop 3'}
       ],
       example: {
         "name": "",

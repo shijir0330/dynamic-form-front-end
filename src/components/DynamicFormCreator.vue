@@ -33,9 +33,8 @@
                              v-bind:validated="validated" v-bind:custom-properties="customProperties"
                              v-on:remove-property="removeProperty(index-1)"
                              v-on:duplicate-property="duplicateProperty"
-                             v-for="c in customProperties" :key="c.value"
           >
-            <template :slot="`modal(${c.value})`" slot-scope="{value, type}">
+            <template :slot="`modal(${c.value})`" slot-scope="{value, type}" v-for="c in customProperties">
               <slot :name="`modal(${c.value})`" v-bind:value="value" v-bind:type="type"></slot>
             </template>
           </create-properties>
@@ -49,8 +48,10 @@
       <b-row v-if="state === 'preview'">
         <b-col>
           <dynamic-form-generator v-model="example" :schema="componentValue" properties="array" required="object"
-                                  v-on:submit="submitExample">
-
+                                  v-on:submit="submitExample" v-bind:custom-properties="customProperties">
+            <template :slot="`property(${c.value})`" slot-scope="{value, item, name}" v-for="c in customProperties">
+              <slot :name="`property(${c.value})`" v-bind:value="value" v-bind:item="item" v-bind:name="name"></slot>
+            </template>
             <b-row>
               <b-col class="text-center">
                 <b-button type="submit">SUBMIT FORM</b-button>
