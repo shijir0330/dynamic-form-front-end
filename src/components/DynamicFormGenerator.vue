@@ -67,7 +67,7 @@ export default {
     validator() {
       let validator = {};
       this.getSchema.properties.forEach((item) => {
-        if (!this.value[item.name] && this.value[item.name] !== false || !this.value[item.name].length) {
+        if (!this.value[item.name] && this.value[item.name] !== false) {
           validator[item.name] = item.required ? false : null;
         } else {
           switch (item.type) {
@@ -103,7 +103,7 @@ export default {
       item.properties.forEach((_item) => {
         if (!value) {
           validator[_item.name] = _item.required ? false : null;
-        } else if (!value[_item.name] && value[_item.name] !== false || !value[_item.name].length) {
+        } else if (!value[_item.name] && value[_item.name] !== false) {
           validator[_item.name] = _item.required ? false : null;
         } else {
           switch (_item.type) {

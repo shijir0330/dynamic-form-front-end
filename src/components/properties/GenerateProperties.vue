@@ -126,9 +126,11 @@
     <template v-else-if="item.type === 'object'">
       <b-row>
         <b-col v-for="(_item, index) in item.properties" v-bind:key="index" :cols="_item.column">
-          <generate-properties v-model="value[item.name]" :item="_item"
-                               :validated="validated" :validator="validator[item.name]">
-
+          <generate-properties v-model="value[item.name]" :item="_item" :validated="validated"
+                               :validator="validator[item.name]" :custom-properties="customProperties">
+            <template :slot="`property(${c.value})`" slot-scope="{value, item, name}" v-for="c in customProperties">
+              <slot :name="`property(${c.value})`" v-bind:value="value" v-bind:item="item" v-bind:name="name"></slot>
+            </template>
           </generate-properties>
         </b-col>
       </b-row>

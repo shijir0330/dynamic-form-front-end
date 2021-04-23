@@ -24,7 +24,7 @@
             <b-form-select-option value="boolean">boolean</b-form-select-option>
             <b-form-select-option value="file">file</b-form-select-option>
             <b-form-select-option value="object">object</b-form-select-option>
-            <b-form-select-option-group label="custom" v-if="customProperties.length > 0">
+            <b-form-select-option-group label="custom" v-if="customProperties && customProperties.length > 0">
               <b-form-select-option v-for="c in customProperties" :key="c.value"
                                     :value="c.value">{{ c.text }}
               </b-form-select-option>
@@ -41,6 +41,7 @@
       <property-file v-if="value.type === 'file'" v-model="value"/>
       <property-boolean v-if="value.type === 'boolean'" v-model="value" v-on:update-value="updateValue2"/>
       <property-object v-if="value.type === 'object'" v-model="value" :validated="validated"
+                       v-bind:custom-properties="customProperties"
                        v-bind:name="`${name}-${value.name}`" v-on:update-value="updateValue2"/>
       <div v-for="c in customProperties" :key="c.value">
         <slot v-if="value.type === c.value" :name="`modal(${c.value})`"

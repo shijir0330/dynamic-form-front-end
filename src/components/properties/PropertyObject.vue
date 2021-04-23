@@ -23,7 +23,7 @@
         <create-properties class="mb-2"
                            v-model="value.properties[index-1]"
                            v-bind:index="index-1" v-bind:name="`${name}-${value.name}`"
-                           v-bind:validated="validated"
+                           v-bind:validated="validated" v-bind:custom-properties="customProperties"
                            v-on:remove-property="removeProperty(index-1)"
                            v-on:duplicate-property="duplicateProperty"
         />
@@ -48,7 +48,7 @@ import PropertiesPosition from "@/components/PropertiesPosition";
 export default {
   name: "PropertyObject",
   components: {PropertiesPosition},
-  props: ['value', 'validated', 'name'],
+  props: ['value', 'validated', 'name', 'customProperties'],
   data() {
     return {
       state: 'editing'

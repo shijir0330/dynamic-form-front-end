@@ -169,9 +169,6 @@ export default {
     // }
   },
   methods: {
-    getSlotName(name) {
-      return `modal(${name})`;
-    },
     // getObjectPropArray(objectProperties, required) {
     //   let propArray = [];
     //   if (required) {
@@ -193,7 +190,8 @@ export default {
             || x.type === 'boolean' || x.type === 'file') {
           exampleObject[x.name] = null;
         } else {
-          exampleObject[x.name] = this.customExample[x.type];
+          const temp = !this.customExample ? null : JSON.stringify(this.customExample[x.type])
+          exampleObject[x.name] = temp ? JSON.parse(temp) : null;
         }
       })
       return exampleObject;
