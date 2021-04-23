@@ -19,7 +19,7 @@
         <select v-model="item.labelAlign" v-b-tooltip.hover title="label align"
                 v-if="!!item.labelColumn">
           <option :value="undefined">left</option>
-          <option value="right">right</option>
+          <option :value="'right'">right</option>
         </select>
       </b-card>
     </b-col>
