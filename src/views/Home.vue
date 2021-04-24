@@ -88,8 +88,8 @@ export default {
         properties: [],
       },
       customProperties: [
-        {value: 'address', text: 'Address prop'},
-        {value: 'fullName', text: 'Full name prop'},
+        {value: 'address', text: 'Address'},
+        {value: 'fullName', text: 'Full Name'},
       ],
       customExample: {
         address: {
