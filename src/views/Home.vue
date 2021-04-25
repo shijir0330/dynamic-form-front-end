@@ -4,50 +4,49 @@
       <b-col cols="7">
         <b-button @click="change">change</b-button>
       </b-col>
-      <b-col>
-        <b-form inline>
-          <label class="mr-sm-2">Properties</label>
-          <b-form-select v-model="properties" class="mb-2 mr-sm-5 mb-sm-0">
-            <b-form-select-option value="array">array</b-form-select-option>
-            <b-form-select-option value="object">object</b-form-select-option>
-          </b-form-select>
-          <label class="mr-sm-2">Required</label>
-          <b-form-select v-model="required" class="mb-2 mr-sm-2 mb-sm-0">
-            <b-form-select-option value="array">array</b-form-select-option>
-            <b-form-select-option value="object">object</b-form-select-option>
-          </b-form-select>
-        </b-form>
-      </b-col>
+<!--      <b-col>-->
+<!--        <b-form inline>-->
+<!--          <label class="mr-sm-2">Properties</label>-->
+<!--          <b-form-select v-model="properties" class="mb-2 mr-sm-5 mb-sm-0">-->
+<!--            <b-form-select-option value="array">array</b-form-select-option>-->
+<!--            <b-form-select-option value="object">object</b-form-select-option>-->
+<!--          </b-form-select>-->
+<!--          <label class="mr-sm-2">Required</label>-->
+<!--          <b-form-select v-model="required" class="mb-2 mr-sm-2 mb-sm-0">-->
+<!--            <b-form-select-option value="array">array</b-form-select-option>-->
+<!--            <b-form-select-option value="object">object</b-form-select-option>-->
+<!--          </b-form-select>-->
+<!--        </b-form>-->
+<!--      </b-col>-->
     </b-row>
     <b-row class="mt-2">
       <b-col cols="7">
-        <dynamic-form-creator v-model="schema" v-bind:properties="properties" v-bind:required="required"
-                              v-bind:custom-properties="customProperties" v-bind:custom-example="customExample"
-                              v-on:submit="submitSchema">
-          <template v-slot:modal(address)="prop">
-            ERROR:
-            <b-form-input v-model="prop.value.errorText"/>
+        <dynamic-form-creator v-model="schema" v-bind:custom-properties="customProperties"
+                              v-bind:custom-example="customExample" v-on:submit="submitSchema">
+          <template v-slot:modal(fullName)="{value, type}">
+            ERROR MESSAGE:
+            <b-form-input v-model="value.errorText"/>
           </template>
-          <template v-slot:property(address)="prop">
+          <template v-slot:property(address)="{value, item, name}">
             <b-row>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name].aimag" placeholder="Аймаг/Нийслэл"/>
+                <b-form-input v-model="value[name].aimag" placeholder="Аймаг/Нийслэл"/>
               </b-col>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name].soum" placeholder="Сум/Дүүрэг"/>
+                <b-form-input v-model="value[name].soum" placeholder="Сум/Дүүрэг"/>
               </b-col>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name].bagKhoroo" placeholder="Баг хороо/Хороо"/>
+                <b-form-input v-model="value[name].bagKhoroo" placeholder="Баг хороо/Хороо"/>
               </b-col>
               <b-col>
-                <b-form-input v-model="prop.value[prop.name].street" placeholder="Гудамж, хаяг"/>
+                <b-form-input v-model="value[name].street" placeholder="Гудамж, хаяг"/>
               </b-col>
             </b-row>
           </template>
-          <template v-slot:property(fullName)="prop">
+          <template v-slot:property(fullName)="{value, item, name}">
             <b-input-group>
-              <b-form-input v-model="prop.value[prop.name].lastName" placeholder="lastName"/>
-              <b-form-input v-model="prop.value[prop.name].firstName" placeholder="firstName"/>
+              <b-form-input v-model="value[name].lastName" placeholder="lastName"/>
+              <b-form-input v-model="value[name].firstName" placeholder="firstName"/>
             </b-input-group>
           </template>
         </dynamic-form-creator>

@@ -1,7 +1,7 @@
 <template>
   <b-form @submit.prevent="submitForm">
     <b-row>
-      <b-col v-for="(item, index) in getSchema.properties" v-bind:key="index" :cols="item.column">
+      <b-col v-for="(item, index) in schema.properties" v-bind:key="index" :cols="item.column">
         <generate-properties v-model="value" :item="item" :validated="validated" :validator="validator"
                              :custom-properties="customProperties">
           <template :slot="`property(${c.value})`" slot-scope="{value, item, name}" v-for="c in customProperties">
@@ -10,14 +10,14 @@
         </generate-properties>
       </b-col>
     </b-row>
-    <b-row>
-      <b-col cols="12">
-        value:{{ value }}
-      </b-col>
-      <b-col>
-        validator:{{ validator }}
-      </b-col>
-    </b-row>
+<!--    <b-row>-->
+<!--      <b-col cols="12">-->
+<!--        value:{{ value }}-->
+<!--      </b-col>-->
+<!--      <b-col>-->
+<!--        validator:{{ validator }}-->
+<!--      </b-col>-->
+<!--    </b-row>-->
     <slot></slot>
   </b-form>
 </template>
@@ -61,12 +61,9 @@ export default {
     }
   },
   computed: {
-    getSchema() {
-      return this.schema;
-    },
     validator() {
       let validator = {};
-      this.getSchema.properties.forEach((item) => {
+      this.schema.properties.forEach((item) => {
         if (!this.value[item.name] && this.value[item.name] !== false) {
           validator[item.name] = item.required ? false : null;
         } else {

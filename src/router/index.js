@@ -10,11 +10,11 @@ const routes = [
     name: 'Home',
     component: Home
   },
-  // {
-  //   path: '/form-generator',
-  //   name: 'FormGenerator',
-  //   component: () => import(/* webpackChunkName: "about" */ '../views/FormGenerator.vue')
-  // }
+  {
+    path: '/form-generator',
+    name: 'FormGenerator',
+    component: () => import(/* webpackChunkName: "about" */ '../views/FormGenerator.vue')
+  }
 ]
 
 const router = new VueRouter({
